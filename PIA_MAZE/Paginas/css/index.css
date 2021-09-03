@@ -6,8 +6,12 @@
     -webkit-text-stroke: 2px #FFC300
 }
 
+.navbar{
+	font-family: 'Metal Mania', cursive;
+}
+
 .btnPlay{
-	margin: 300px 550px;
+	margin: 300px 570px;
 	font-family: 'Metal Mania', cursive;
     font-size: 40px;
     position: absolute;
@@ -20,6 +24,37 @@
 .btnPlay:hover{
 	
 	background:#FFC300 ;
+}
+
+.btnMultPlay{
+	margin: 400px 510px;
+	font-family: 'Metal Mania', cursive;
+    font-size: 40px;
+    position: absolute;
+    -webkit-text-stroke: 2px #FFC300;
+}
+
+.btnMultPlay:hover{
+	
+	background:#FFC300;
+}
+
+.btnPuntaje{
+	margin-left:590px;
+	margin-top:500px;
+}
+
+.btnPuntaje:hover{
+	background:#FFC300;
+}
+
+.btnConfig{
+	margin-left:590px;
+	margin-top:20px;
+}
+
+.btnConfig:hover{
+	background:#FFC300;
 }
 
 a{

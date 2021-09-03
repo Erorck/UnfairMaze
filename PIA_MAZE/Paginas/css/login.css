@@ -8,21 +8,23 @@
 
 body {
 	background: #f2f2f2;
-	font-family: Arial, Sans-serif;
+	font-family: 'Metal Mania', cursive;
 }
 
 .logTitulo{
 	font-family: 'Metal Mania', cursive;
-	margin-left: 370px;
+	margin-left: 390px;
 	font-size: 70px;
+	-webkit-text-stroke: 2px #FFC300
 }
 
 .formulario {
-	background: #fff;
+	background: #848484;
 	width: 500px;
 	margin: 20px auto;
 	padding: 20px;
 	border-radius: 5px;
+	border-color: #FFBF00;
 }
 
 .formulario input {
@@ -36,9 +38,9 @@ body {
 	padding: 20px;
 	margin-bottom: 20px;
 	border-radius: 3px;
-	border:1px solid #226fc1;
+	border:2px solid #FACC2E;
 	font-size: 16px;
-	font-family: Arial;
+	font-family: 'Metal Mania', cursive;
 }
 
 .formulario textarea {
@@ -52,9 +54,10 @@ body {
 .formulario input[type="email"]:focus,
 .formulario textarea:focus {
 	border:2px solid #4fb560;
+
 }
 
-.formulario input[type="submit"] {
+/*.formulario input[type="submit"] {
 	font-family: 'Metal Mania', cursive;
 	width: 200px;
 	margin: 0 auto;
@@ -71,4 +74,31 @@ body {
 	font-family: 'Metal Mania', cursive;
 	background: #FFFF00;
 	color: #000;
+}*/
+
+.formulario #btnSendSesion{
+	font-family: 'Metal Mania', cursive;
+	width: 200px;
+	margin-left: 120px;
+	padding: 10px;
+	border:1px solid #FACC2E;
+	color: #FFFF00;
+	background: #2E2E2E;
+	cursor: pointer;
+	border-radius: 3px;
+	font-size: 16px;
+}
+
+.formulario #btnSendSesion:hover{
+	font-family: 'Metal Mania', cursive;
+	background: #FFFF00;
+	color: #000;
+}
+
+.formulario #goToSignIn{
+	margin-left: 80px;
+	font-family: 'Metal Mania', cursive;
+	color: #FFFF00;
+	
+	-webkit-text-stroke: 0.5px #FFC300;
 }

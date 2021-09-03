@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&display=swap" rel="stylesheet">
+    <title>Como jugar</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
+        <div class="container-fluid">
+            <a href="index.html" class="navbar-brand">Unfair Maze</a>
+
+            <!-- boton para el menu movil-->
+            <button 
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#menu"
+                    aria-controls="menu"
+                    aria-expanded="false"
+                    aria-label="Mostrar/Ocultar Menu"
+            >
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+            <!--Agregar menu de navegacion-->
+            <div class="collapse navbar-collapse" id="menu">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a href="#" class="nav-link">Inicio</a></li>
+
+                    <!--Dropdown-->
+                    <li class="nav-item dropdown">
+                        <a href="#" 
+                            class="nav-link dropdown-toggle"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-epanded="false"
+                            id="dropdown-menu"
+                    >
+                        Cuenta
+                    </a>
+
+                    <ul class="dropdown-menu" aria-labelledby="dropdown-menu">
+                        <li><a href="login.html" class="dropdown-item">Iniciar sesion</a></li>
+                        <li><a href="registro.html" class="dropdown-item">Registrarse</a></li>
+                    </ul>
+
+                    </li>
+                    <li class="nav-item"><a href="puntajes.html" class="nav-link">Puntajes</a></li>
+                    <li class="nav-item"><a href="comoJugar.html" class="nav-link">Como jugar</a></li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+  
+
+
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

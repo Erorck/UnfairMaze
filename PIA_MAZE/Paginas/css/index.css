@@ -3,4 +3,31 @@
     margin-left: 350px;
     font-size: 90px;
     position: absolute;
+    -webkit-text-stroke: 2px #FFC300
+}
+
+.btnPlay{
+	margin: 300px 550px;
+	font-family: 'Metal Mania', cursive;
+    font-size: 40px;
+    position: absolute;
+}
+
+.border-warning{
+	  border-width: 2px;
+}
+
+.btnPlay:hover{
+	
+	background:#FFC300 ;
+}
+
+a{
+	color:#fff;
+	text-decoration: none;
+}
+
+a:hover{
+	color: #000;
+	text-decoration: none;
 }

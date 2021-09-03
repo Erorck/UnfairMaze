@@ -9,11 +9,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&display=swap" rel="stylesheet">
     <title>Unfair Maze</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/jugar.css">
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
+    <nav class="navGame navbar navbar-expand-lg navbar-dark bg-dark ">
         <div class="container-fluid">
             <a href="index.html" class="navbar-brand">Unfair Maze</a>
 
@@ -67,19 +67,55 @@
             </div>
         </div>
     </nav>
-
-    <header>
-        <h1 class="titulo">Bienvenido a Unfair Maze</h1>
-    </header>
-
-    <div class="container">
-        <button type="button" class="btnPlay btn btn-dark border border-warning"><a href="jugar.html">Jugar</a></button>
-
+    
+    <div class="container2">
+        <div class="row">
+                <div class="col-lg-4">
+                    <h2>Nombre de Usuario:</h2>
+                </div>
+                <div class="col-lg-4">
+                    <h2 class="punt">Puntuacion: 20092</h2>
+                </div>
+            </div>
     </div>
 
+    <img class="ImgPrueba" src="https://static.listoffreeware.com/wp-content/uploads/maze_game_pakman_full_03-31-17-017.jpg" alt="" >
+<!--   -------------------------------------Boton de pausa ---------------------------------- -->
+        <div class="container">
+            
+              <!-- Button trigger modal -->
+              <button type="button" class="btnPause btn btn-dark border border-warning"  data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Pausa
+              </button>
+        
+              <!-- Modal -->
+              <div class="pauseMenu modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">Juego en pausa</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <button type="button" class="btn btnReturn btn-dark border border-warning" data-bs-dismiss="modal">Regresar</button>
+                              <br>
+                              <br>
+                              <button type="button" class="btn btn-dark border border-warning"> Guardar y salir</button>
+                              <br>
+                              <br>
+                              <button type="button" class="btn btn-dark border border-warning">Salir sin guardar</button>
+                            </div>
+                            
+                        </div>
+                    </div>
+              </div>
+        </div>
 
-    <script src="js/jquery-1.12.3.min.js"></script>
+ 
+
+
+    <script src="js/jquery-3.6.0.min.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="js/index.js"></script>
+    <script src="js/jugar.js"></script>
 </body>
 </html>

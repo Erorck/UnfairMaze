@@ -1,0 +1,11 @@
+.titulo3{
+   font-family: 'Metal Mania', cursive;
+    margin-left: 350px;
+    font-size: 90px;
+    position: absolute;
+    -webkit-text-stroke: 2px #FFC300
+}
+
+.navbar{
+	font-family: 'Metal Mania', cursive;
+}

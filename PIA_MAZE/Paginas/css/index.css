@@ -4,7 +4,7 @@ body{
 
 .navbar{
 	background: #2E2E2E url("https://i.pinimg.com/originals/21/8f/c4/218fc4f0be3a8531aa19fde1118a48bb.jpg");
-	 opacity: 2.6;
+	 /*opacity: 0*/
 	 font-family: 'Metal Mania', cursive;
 }
 

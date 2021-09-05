@@ -7,9 +7,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&display=swap" rel="stylesheet">
-    <title>inicio de sesion</title>
+    <title>Registrate</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/elegirEscenario.css">
 </head>
 
 <body>
@@ -34,19 +34,23 @@
         </div>
     </nav>
 
-  <h2 class="logTitulo">Inicia sesión para poder jugar</h2>
+    <header>
+        <h1 class="tituloConf">Elija su escenario</h1>
+    </header>
 
-    <form class="formulario" action="">
-        <input type="text" placeholder="Nombre">
-        <input type="email" placeholder="Correo">
-        <button id="btnSendSesion" onclick="location.href='elegirEscenario.html'">Jugar</button>
-       <!-- <input  type="submit" onclick="location.href='jugar.html" value="Enviar">-->
-       <br>
-       <hr>
-       <a id="goToSignIn" href="registro.html">¿No tienes cuenta? Registrate para poder jugar</a>
-    </form>
+     <div class="containerOptions">
+       
+       <div class="options btn-group" role="group" aria-label="Basic radio toggle button group">
+         <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+         <label class="btn btn-outline-warning" for="btnradio1" onclick="location.href='jugar.html'">Bosque</label>
+         <br>
+         <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+         <label class="btn btn-outline-warning" for="btnradio2" onclick="location.href='jugar.html'">Medieval</label>
+         <br>
+         <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+         <label class="btn btn-outline-warning" for="btnradio3" onclick="location.href='jugar.html'">Futurista</label>
+       </div>
 
-    <script src="js/jquery-3.6.0.min.js"></script>
-    <script src="js/bootstrap.bundle.min.js"></script>
+      </div>
 </body>
 </html>

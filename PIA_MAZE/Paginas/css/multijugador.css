@@ -1,7 +1,6 @@
 body{
 	background: url('../img/fondo.png');
 }
-
 .navbar{
 	background: #2E2E2E url("https://i.pinimg.com/originals/21/8f/c4/218fc4f0be3a8531aa19fde1118a48bb.jpg");
 	 opacity: 2.6;
@@ -9,16 +8,17 @@ body{
 }
 
 
+
 .container2{
 	margin: 10px 200px;
 }
 
 .container2 .punt{
-	margin-left: 400px;
+	margin-left:400px;
 }
 
 .ImgPrueba{
-	margin: 10px 150px;
+	margin: 10px -30px;
 	width:1200px;
 	height:600px;
 }
@@ -27,28 +27,20 @@ body{
 	margin: 40px 570px;
 	 font-family: 'Metal Mania', cursive;
 	font-size: 30px;
+	text-decoration: none;
 }
 
 .btnPause:hover{
 	background:#FFC300 ;
 	color: #000;
+	text-decoration: none;
 }
 
 .modal-body .btn{
+	text-decoration: none;
 	 font-family: 'Metal Mania', cursive;
 	font-size: 30px;
 	margin-left: 120px;
-}
-
-.modal-body  .btnReturn{
-	 font-family: 'Metal Mania', cursive;
-	font-size: 30px;
-	margin-left: 150px;
-}
-
-.modal-body .btn:hover{
-	 background:#FFC300 ;
-	color: #000;
 }
 
 .modal-body .btnSave{
@@ -61,8 +53,20 @@ body{
 	color:#000;
 }
 
-.modal-content{
+.modal-body  .btnReturn{
+	 font-family: 'Metal Mania', cursive;
+	font-size: 30px;
+	margin-left: 150px;
+}
+
+.modal-body .btn:hover{
+	 background:#FFC300 ;
+	color: #000;
 	
+}
+
+.modal-content{
+	text-decoration: none;
 	background: #848484;
 }
 

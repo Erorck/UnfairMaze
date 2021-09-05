@@ -7,9 +7,11 @@
 }
 
 body {
-	background: url('../img/fondo.png');
-
+	background: #f2f2f2;
 	font-family: 'Metal Mania', cursive;
+	background: url('../img/fondo.png');
+	opacity: 2.6;;
+
 }
 
 .navbar{
@@ -18,8 +20,12 @@ body {
 	 font-family: 'Metal Mania', cursive;
 }
 
+label{
+	color: #FFC300;
+}
 
-.logTitulo{
+.tituloRegi{
+	margin-top: 10px;
 	font-family: 'Metal Mania', cursive;
 	margin-left: 390px;
 	font-size: 70px;
@@ -84,29 +90,22 @@ body {
 	color: #000;
 }*/
 
-.formulario #btnSendSesion{
+.formulario #btnRegSesion{
 	font-family: 'Metal Mania', cursive;
 	width: 200px;
 	margin-left: 120px;
 	padding: 10px;
 	border:1px solid #FACC2E;
-	color: #FFFF00;
+	color: #FFC300;
 	background: #2E2E2E;
 	cursor: pointer;
 	border-radius: 3px;
 	font-size: 16px;
 }
 
-.formulario #btnSendSesion:hover{
+.formulario #btnRegSesion:hover{
 	font-family: 'Metal Mania', cursive;
-	background: #FFFF00;
+	background: #FFC300;
 	color: #000;
 }
 
-.formulario #goToSignIn{
-	margin-left: 80px;
-	font-family: 'Metal Mania', cursive;
-	color: #FFFF00;
-	
-	-webkit-text-stroke: 0.5px #FFC300;
-}

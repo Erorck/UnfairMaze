@@ -1,0 +1,137 @@
+body {
+	background: #f2f2f2;
+	font-family: 'Metal Mania', cursive;
+	background: url('../img/fondo.png');
+	opacity: 2.6;
+
+}
+
+.navbar{
+	background: #2E2E2E url("https://i.pinimg.com/originals/21/8f/c4/218fc4f0be3a8531aa19fde1118a48bb.jpg");
+	 opacity: 0.8;
+	 font-family: 'Metal Mania', cursive;
+}
+
+.containConf{
+	width: 500px;
+	height: 400px;
+	background: #2E2E2E;
+	margin: 20px 500px;
+	color: #FFBF00;
+	border-radius: 20px;
+}
+
+.slidecontainer {
+  width: 50%;
+  margin-top: 190px;
+ margin-left:130px;
+ font-size: 25px;
+}
+
+.slidecontainer2 {
+  width: 90%;
+  margin-top: 10px;
+ margin-left:0px;
+ font-size: 25px;
+}
+
+.tituloConf{
+	font-family: 'Metal Mania', cursive;
+    margin-left: 350px;
+    font-size: 90px;
+    position: absolute;
+    color: #000;
+    -webkit-text-stroke: 2px #FFC300;
+}
+
+
+.ConfProp{
+	font-family: 'Metal Mania', cursive;
+	font-size: 230px
+	-webkit-text-stroke: 2px #FFC300;
+	
+}
+
+.slider{
+  -webkit-appearance: none;
+  width: 100%;
+  height: 15px;
+  border-radius: 5px;  
+  background: #FFC300;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%; 
+  background: #1C1C1C;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #04AA6D;
+  cursor: pointer;
+}
+
+.slider2{
+  -webkit-appearance: none;
+  width: 100%;
+  height: 15px;
+  border-radius: 5px;  
+  background: #FFC300;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider2::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%; 
+  background: #1C1C1C;
+  cursor: pointer;
+}
+
+.slider2::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #04AA6D;
+  cursor: pointer;
+}
+
+.radioConf .form-check{
+	font-size: 25px;
+	margin-left: 10px;
+}
+
+#btnReturnToIndex{
+	font-family: 'Metal Mania', cursive;
+	width: 200px;
+	margin-left: 650px;
+	padding: 10px;
+	border:1px solid #FACC2E;
+	color: #FFC300;
+	background: #2E2E2E;
+	cursor: pointer;
+	border-radius: 3px;
+	font-size: 20px;
+}
+
+#btnReturnToIndex:hover{
+	font-family: 'Metal Mania', cursive;
+	background: #FFC300;
+	color: #000;
+}

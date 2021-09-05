@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&display=swap" rel="stylesheet">
     <title>Registrate</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/registro.css">
 </head>
 
 <body>
@@ -30,20 +30,27 @@
                 <span class="navbar-toggler-icon"></span>
 
             </button>
-
-        
-
-               
-
-
             </div>
-        </div>
     </nav>
-
-  
+<div class="container">
+    <h1 class="tituloRegi">Registrese para jugar</h1>
+    <form class="formulario" onsubmit="return validform()" action="jugar.html">
+        <label class="labels" for="">Escriba su nombre</label>
+        <input type="text" placeholder="Nombre">
+        <label class="labels" for="">Escriba su nombre de usuario</label>
+        <input type="text" placeholder="Usuario/Nickname">
+        <label class="labels" for="">Escriba su correo</label>
+        <input type="email" placeholder="Correo">
+        
+        <!--<button id="btnSendSesion" >Registrar cuenta</button>-->
+        <input  id="btnRegSesion"type="submit" onclick="location.href='jugar.html" value="Enviar">
+    </form>
+</div>
+ 
 
 
     <script src="js/jquery-3.6.0.min.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/registro.js"></script>
 </body>
 </html>

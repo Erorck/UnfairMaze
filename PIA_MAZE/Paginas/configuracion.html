@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&display=swap" rel="stylesheet">
     <title>Registrate</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/configuracion.css">
 </head>
 
 <body>
@@ -30,20 +30,58 @@
                 <span class="navbar-toggler-icon"></span>
 
             </button>
-
-        
-
-               
-
-
             </div>
         </div>
     </nav>
 
-  
+   <header>
+        <h1 class="tituloConf">Menu de configuraciones</h1>
+    </header>
+
+<div class="containConf">
+    <div class="slidecontainer">
+       <p class="ConfProp">Volumen</p>
+     <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+     <p>val:<span id="demo"></span></p>
+
+     <div class="slidecontainer2">
+       <p class="ConfProp">Musica</p>
+     <input type="range" min="1" max="100" value="50" class="slider2" id="myRange2">
+     <p>val:<span id="demo2"></span></p>
+    </div>
+
+        <div class="radioConf">
+            <h3>Dificultad</h3>
+            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+              <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+              <label class="btn btn-outline-warning" for="btnradio1">Modo 1</label>
+
+              <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+              <label class="btn btn-outline-warning" for="btnradio2">Modo 2</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button id="btnReturnToIndex" onclick="location.href='index.html'">Regresar</button>
 
 
     <script src="js/jquery-3.6.0.min.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
+    <script>
+var slider = document.getElementById("myRange");
+var output = document.getElementById("demo");
+var slider2 = document.getElementById("myRange2");
+var output2 = document.getElementById("demo2");
+output.innerHTML = slider.value;
+output2.innerHTML = slider2.value;
+
+slider.oninput = function() {
+  output.innerHTML = this.value;
+}
+slider2.oninput = function() {
+  output2.innerHTML = this.value;
+}
+</script>
 </body>
 </html>

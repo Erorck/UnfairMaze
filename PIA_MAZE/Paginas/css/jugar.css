@@ -34,8 +34,9 @@ body{
 .btnPause{
 	margin: 5px 570px;
 	 font-family: 'Metal Mania', cursive;
-	font-size: 30px;
+	font-size: 20px;
 	text-decoration: none;
+	color: #FFC300;
 }
 
 .btnPause:hover{
@@ -80,4 +81,23 @@ body{
 	font-size: 30px;
 	color: #000;
 	background:#F7D358;
+}
+
+#btnReturnToIndex{
+	font-family: 'Metal Mania', cursive;
+	width: 200px;
+	margin-left: 510px;
+	padding: 10px;
+	border:1px solid #FACC2E;
+	color: #FFC300;
+	background: #2E2E2E;
+	cursor: pointer;
+	border-radius: 3px;
+	font-size: 20px;
+}
+
+#btnReturnToIndex:hover{
+	font-family: 'Metal Mania', cursive;
+	background: #FFC300;
+	color: #000;
 }

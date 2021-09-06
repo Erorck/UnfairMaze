@@ -7,25 +7,30 @@ body{
 	 font-family: 'Metal Mania', cursive;
 }
 
-
-
 .container2{
-	margin: 10px 200px;
+	margin: 15px 260px;
 	font-family: 'Metal Mania', cursive;
+	font-size: 10px;
 }
 
 .container2 .punt{
 	margin-left:400px;
+	font-size: 20px;
 }
 
-.ImgPrueba{
-	margin: 10px -30px;
-	width:1200px;
-	height:600px;
+.container2 .punt2{
+	margin-left:10px;
+	font-size: 20px;
+}
+
+.container2 .ImgPrueba{
+	margin-left:15px;
+	width:1000px;
+	height:500px;
 }
 
 .btnPause{
-	margin: 40px 570px;
+	margin: 5px 570px;
 	 font-family: 'Metal Mania', cursive;
 	font-size: 30px;
 	text-decoration: none;

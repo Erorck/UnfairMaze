@@ -14,26 +14,37 @@ body{
 	font-size: 10px;
 }
 
-.container2 .punt{
-	margin-left:400px;
-	font-size: 20px;
+.container2 .container{
+	position: absolute;
+	margin: 850px 95px;
+
 }
 
-.container2 .punt2{
-	margin-left:10px;
-	font-size: 20px;
+.container2 .row{
+	position: absolute;
+	margin: 40px 195px;
+	font-size: 25px;
+	-webkit-text-stroke: 0.5px #FFC300;
+}
+
+.punt{
+	margin-top: -15px;
+	margin-left:630px;
+	
+
+}
+.punt2{
+	
+	margin-left:-25px;
+	
 }
 
 .container2 .ImgPrueba{
-	
 	width:1518px;
 	height:1000px;
 }
 
-.container2 .container{
-	position: absolute;
-	margin: 850px 95px;
-}
+
 
 .container2 .container .btnPause{
 	margin: 5px 570px;
@@ -43,7 +54,7 @@ body{
 	color: #FFC300;
 }
 
-.btnPause:hover{
+.container2 .container .btnPause:hover{
 	background:#FFC300 ;
 	color: #000;
 }

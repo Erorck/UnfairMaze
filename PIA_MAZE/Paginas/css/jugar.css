@@ -10,7 +10,6 @@ body{
 
 
 .container2{
-	margin: 15px 260px;
 	font-family: 'Metal Mania', cursive;
 	font-size: 10px;
 }
@@ -26,12 +25,17 @@ body{
 }
 
 .container2 .ImgPrueba{
-	margin-left:15px;
-	width:1000px;
-	height:500px;
+	
+	width:1518px;
+	height:1000px;
 }
 
-.btnPause{
+.container2 .container{
+	position: absolute;
+	margin: 850px 95px;
+}
+
+.container2 .container .btnPause{
 	margin: 5px 570px;
 	 font-family: 'Metal Mania', cursive;
 	font-size: 20px;

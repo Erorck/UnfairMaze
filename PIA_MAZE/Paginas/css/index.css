@@ -76,3 +76,7 @@ a:hover{
 	color: #000;
 	text-decoration: none;
 }
+
+.nav{
+	display: block;
+}

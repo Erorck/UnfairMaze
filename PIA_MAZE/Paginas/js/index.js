@@ -13,6 +13,9 @@ $(document).ready(function(){
 	}
 							//tiempo que va a tardar(1.5s)
 
+
+
+
 });
 
 

@@ -10,6 +10,7 @@
     <title>inicio de sesion</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/login.css">
+    <script src="js/jquery-1.12.3.min.js"></script>
 </head>
 
 <body>
@@ -36,16 +37,32 @@
 
   <h2 class="logTitulo">Inicia sesión para poder jugar</h2>
 
-    <form class="formulario" action="">
+    <section id="three">
+    <form id="form" class="formulario" action="">
+        
         <input type="text" placeholder="Nombre">
         <input type="email" placeholder="Correo">
         <button id="btnSendSesion" onclick="location.href='elegirEscenario.html'">Jugar</button>
        <!-- <input  type="submit" onclick="location.href='jugar.html" value="Enviar">-->
        <br>
        <hr>
-       <a id="goToSignIn" href="registro.html">¿No tienes cuenta? Registrate para poder jugar</a>
-    </form>
+       <ul id="nav-one" class="nav">  
+        <audio id="theSound" controls="controls" preload="auto" hidden>
+                                <source src="audio/AndrossEnter.mp3" controls >
+        </audio> 
+        <a id="goToSignIn" href="registro.html">¿No tienes cuenta? Registrate para poder jugar</a>
+       </ul>
+       
 
+    </form>
+        <script>var beepOne = $("#theSound")[0];
+    $("nav-one a")
+        .mouseenter(function() {
+            beepOne.play();
+        });
+        </script>
+ </section>
+    
     <script src="js/jquery-3.6.0.min.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
 </body>

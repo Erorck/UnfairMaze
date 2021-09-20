@@ -81,5 +81,17 @@ a:hover{
 	display: block;
 	padding: 20px;
 	font-family: 'Metal Mania', cursive;
+	font-size: 60px;
+	margin: 200px 570px;
+	
+}
+
+li .btnPlay{
+	font-size: 40px;
+}
+li .btnPlay:hover{
+	color: #000;
+	text-decoration: none;
+	background:#FFC300;
 }
 

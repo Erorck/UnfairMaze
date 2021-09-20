@@ -20,7 +20,7 @@ body{
 	font-family: 'Metal Mania', cursive;
 }
 
-.btnPlay{
+/*.btnPlay{
 	margin: 300px 570px;
 	font-family: 'Metal Mania', cursive;
     font-size: 40px;
@@ -65,7 +65,7 @@ body{
 
 .btnConfig:hover{
 	background:#FFC300;
-}
+}*/
 
 a{
 	color:#fff;
@@ -77,6 +77,9 @@ a:hover{
 	text-decoration: none;
 }
 
-.nav{
+.nav {
 	display: block;
+	padding: 20px;
+	font-family: 'Metal Mania', cursive;
 }
+

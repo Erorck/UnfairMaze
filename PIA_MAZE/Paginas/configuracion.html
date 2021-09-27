@@ -7,9 +7,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&display=swap" rel="stylesheet">
-    <title>Registrate</title>
+    <title>Configruacion</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/configuracion.css">
+      <script src="js/jquery-1.12.3.min.js"></script>
 </head>
 
 <body>
@@ -63,11 +64,66 @@
     </div>
 </div>
 
-<button id="btnReturnToIndex" onclick="location.href='index.html'">Regresar</button>
 
 
-    <script src="js/jquery-3.6.0.min.js"></script>
+   <!--<section id="three">
+       <div class="inside">
+   <ul id="nav-one" class="nav">
+       <audio id="theSound" controls="controls" preload="auto" >
+                           <source src="audio/AndrossEnter.mp3" controls >
+                   </audio>  
+            <li>
+                <button id="btnReturnToIndex" onclick="location.href='index.html'">Regresar</button>    
+            </li> 
+            
+       </ul>
+       
+
+
+            <script>var beepOne = $("#theSound")[0];
+            $("#nav-one a")
+                .mouseenter(function() {
+                    beepOne.play();
+                });
+            </script>
+       </div>
+</section>-->
+
+<div class="container"> 
+
+    <section id="three">
+        <div class="inside">
+    <ul id="nav-one" class="nav">
+        <audio id="theSound" controls="controls" preload="auto" hidden>
+                            <source src="audio/AndrossEnter.mp3" controls >
+                    </audio>  
+             <li>
+                  <a type="button" id="btnReturnToIndex" class="btnPlay btn btn-dark border border-warning" onclick="location.href='index.html'">Regresar</a>   
+             </li> 
+             
+        </ul>
+        
+
+
+             <script>var beepOne = $("#theSound")[0];
+             $("#nav-one a")
+                 .mouseenter(function() {
+                     beepOne.play();
+                 });
+             </script>
+        </div>
+ </section>
+</div>
+
+
+    
     <script src="js/bootstrap.bundle.min.js"></script>
+    <script>var beepOne = $("#theSound")[0];
+                 $("btnReturnToIndex button")
+                     .mouseenter(function() {
+                         beepOne.play();
+                     });
+                 </script>
     <script>
 var slider = document.getElementById("myRange");
 var output = document.getElementById("demo");

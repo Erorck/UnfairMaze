@@ -10,6 +10,7 @@
     <title>Registrate</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/elegirEscenario.css">
+    <script src="js/jquery-1.12.3.min.js"></script>
 </head>
 
 <body>
@@ -41,6 +42,9 @@
      <div class="containerOptions">
        
        <div class="options btn-group" role="group" aria-label="Basic radio toggle button group">
+        <audio id="theSound" controls="controls" preload="auto" hidden>
+                                          <source src="audio/AndrossEnter.mp3" controls >
+                                  </audio>  
          <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
          <label class="btn btn-outline-warning" for="btnradio1" onclick="location.href='jugar.html'">Bosque</label>
          <br>
@@ -50,7 +54,21 @@
          <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
          <label class="btn btn-outline-warning" for="btnradio3" onclick="location.href='jugar.html'">Futurista</label>
        </div>
+       <script>var beepOne = $("#theSound")[0];
+           $(".options label")
+               .mouseenter(function() {
+                   beepOne.play();
+               });
+        </script>
 
       </div>
+
+
+
+     
+        
+         
+          </section>
+   
 </body>
 </html>

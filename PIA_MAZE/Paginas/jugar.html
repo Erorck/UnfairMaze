@@ -10,6 +10,7 @@
     <title>Unfair Maze</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/jugar.css">
+    <script src="js/jquery-1.12.3.min.js"></script>
 </head>
 
 <body>
@@ -29,14 +30,18 @@
             <div class="container">
             
               <!-- Button trigger modal -->
-              <button type="button" class="btnPause btn btn-dark border border-warning"  data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <button type="button" id="btnPaused" class="btnPause btn btn-dark border border-warning"  data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Pausa
               </button>
         
               <!-- Modal -->
               <div class="pauseMenu modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <audio id="theSound" controls="controls" preload="auto" hidden>
+                                          <source src="audio/AndrossEnter.mp3" controls >
+                                  </audio>  
                     <div class="modal-dialog">
                         <div class="modal-content">
+                          
                             <div class="modal-header">
                               <h5 class="modal-title" id="exampleModalLabel">Juego en pausa</h5>
                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -60,6 +65,17 @@
 
               </div>
               <button id="btnReturnToIndex" onclick="location.href='index.html'">Cerrar-Sesion</button>
+
+              <script>var beepOne = $("#theSound")[0];
+                          $(".modal-dialog button")
+                              .mouseenter(function() {
+                                  beepOne.play();
+                              });
+                         $("#btnReturnToIndex, #btnPaused")
+                         .mouseenter(function() {
+                             beepOne.play();
+                         });
+                       </script>
             </div>
             <img class="ImgPrueba" src="https://static.listoffreeware.com/wp-content/uploads/maze_game_pakman_full_03-31-17-017.jpg" alt="" >
     </div>

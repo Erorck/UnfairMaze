@@ -10,6 +10,7 @@
     <title>Registrate</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/registro.css">
+     <script src="js/jquery-1.12.3.min.js"></script>
 </head>
 
 <body>
@@ -34,7 +35,10 @@
     </nav>
 <div class="container">
     <h1 class="tituloRegi">Registrese para jugar</h1>
-    <form class="formulario" onsubmit="return validform()" action="jugar.html">
+    <form id="form" class="formulario" onsubmit="return validform()" action="jugar.html">
+        <audio id="theSound" controls="controls" preload="auto" hidden>
+                                <source src="audio/AndrossEnter.mp3" controls >
+        </audio>
         <label class="labels" for="">Escriba su nombre</label>
         <input type="text" placeholder="Nombre">
         <label class="labels" for="">Escriba su nombre de usuario</label>
@@ -45,6 +49,12 @@
         <!--<button id="btnSendSesion" >Registrar cuenta</button>-->
         <input  id="btnRegSesion"type="submit" onclick="location.href='jugar.html" value="Enviar">
     </form>
+        <script>var beepOne = $("#theSound")[0];
+            $("#form input")
+                .mouseenter(function() {
+                    beepOne.play();
+                });
+         </script>
 </div>
  
 

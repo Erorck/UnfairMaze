@@ -1,0 +1,462 @@
+<html>
+<head>
+	<title>2.3 Colisiones</title>
+	<script type="text/javascript" src="js/libs/jquery/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="js/libs/three/three.js"></script>
+	<script type="text/javascript" src="js/libs/three/MTLLoader.js"></script>
+	<script type="text/javascript" src="js/libs/three/OBJLoader.js"></script>
+	<script type="text/javascript">
+
+	var scene;
+	var camera;
+	var renderer;
+	var controls;
+	var objects = [];
+	var clock;
+	var deltaTime;	
+	var keys = {};
+	var moto;
+
+	// Clase que nos permite "lanzar" un rayo hacia diferentes direcciones
+	// y detectar si el "rayo" colisiona con un objeto en esa direccion
+	var rayCaster;
+	var collisionObjects = [];
+	var isWorldReady = [ false, false ];
+	$(document).ready(function() {
+
+		setupScene();
+		rayCaster = new THREE.Raycaster();
+
+		loadOBJWithMTL("assets/", "laPared.obj", "laParedFuturo.mtl", (object) => {
+			//Primera pared-----------------------------------------------------------------------------
+			object.position.z = -43;
+			object.position.x = 34;
+			object.position.y = -2;
+			object.scale.set(1.92,2,1);
+
+			var box2 = object.clone();
+			box2.position.x = -0.4;
+		
+			var box3 = object.clone();
+			box3.position.x = -33;
+			//--------------------------------------------------------------------------------------------
+			//Segunda pared-----------------------------------------------------------------------------
+			var box4 = object.clone();
+			box4.position.x = 30;
+			box4.position.z = 33;
+
+			var box5 = box4.clone();
+			box5.position.x = 6;
+			box5.scale.set(0.8,2,1);
+
+			var box6 = box4.clone();
+			box6.position.x = -33;
+
+			//--------------------------------------------------------------------------------------------
+			//Tercera pared-----------------------------------------------------------------------------
+			var box7 = object.clone();		
+			box7.position.z = -18;
+			box7.position.x = 43.5;
+			box7.rotation.y = THREE.Math.degToRad(90);
+
+			var box8 = object.clone();		
+			box8.position.z = 14;
+			box8.position.x = 43.5;
+			box8.rotation.y = THREE.Math.degToRad(90);
+			//--------------------------------------------------------------------------------------------
+			//Cuarta pared-----------------------------------------------------------------------------
+			var box9 = object.clone();		
+			box9.position.x = -42.4;
+			box9.position.z = 23;
+			box9.rotation.y = THREE.Math.degToRad(-90);
+
+			var box10 = object.clone();		
+			box10.position.x = -42.4;
+			box10.position.z = -6;
+			box10.rotation.y = THREE.Math.degToRad(-90);
+			//--------------------------------------------------------------------------------------------
+			//Paredes horizontales largas-----------------------------------------------------------------------------
+			var box11 = object.clone();
+			box11.position.x = -37;
+			box11.position.z = -12;
+			box11.scale.set(1.34,2,1);
+
+			var box12 = box11.clone();
+			box12.position.x = -15;
+			box12.position.z = 0;
+
+			var box13 = box11.clone();
+			box13.position.x = -15;
+			box13.position.z = 8;
+
+			var box14 = box11.clone();
+			box14.position.x = -3;
+			box14.position.z = -12;
+
+			var box15 = box11.clone();
+			box15.position.x = -3;
+			box15.position.z = -28;
+
+			var box16 = box11.clone();
+			box16.position.x = 30;
+			box16.position.z = -28;
+
+			var box17 = box11.clone();
+			box17.position.x = 30;
+			box17.position.z = 25;
+			//--------------------------------------------------------------------------------------------
+			//Paredes horizontales Cortas-----------------------------------------------------------------------------
+			var shortWallHor1 = object.clone();
+			shortWallHor1.position.x = 44;
+			shortWallHor1.position.z = 14;
+			shortWallHor1.scale.set(0.5,2,1);
+
+			var shortWallHor2 = shortWallHor1.clone(); //Esta requiere una pared vertical
+			shortWallHor2.position.x = 4;
+			shortWallHor2.position.z = 25;
+
+			var shortWallHor3 = shortWallHor1.clone();
+			shortWallHor3.position.x = -14;
+			shortWallHor3.position.z = 25;
+
+			var shortWallHor4 = shortWallHor1.clone();
+			shortWallHor4.position.x = -7;
+			shortWallHor4.position.z = 16;
+
+			var shortWallHor5 = shortWallHor1.clone(); //Esta requiere una pared vertical
+			shortWallHor5.position.x = 6;
+			shortWallHor5.position.z = 12;
+
+			var shortWallHor6 = shortWallHor1.clone(); //Esta requiere una pared vertical
+			shortWallHor6.position.x = 34;
+			shortWallHor6.position.z = -2;
+
+			var shortWallHor7 = shortWallHor1.clone(); 
+			shortWallHor7.position.x = 6;
+			shortWallHor7.position.z = -5;
+
+			var shortWallHor8 = shortWallHor1.clone(); //Esta requiere una pared vertical
+			shortWallHor8.position.x = 26;
+			shortWallHor8.position.z = 12;
+
+			var shortWallHor9 = shortWallHor1.clone(); //Esta requiere una pared vertical
+			shortWallHor9.position.x = -32;
+			shortWallHor9.position.z = -25;
+
+			var shortWallHor10 = shortWallHor1.clone(); //Esta requiere una pared vertical
+			shortWallHor10.position.x = 14;
+			shortWallHor10.position.z = -18;
+
+			var shortWallHor11 = shortWallHor1.clone(); 
+			shortWallHor11.position.x = 35;
+			shortWallHor11.position.z = -18;
+
+			var shortWallHor12 = shortWallHor1.clone(); //Esta requiere una pared vertical
+			shortWallHor12.position.x = -36;
+			shortWallHor12.position.z = 15;
+
+			var shortWallHor13 = shortWallHor1.clone(); //Esta requiere una pared vertical
+			shortWallHor13.position.x = -36;
+			shortWallHor13.position.z = -5;4
+
+			var shortWallHor14 =box5.clone();
+			shortWallHor14.position.x = 34;
+			shortWallHor14.position.z = -12;
+			shortWallHor14.scale.set(0.55,2,1);
+			//--------------------------------------------------------------------------------------------
+			//Paredes verticales Cortas-------------------------------------------------------------------
+			var shortWallVer1 = shortWallHor1.clone();		
+			shortWallVer1.position.x = -32.5;
+			shortWallVer1.position.z = 11.7;
+			shortWallVer1.rotation.y = THREE.Math.degToRad(-90);
+			shortWallVer1.scale.set(1.05,2,1);
+			
+			var shortWallVer2 = shortWallVer1.clone();		
+			shortWallVer2.position.x = -18;
+			shortWallVer2.position.z = 25;
+			shortWallVer2.scale.set(0.5,2,1);
+
+			var shortWallVer3 = shortWallVer2.clone();		
+			shortWallVer3.position.x = 16;
+			shortWallVer3.position.z = 28.5;
+
+			var shortWallVer4 = shortWallVer1.clone();		
+			shortWallVer4.position.x = 18;
+			shortWallVer4.position.z = 14;
+			shortWallVer4.scale.set(0.65,2,1);
+
+			var shortWallVer5 = shortWallVer1.clone();		
+			shortWallVer5.position.x = 30;
+			shortWallVer5.position.z = 4;
+
+			var shortWallVer6 = shortWallVer1.clone();		
+			shortWallVer6.position.x = -14;
+			shortWallVer6.position.z = -17.5;
+
+			var shortWallVer7 = shortWallVer2.clone();		
+			shortWallVer7.position.x = 22;
+			shortWallVer7.position.z = -30;
+
+			var shortWallVer8 = shortWallVer2.clone();		
+			shortWallVer8.position.x = 5;
+			shortWallVer8.position.z = 45;
+
+			var shortWallVer9 = shortWallVer2.clone();		
+			shortWallVer9.position.x = -8;
+			shortWallVer9.position.z = 45;
+			
+			//--------------------------------------------------------------------------------------------
+			//Paredes Troll-------------------------------------------------------------------
+			var boxTroll1 = box5.clone();
+			boxTroll1.position.x = -8.5;
+
+			var boxTroll3 = boxTroll1.clone();
+			boxTroll3.position.x = -8.5;
+			boxTroll3.position.z = 43;
+
+			var boxTroll2 =shortWallVer6.clone();
+			boxTroll2.position.x = 4;
+			boxTroll2.position.z = 11;
+			boxTroll2.scale.set(0.55,2,1);
+			//--------------------------------------------------------------------------------------------
+
+			//--------------------------------------------------------------------------------------------
+			scene.add(object);
+			scene.add(box2);
+			scene.add(box3);
+			scene.add(box4);
+			scene.add(box5);
+			scene.add(box6);
+			scene.add(box7);
+			scene.add(box8);
+			scene.add(box9);
+			scene.add(box10);
+			scene.add(box11);
+			scene.add(box12);
+			scene.add(box13);
+			scene.add(box14);
+			scene.add(box15);
+			scene.add(box16);
+			scene.add(box17);
+
+			scene.add(shortWallHor1);
+			scene.add(shortWallHor2);
+			scene.add(shortWallHor3);
+			scene.add(shortWallHor4);
+			scene.add(shortWallHor5);
+			scene.add(shortWallHor6);
+			scene.add(shortWallHor7);
+			scene.add(shortWallHor8);
+			scene.add(shortWallHor9);
+			scene.add(shortWallHor10);
+			scene.add(shortWallHor11);
+			scene.add(shortWallHor12);
+			scene.add(shortWallHor13);
+			
+
+			scene.add(shortWallVer1);
+			scene.add(shortWallVer2);
+			scene.add(shortWallVer3);
+			scene.add(shortWallVer4);
+			scene.add(shortWallVer5);
+			scene.add(shortWallVer6);
+			scene.add(shortWallVer7);
+			scene.add(shortWallVer8);
+			scene.add(shortWallVer9);
+
+			scene.add(boxTroll1);
+			scene.add(boxTroll2);
+			scene.add(boxTroll3);
+
+			collisionObjects.push(object);
+			collisionObjects.push(box2);
+			collisionObjects.push(box3);
+			collisionObjects.push(box4);
+			collisionObjects.push(box5);
+			collisionObjects.push(box6);
+			collisionObjects.push(box7);
+			collisionObjects.push(box8);
+			collisionObjects.push(box9);
+			collisionObjects.push(box10);
+			collisionObjects.push(box11);
+			collisionObjects.push(box12);
+			collisionObjects.push(box13);
+			collisionObjects.push(box14);
+			collisionObjects.push(box15);
+			collisionObjects.push(box16);
+			collisionObjects.push(box17);
+
+			collisionObjects.push(shortWallHor1);
+			collisionObjects.push(shortWallHor2);
+			collisionObjects.push(shortWallHor3);
+			collisionObjects.push(shortWallHor4);
+			collisionObjects.push(shortWallHor5);
+			collisionObjects.push(shortWallHor6);
+			collisionObjects.push(shortWallHor7);
+			collisionObjects.push(shortWallHor8);
+			collisionObjects.push(shortWallHor9);
+			collisionObjects.push(shortWallHor10);
+			collisionObjects.push(shortWallHor11);
+			collisionObjects.push(shortWallHor12);
+			collisionObjects.push(shortWallHor13);
+
+			collisionObjects.push(shortWallVer1);
+			collisionObjects.push(shortWallVer2);
+			collisionObjects.push(shortWallVer3);
+			collisionObjects.push(shortWallVer4);
+			collisionObjects.push(shortWallVer5);
+			collisionObjects.push(shortWallVer6);
+			collisionObjects.push(shortWallVer7);
+			collisionObjects.push(boxTroll3);
+
+			isWorldReady[0] = true;
+		});
+
+		loadOBJWithMTL("assets/", "jetski.obj", "jetski.mtl", (object) => {
+			object.position.z = -10;
+			object.rotation.x = THREE.Math.degToRad(-90);
+
+
+			object.name = "moto";
+
+
+			scene.add(object);
+			collisionObjects.push(object);//colision con la moto
+			isWorldReady[1] = true;
+		});
+
+		loadOBJWithMTL("assets/", "plataforma.obj", "plataforma.mtl", (object) => {
+			object.position.z = 1;
+			object.position.y = -1;
+			object.scale.set(2.3,1,2.13);
+
+			scene.add(object);
+			collisionObjects.push(object);//colision con la moto
+			isWorldReady[2] = true;
+		});
+
+		
+		render();
+
+		document.addEventListener('keydown', onKeyDown);
+		document.addEventListener('keyup', onKeyUp);		
+	});
+
+	function loadOBJWithMTL(path, objFile, mtlFile, onLoadCallback) {
+		var mtlLoader = new THREE.MTLLoader();
+		mtlLoader.setPath(path);
+		mtlLoader.load(mtlFile, (materials) => {
+			
+			var objLoader = new THREE.OBJLoader();
+			objLoader.setMaterials(materials);
+			objLoader.setPath(path);
+			objLoader.load(objFile, (object) => {
+				onLoadCallback(object);
+			});
+
+		});
+	}
+
+	function onKeyDown(event) {
+		keys[String.fromCharCode(event.keyCode)] = true;
+	}
+	function onKeyUp(event) {
+		keys[String.fromCharCode(event.keyCode)] = false;
+	}
+
+	
+	function render() {
+		requestAnimationFrame(render);
+		deltaTime = clock.getDelta();	
+		moto = scene.getObjectByName("moto");
+		var yaw = 0;
+		var forward = 0;
+		if (keys["A"]) {
+			yaw = 5;
+		} else if (keys["D"]) {
+			yaw = -5;
+		}
+		if (keys["W"]) {
+			forward = -20;
+		} else if (keys["S"]) {
+			forward = 20;
+		}
+
+		if (isWorldReady[0] && isWorldReady[1]) {
+			moto.rotation.z += yaw * deltaTime;
+			moto.translateX(forward * deltaTime);
+			// Collision
+			// Recorremos los "rayos" a lanzar para detectar las colisiones
+			for (var i = 0; i < camera.rays.length; i++) {
+				// Lanzamos el rayo
+				// El primero parametro es para saber desde donde vamos a lanzar el rayo (desde la camara)
+				// El segundo parametro es para saber la direccion a la cual lanzaremos el rayo
+				rayCaster.set(moto.position, camera.rays[i]);
+				// Verificamos si hay colision con algun objeto.
+				// El primer parametro es el objeto o la coleccion de objetos 
+				// los cuales vamos a tomar en cuenta para colisionar
+				// El segundo parametro es para indicar que aparte de verificar
+				// si existe colision con estos objetos tambien verifique colision con los hijos de estos objetos
+				var collision = rayCaster.intersectObjects(collisionObjects, true);				
+				// En el if podemos ver que tambien tenemos control para saber a que distancia esta colisionando
+				if (collision.length > 0 && collision[0].distance < 1) {
+					console.log("colisionando");
+					//Profe, esta fue la solución que encontré después de 4 horas, solo son 2 líneas de código evita que atravieses las cajas y te hace retroceder si quieres pasar a través de ellas
+					moto.translateX(-(forward * deltaTime));
+					
+				}
+
+			}		
+		}
+		
+	
+		renderer.render(scene, camera);
+	}
+
+	function setupScene() {		
+		var visibleSize = { width: window.innerWidth, height: window.innerHeight};
+		clock = new THREE.Clock();		
+		scene = new THREE.Scene();
+		camera = new THREE.PerspectiveCamera(100, visibleSize.width / visibleSize.height, 0.1, 120);
+		//camera.position.z = 55;
+		//camera.position.y = 5;
+		//camera.rotation.x = THREE.Math.degToRad(-55);
+		camera.position.z = 18;
+		camera.position.y = 69;
+		camera.rotation.x = THREE.Math.degToRad(-90);
+		camera.rays = [
+			new THREE.Vector3(1, 0, 0),
+			new THREE.Vector3(-1, 0, 0),
+			new THREE.Vector3(0, 0, 1),
+			new THREE.Vector3(0, 0, -1),
+		];
+
+		renderer = new THREE.WebGLRenderer( {precision: "mediump" } );
+		renderer.setClearColor(new THREE.Color(0, 0, 0));
+		renderer.setPixelRatio(visibleSize.width / visibleSize.height);
+		renderer.setSize(visibleSize.width, visibleSize.height);
+
+		var ambientLight = new THREE.AmbientLight(new THREE.Color(1, 1, 1), 1.0);
+		scene.add(ambientLight);
+
+		var directionalLight = new THREE.DirectionalLight(new THREE.Color(1, 1, 0), 0.4);
+		directionalLight.position.set(0, 0, 1);
+		scene.add(directionalLight);
+
+		var grid = new THREE.GridHelper(50, 10, 0xffffff, 0xffffff);
+		grid.position.y = -1;
+		scene.add(grid);
+
+		$("#scene-section").append(renderer.domElement);
+	}
+
+
+	</script>
+</head>
+
+<body>
+
+	<div id="scene-section"/>
+
+</body>
+</html>

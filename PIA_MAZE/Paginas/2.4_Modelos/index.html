@@ -12,6 +12,32 @@
 	var renderer;
 	var controls;
 	
+	var mainModeWalls = [
+		[0,0], [0,1], [0,2], [0,3], [0,4], [0,5], [0,6], [0,7], [0,8], [0,9], [0,10], [0,11], [0,12], [0,13], [0,14], [0,15], [0,16], [0,17], [0,18], [0,19],
+		[1,6], [1,19],
+		[2,0], [2,2], [2,3], [2,4], [2,6], [2,8], [2,10], [2,11], [2,12], [2,19],
+		[3,0], [3,8], [3,11], [3,14], [3,15], [3,16], [3,17], [3,19],
+		[4,0], [4,2], [4,4], [4,5], [4,6], [4,8], [4,9], [4,11], [4,13], [4,14], [4,19],
+		[5,0], [5,8], [0,9], [5,16], [5,17], [5,19],
+		[6,0], [6,1], [6,2], [6,3], [6,4], [6,5], [6,6], [6,8], [6,10], [6,11], [6,12], [6,14], [6,19],
+		[7,0], [7,17], [7,19],
+		[8,0], [8,2], [8,4], [8,5], [8,6], [8,7], [8,9], [8,10], [8,11], [8,13], [8,15], [8,19],
+		[9,0], [9,2], [9,13], [9,17], [9,19],
+		[10,0], [10,2], [10,3], [10,4], [10,5], [10,6], [10,7], [10,9], [0,10], [10,11], [10,12], [10,13], [10,14], [10,19],
+		[11,0], [11,11], [11,16], [11,17], [11,19],
+		[12,0], [12,2], [12,3], [12,5], [12,7], [12,8], [12,10], [12,11], [12,13], [12,14],[12,16], [12,19],
+		[13,0], [13,2], [13,5], [13,7], [13,8], [13,13], [13,14], [13,16], [13,18], [13,19],
+		[14,0], [14,4], [14,5], [14,10], [14,11], [14,19],
+		[15,0], [15,2], [15,4], [15,5], [15,7], [15,8], [15,10], [15,11], [15,13], [15,14],  [15,16], [15,17], [15,19],
+		[16,0], [0,19],
+		[17,0], [17,1], [17,2], [17,3], [17,4], [17,5], [17,6], [17,7], [17,8], [17,9], [17,10], [17,11], [17,12], [17,13], [17,14], [17,16], [17,17], [17,18], [17,19],
+		[18,0], [18,1], [18,2], [18,3], [18,4], [18,5], [18,6], [18,7], [18,8], [18,9], [18,10], [18,11], [18,12], [18,13], [18,14], [18,16], [18,17], [18,18], [18,19],
+		[19,0], [19,1], [19,2], [19,3], [19,4], [19,5], [19,6], [19,7], [19,8], [19,9], [19,10], [19,11], [19,12], [19,13], [190,14], [19,15], [19,16], [19,17], [19,18], [19,19],
+
+
+	];
+
+
 	var objects = {
 		boxes:"boxes",
 		fakeBoxes:"fakeBoxes",
@@ -21,7 +47,7 @@
 		mannequins:"mannequins",
 	};
 
-	objects.boxes = [{x:"coordX", y:"posy", z:"coordZ"}];
+	objects.boxes = [];
 	objects.fakeBoxes = [{x:"coordX", y:"posy", z:"coordZ"}];
 	objects.decorators = [{x:"coordX", y:"posy", z:"coordZ"}];
 	objects.spikes = [{x:"coordX", y:"posy", z:"coordZ"}];
@@ -36,23 +62,40 @@
 	// Clase que nos permite "lanzar" un rayo hacia diferentes direcciones
 	// y detectar si el "rayo" colisiona con un objeto en esa direccion
 	var rayCaster;
-	var collisionObjects = [];
+	var collisionObjects = []; 
 	var isWorldReady = [ false, false ];
 	$(document).ready(function() {
 
-		
-
-		// function positionObject(object) {
-		// 	if(object.parent.name="boxes"){
-		// 		object.mesh = cubo.clone();
-		// 		object.mesh.position.x +=  object.coordX*10;
-		// 		object.mesh.position.z +=  object.coordZ*10;
-		// 	}
-
-		// }
-
 		setupScene();
 		rayCaster = new THREE.Raycaster();
+
+		function positionObject(object) {
+				if(object == "box"){
+
+					var geometria = new THREE.BoxGeometry(10, 10, 10);
+					var material = new THREE.MeshLambertMaterial( { color: new THREE.Color(0, 0.6, 0.7), wireframe:false } );
+					
+					cubo = new THREE.Mesh(geometria, material);
+
+					cubo.position.z = -40;
+					cubo.position.x = -44;
+					cubo.position.y = 5;
+
+					mainModeWalls.forEach(function(element){
+						var asset = cubo.clone();
+						 
+						asset.coordZ = element[0];
+						asset.coordX = element[1];
+						asset.position.x +=  asset.coordX*10;
+						asset.position.z +=  asset.coordZ*10;
+						objects.boxes.push(asset);
+					});
+
+					objects.boxes.forEach(function(box){
+						collisionObjects.push(box);
+					});
+				}
+		}
 
 		loadOBJWithMTL("assets/", "laPared.obj", "laParedFuturo.mtl", (object) => {
 			/*//Primera pared-----------------------------------------------------------------------------
@@ -346,13 +389,11 @@
 		});
 
 		loadOBJWithMTL("assets/", "jetski.obj", "jetski.mtl", (object) => {
-			object.position.z = -16;
+			object.position.z = -26;
 			object.rotation.x = THREE.Math.degToRad(-90);
 			object.rotation.z = THREE.Math.degToRad(90);
 
-
 			object.name = "moto";
-
 
 			scene.add(object);
 			collisionObjects.push(object);//colision con la moto
@@ -370,9 +411,8 @@
 		});
 
 		(function() {
-			//PARED SUPERIOR-----------------------------------------------------------------------------
-			
-			var geometria = new THREE.BoxGeometry(10, 10, 10);
+						
+			/*var geometria = new THREE.BoxGeometry(10, 10, 10);
 			var material = new THREE.MeshLambertMaterial( { color: new THREE.Color(0.7, 0, 0), wireframe:true } );
 			
 			cubo = new THREE.Mesh(geometria, material);
@@ -390,37 +430,37 @@
 			collisionObjects.push(cubo2);
 
 			for (let i = 0; i < 10; i++){
-				var cuboT = cubo.clone();
-				cuboT.position.x = cubo.position.x - i*10;
-				collisionObjects.push(cuboT);
-			}
-
-			//PARED DERECHA-----------------------------------------------------------------------------
-			for (let i = 0; i < 10; i++){
-				var cuboT = cubo.clone();
-				cuboT.position.x = 56;
-				cuboT.position.z = cubo.position.z + i*10;
-				collisionObjects.push(cuboT);
-			}
-
-			//PARED IZQUIERDA-----------------------------------------------------------------------------
-			for (let i = 0; i < 8; i++){
-				var cuboT = cubo2.clone();
+				var cuboT1 = cubo.clone();
+				var cuboT2 = cubo.clone();
+				var cuboT3 = cubo2.clone();
+				var cuboT4 = cubo2.clone();
 				
-				cuboT.position.z = cubo2.position.z - i*10;
-				collisionObjects.push(cuboT);
-			}
+				//PARED SUPERIOR-----------------------------------------------------------------------------
+				cuboT1.position.x = cubo.position.x - i*10;
+				collisionObjects.push(cuboT1);
 
-			//PARED DERECHA-----------------------------------------------------------------------------
-			for (let i = 0; i < 9; i++){
-				var cuboT = cubo2.clone();
-				cuboT.position.x = cubo.position.x - i*10;
-				
-				collisionObjects.push(cuboT);
-			}
+				//PARED DERECHA-----------------------------------------------------------------------------
+				cuboT2.position.x = 56;
+				cuboT2.position.z = cubo.position.z + i*10;
+				collisionObjects.push(cuboT2);
 
-			collisionObjects.forEach(function(pared){
-				scene.add(pared);
+				//PARED IZQUIERDA-----------------------------------------------------------------------------
+				if(i < 8){
+					cuboT3.position.z = cubo2.position.z - i*10;
+					collisionObjects.push(cuboT3);
+				}
+
+				//PARED INFERIOR-----------------------------------------------------------------------------
+				if(i < 9){
+					cuboT4.position.x = cubo2.position.x + i*10;
+					collisionObjects.push(cuboT4);
+				}
+			}*/
+
+			positionObject("box");
+
+			collisionObjects.forEach(function(block){
+				scene.add(block);
 			})
 
 			isWorldReady[0] = true;
@@ -451,11 +491,11 @@
 	function onKeyDown(event) {
 		keys[String.fromCharCode(event.keyCode)] = true;
 	}
+
 	function onKeyUp(event) {
 		keys[String.fromCharCode(event.keyCode)] = false;
 	}
 
-	
 	function render() {
 		requestAnimationFrame(render);
 		deltaTime = clock.getDelta();	
@@ -473,6 +513,11 @@
 			forward = 20;
 		}
 
+		var player1 = scene.getObjectByName("moto");
+
+		camera.position.x = player1.position.x;
+		camera.position.x = player1.position.z;
+
 		if (isWorldReady[0] && isWorldReady[1]) {
 			moto.rotation.z += yaw * deltaTime;
 			moto.translateX(forward * deltaTime);
@@ -489,7 +534,13 @@
 				// los cuales vamos a tomar en cuenta para colisionar
 				// El segundo parametro es para indicar que aparte de verificar
 				// si existe colision con estos objetos tambien verifique colision con los hijos de estos objetos
-				var collision = rayCaster.intersectObjects(collisionObjects, true);				
+				var collision = rayCaster.intersectObjects(collisionObjects, true);	
+				if(collision.length){
+					console.log(collision[0].distance);
+				}
+				else{
+					console.log("nada");
+				}
 				// En el if podemos ver que tambien tenemos control para saber a que distancia esta colisionando
 				if (collision.length > 0 && collision[0].distance < 1) {
 					console.log("colisionando");
@@ -512,10 +563,10 @@
 		//camera = new THREE.PerspectiveCamera(100, visibleSize.width / visibleSize.height, 0.1, 120);
 
 		var aspect = window.innerWidth / window.innerHeight;
-		var d = 55;
+		var d = 105;
 		camera = new THREE.OrthographicCamera(  - d * aspect, d * aspect, d, - d, 1, 1000 );
-		camera.position.set( 0, 60, 20 ); // all components equal
-		camera.lookAt( 0,0,0 ); // or the origin
+		camera.position.set( 50, 60, 70 ); // all components equal
+		camera.lookAt( 0, 0, 0); // or the origin
 		
 		//camera.rotation.y = THREE.Math.degToRad(-5);
 		camera.rotation.x = THREE.Math.degToRad(-70);
@@ -539,7 +590,7 @@
 		directionalLight.position.set(0, 0, 1);
 		scene.add(directionalLight);
 
-		var grid = new THREE.GridHelper(50, 10, 0xffffff, 0xffffff);
+		var grid = new THREE.GridHelper(200, 50, 0xffffff, 0xffffff);
 		grid.position.y = -1;
 		scene.add(grid);
 

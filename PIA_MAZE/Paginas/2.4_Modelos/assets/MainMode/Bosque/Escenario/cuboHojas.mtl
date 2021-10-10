@@ -1,0 +1,10 @@
+newmtl blinn2SG
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Vol_42_1_Base_Color.png
+map_Ka Vol_42_1_Ambient_Occlusion.png
+bump  -bm 0.301205 Vol_42_1_Normal.png
+Ni 1.00
+Ks 0.50 0.50 0.50

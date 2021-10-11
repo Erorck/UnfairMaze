@@ -13,6 +13,7 @@
 		var renderer;
 		var controls;
 
+		//Coordenadas de las paredes del modo de juego principal
 		var mainModeWalls = [
 			[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7], [0, 8], [0, 9], [0, 10], [0, 11], [0, 12], [0, 13], [0, 14], [0, 15], [0, 16], [0, 17], [0, 18], [0, 19],
 			[1, 6], [1, 19],
@@ -33,15 +34,24 @@
 			[16, 0], [0, 19],
 			[17, 0], [17, 1], [17, 2], [17, 3], [17, 4], [17, 5], [17, 6], [17, 7], [17, 8], [17, 9], [17, 10], [17, 11], [17, 12], [17, 13], [17, 14], [17, 16], [17, 17], [17, 18], [17, 19],
 			[18, 0], [18, 1], [18, 2], [18, 3], [18, 4], [18, 5], [18, 6], [18, 7], [18, 8], [18, 9], [18, 10], [18, 11], [18, 12], [18, 13], [18, 14], [18, 16], [18, 17], [18, 18], [18, 19],
-			[19, 0], [19, 1], [19, 2], [19, 3], [19, 4], [19, 5], [19, 6], [19, 7], [19, 8], [19, 9], [19, 10], [19, 11], [19, 12], [19, 13], [190, 14], [19, 15], [19, 16], [19, 17], [19, 18], [19, 19]
+			[19, 0], [19, 1], [19, 2], [19, 3], [19, 4], [19, 5], [19, 6], [19, 7], [19, 8], [19, 9], [19, 10], [19, 11], [19, 12], [19, 13], [19, 14], [19, 15], [19, 16], [19, 17], [19, 18], [19, 19]
 		];
 
+		//Coordenadas de los corazones del modo de juego principal
 		var mainModeHearts = [[8, 1], [9, 6], [18, 15]];
 
+		//Coordenadas de las paredes atravesables
+		var mainModeFakeWalls = [[9, 7], [11, 2], [17, 15]];
+
+		var mainModeSpikes = [[2,14], [3, 2], [4, 7], [4, 17], [5, 11], [6, 15], [7, 2], [8, 14], [10,8], [11, 13], [13, 3], [14, 6], [14, 16], [15,1], [15, 9]];
+
+		//Direcciones de los assets
 		modelPaths = {
 			escenario: "escenario",
-			items: "items"
+			items: "items",
+			spikes: "spikes"
 		};
+
 		modelPaths.escenario = [
 			{ path: "assets/MainMode/Bosque/Escenario/", obj: "cuboHojas.obj", mtl: "cuboHojas.mtl" },
 			{ path: "assets/MainMode/Medieval/Escenario/", obj: "cuboLadrillo.obj", mtl: "cuboLadrillo.mtl" },
@@ -50,10 +60,18 @@
 		modelPaths.items = [
 			{ path: "assets/Items/Corazon/", obj: "corazon.obj", mtl: "corazon.mtl" }
 		];
+
+		modelPaths.spikes = [
+			{ path: "assets/Trampas/Picos/", obj: "picosModernos.obj", mtl: "picosModernos.mtl" },
+			{ path: "assets/Trampas/Picos/", obj: "picosViejos.obj", mtl: "picosViejos.mtl" }
+		];
+
+		//Material y mesh de prueba
 		var geometriaCubo = new THREE.BoxGeometry(10, 10, 10);
 		var materialCubo = new THREE.MeshLambertMaterial({ color: new THREE.Color(0, 0.6, 0.7), wireframe: false });
 
 
+		//Objecto maestro de todos los assets en la escena
 		var objects = {
 			boxes: "boxes",
 			fakeBoxes: "fakeBoxes",
@@ -64,6 +82,7 @@
 			items: "items"
 		};
 
+		//Arreglo de cada tipo de asset
 		objects.boxes = [];
 		objects.fakeBoxes = [];
 		objects.decorators = [];
@@ -76,6 +95,7 @@
 			gifs: "gifs"
 		};
 
+		//Arreglo de cada tipo de item
 		objects.items.hearts = [];
 		objects.items.clocks = [];
 		objects.items.gifs = [];
@@ -98,16 +118,18 @@
 			setupScene();
 			rayCaster = new THREE.Raycaster();
 
+			//FUNCION DE POSICIONAMIENTO EN X,Z parametros(String tipo de mesh, asset, arreglo de posiciones)
 			function positionObject(object, mesh = new THREE.Mesh(geometriaCubo, materialCubo), positions) {
 
 				var asset;
 
+				//POSICIONAMIENTO DE ASSETS DE PRUEBA - CUBOS DE COLOR SOLIDO
 				if (object == "testbox") {
 
-					var geometria = new THREE.BoxGeometry(10, 10, 10);
-					var material = new THREE.MeshLambertMaterial({ color: new THREE.Color(0, 0.6, 0.7), wireframe: false });
+					// var geometria = new THREE.BoxGeometry(10, 10, 10);
+					// var material = new THREE.MeshLambertMaterial({ color: new THREE.Color(0, 0.6, 0.7), wireframe: false });
 
-					cubo = new THREE.Mesh(geometria, material);
+					cubo = new THREE.Mesh(geometriaCubo, materialCubo);
 
 					cubo.position.z = -40;
 					cubo.position.x = -44;
@@ -128,23 +150,26 @@
 					});
 				}
 
+				//POSICIONAMIENTO DE PAREDES
 				if (object == "wallblock") {
-					positions.forEach(function (element) {
+					positions.forEach(function (element) { //POR CADA POSICION SE HARA UNA COPIA DEL ASSET
+
 						asset = mesh.clone();
 
-						asset.position.z = -40;
+						asset.position.z = -40; //SE POSICIONA EL ASSET
 						asset.position.x = -44;
 						asset.position.y = 0;
 
-						asset.coordZ = element[0];
+						asset.coordZ = element[0]; //INDICES DE POSICIÓN 
 						asset.coordX = element[1];
-						asset.position.x += asset.coordX * 10;
+						asset.position.x += asset.coordX * 10; //POSICIONAMIENTO DE ACUERDO AL INDICE
 						asset.position.z += asset.coordZ * 10;
-						objects.boxes.push(asset);
+						objects.boxes.push(asset); // SE AGREGA AL OBJETO MAESTRO EN SU RESPECTIVO ARREGLO
 					});
 
 				}
 
+				//POSICIONAMIENTO DE ITEMS
 				if (object == "item") {
 					positions.forEach(function (element) {
 						asset = mesh.clone();
@@ -158,6 +183,24 @@
 						asset.position.x += asset.coordX * 10;
 						asset.position.z += asset.coordZ * 10;
 						objects.items.hearts.push(asset);
+					});
+				}
+
+				//POSICIONAMIENTO DE TRAMPAS
+				//PICOS
+				if (object == "trap_spike") {
+					positions.forEach(function (element) {
+						asset = mesh.clone();
+
+						asset.position.z = -40;
+						asset.position.x = -44;
+						asset.position.y = 0;
+
+						asset.coordZ = element[0];
+						asset.coordX = element[1];
+						asset.position.x += asset.coordX * 10;
+						asset.position.z += asset.coordZ * 10;
+						objects.spikes.push(asset);
 					});
 				}
 			}
@@ -192,7 +235,7 @@
 				object.name = "moto";
 
 				scene.add(object);
-				collisionObjects.push(object);//colision con la moto
+				//collisionObjects.push(object);//colision con la moto
 				isWorldReady[1] = true;
 			});
 
@@ -202,33 +245,48 @@
 				object.scale.set(2.3, 1, 2.13);
 
 				scene.add(object);
-				collisionObjects.push(object);//colision con la moto
+				//collisionObjects.push(object);//colision con la moto
 				//isWorldReady[2] = true;
 			});
 
+			//CARGA DE LAS PAREDES
 			loadOBJWithMTL(modelPaths.escenario[2].path, modelPaths.escenario[2].obj, modelPaths.escenario[2].mtl, (object) => {
 
-				positionObject("wallblock", object, mainModeWalls);
+				positionObject("wallblock", object, mainModeWalls);//PAREDES REGULARES
 
-				objects.boxes.forEach(function (block) {
+				positionObject("testbox", null, mainModeFakeWalls);//PAREDES ATRAVESABLES
+
+				objects.boxes.forEach(function (block) { //AÑADIR CADA ELEMENTO A LAS ESCENA Y AL ARREGLO DE OBJETOS CON COLISION
+					scene.add(block);
 					collisionObjects.push(block);
 				});
-
-				isWorldReady[0] = true;
-
+				
 			});
 
+			//CARGA DE LOS CORAZONES
 			loadOBJWithMTL(modelPaths.items[0].path, modelPaths.items[0].obj, modelPaths.items[0].mtl, (object) => {
 
 				positionObject("item", object, mainModeHearts);
 
 				objects.items.hearts.forEach(function (block) {
+					scene.add(block);
 					collisionObjects.push(block);
 				});
 
-				collisionObjects.forEach(function (object) {
-					scene.add(object);
+				
+			});
+
+			//CARGA DE LOS PICOS
+			loadOBJWithMTL(modelPaths.spikes[0].path, modelPaths.spikes[0].obj, modelPaths.spikes[0].mtl, (object) => {
+
+				positionObject("trap_spike", object, mainModeSpikes);
+
+				objects.spikes.forEach(function (block) {
+					scene.add(block);
+					collisionObjects.push(block);
 				});
+
+				isWorldReady[0] = true;
 
 			});
 
@@ -318,7 +376,7 @@
 				}
 
 				objects.items.hearts.forEach(function (heart) {
-					heart.rotation.y += THREE.Math.degToRad(50) * deltaTime;					
+					heart.rotation.y += THREE.Math.degToRad(50) * deltaTime;
 				});
 			}
 

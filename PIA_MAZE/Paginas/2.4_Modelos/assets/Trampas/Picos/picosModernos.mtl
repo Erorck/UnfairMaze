@@ -1,0 +1,12 @@
+newmtl OPM0041SG
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd OPM0041_4K_BaseColor.png
+map_Ka OPM0041_4K_Occlusion.png
+bump  -bm 0.963855 OPM0041_4K_Normal.png
+Ni 1.00
+Ks 0.00 0.00 0.00
+map_Ks OPM0041_4K_Roughness.png
+Ns 23.00

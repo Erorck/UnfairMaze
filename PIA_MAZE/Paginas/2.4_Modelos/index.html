@@ -40,16 +40,21 @@
 		//Coordenadas de los corazones del modo de juego principal
 		var mainModeHearts = [[8, 1], [9, 6], [18, 15]];
 
-		//Coordenadas de las paredes atravesables
+		//Coordenadas de las paredes atravesables del modo de juego principal
 		var mainModeFakeWalls = [[9, 7], [11, 2], [17, 15]];
 
-		var mainModeSpikes = [[2,14], [3, 2], [4, 7], [4, 17], [5, 11], [6, 15], [7, 2], [8, 14], [10,8], [11, 13], [13, 3], [14, 6], [14, 16], [15,1], [15, 9]];
+		//Coordenadas de los picos del modo de juego principal
+		var mainModeSpikes = [[1, 14], [2, 14], [3, 2], [4, 7], [4, 17], [5, 11], [6, 15], [7, 2], [8, 14], [10, 8], [11, 13], [13, 3], [14, 6], [14, 16], [15, 1], [15, 9]];
+
+		//Coordenadas de los señuelos del modo de juego principal
+		var mainModeMannequins = [[5, 2], [8, 12]];
 
 		//Direcciones de los assets
 		modelPaths = {
 			escenario: "escenario",
 			items: "items",
-			spikes: "spikes"
+			spikes: "spikes",
+			mannequins: "mannequins"
 		};
 
 		modelPaths.escenario = [
@@ -62,9 +67,16 @@
 		];
 
 		modelPaths.spikes = [
+			{ path: "assets/Trampas/Picos/", obj: "picosViejos.obj", mtl: "picosViejos.mtl" },
 			{ path: "assets/Trampas/Picos/", obj: "picosModernos.obj", mtl: "picosModernos.mtl" },
-			{ path: "assets/Trampas/Picos/", obj: "picosViejos.obj", mtl: "picosViejos.mtl" }
+			{ path: "assets/Trampas/Picos/", obj: "picosModernos.obj", mtl: "picosModernos.mtl" }
 		];
+
+		modelPaths.mannequins = [
+			{ path: "assets/Enemigo/guardian/", obj: "guardian_Bosque.obj", mtl: "guardian_Bosque.mtl" },
+			{ path: "assets/Enemigo/fantasma/", obj: "fantasmita.obj", mtl: "fantasmita.mtl" },
+			{ path: "assets/Enemigo/alien/", obj: "alien.obj", mtl: "alien.mtl" }
+		]
 
 		//Material y mesh de prueba
 		var geometriaCubo = new THREE.BoxGeometry(10, 10, 10);
@@ -100,6 +112,12 @@
 		objects.items.clocks = [];
 		objects.items.gifs = [];
 
+		//Index de que escenario esta seleccionado
+		// [0] -> Bosque
+		// [1] -> Medieval
+		// [2] -> Futurista
+		var sceneIndex = 2;
+
 		var clock;
 		var deltaTime;
 		var keys = {};
@@ -110,7 +128,6 @@
 		var rayCaster;
 		var collisionObjects = [];
 		var isWorldReady = [false, false];
-
 
 
 		$(document).ready(function () {
@@ -203,6 +220,19 @@
 						objects.spikes.push(asset);
 					});
 				}
+
+				//POSICIONAMIENTO DE MANIQUIS
+				if (object == "mannequins") {
+					positions.forEach(function (element) {
+						asset = mesh.clone();
+
+						asset.coordZ = element[0];
+						asset.coordX = element[1];
+						asset.position.x += asset.coordX * 10;
+						asset.position.z += asset.coordZ * 10;
+						objects.mannequins.push(asset);
+					});
+				}
 			}
 
 			loadOBJWithMTL("assets/", "laPared.obj", "laParedFuturo.mtl", (object) => {
@@ -246,11 +276,11 @@
 
 				scene.add(object);
 				//collisionObjects.push(object);//colision con la moto
-				//isWorldReady[2] = true;
+				//isWorldReady[2] = true;d
 			});
 
 			//CARGA DE LAS PAREDES
-			loadOBJWithMTL(modelPaths.escenario[2].path, modelPaths.escenario[2].obj, modelPaths.escenario[2].mtl, (object) => {
+			loadOBJWithMTL(modelPaths.escenario[sceneIndex].path, modelPaths.escenario[sceneIndex].obj, modelPaths.escenario[sceneIndex].mtl, (object) => {
 
 				positionObject("wallblock", object, mainModeWalls);//PAREDES REGULARES
 
@@ -260,7 +290,7 @@
 					scene.add(block);
 					collisionObjects.push(block);
 				});
-				
+
 			});
 
 			//CARGA DE LOS CORAZONES
@@ -273,15 +303,36 @@
 					collisionObjects.push(block);
 				});
 
-				
+
 			});
 
 			//CARGA DE LOS PICOS
-			loadOBJWithMTL(modelPaths.spikes[0].path, modelPaths.spikes[0].obj, modelPaths.spikes[0].mtl, (object) => {
+			loadOBJWithMTL(modelPaths.spikes[sceneIndex].path, modelPaths.spikes[sceneIndex].obj, modelPaths.spikes[sceneIndex].mtl, (object) => {
 
 				positionObject("trap_spike", object, mainModeSpikes);
 
 				objects.spikes.forEach(function (block) {
+					scene.add(block);
+					collisionObjects.push(block);
+				});
+				
+			});
+
+			//CARGA DE LOS SEÑUELOS DE ENEMIGOS
+			loadOBJWithMTL(modelPaths.mannequins[sceneIndex].path, modelPaths.mannequins[sceneIndex].obj, modelPaths.mannequins[sceneIndex].mtl, (object) => {
+
+				object.position.z = -40;
+				object.position.x = -44;
+				if(sceneIndex == 1){
+					object.position.y = 5;
+				}
+				else{
+					object.position.y = 0;
+				}
+
+				positionObject("mannequins", object, mainModeMannequins);
+
+				objects.mannequins.forEach(function (block) {
 					scene.add(block);
 					collisionObjects.push(block);
 				});
@@ -388,11 +439,11 @@
 			var visibleSize = { width: window.innerWidth, height: window.innerHeight };
 			clock = new THREE.Clock();
 			scene = new THREE.Scene();
-			//camera = new THREE.PerspectiveCamera(100, visibleSize.width / visibleSize.height, 0.1, 120);
+			camera = new THREE.PerspectiveCamera(100, visibleSize.width / visibleSize.height, 0.1, 120);
 
 			var aspect = window.innerWidth / window.innerHeight;
 			var d = 70;
-			camera = new THREE.OrthographicCamera(- d * aspect, d * aspect, d, - d, 1, 1000);
+			//camera = new THREE.OrthographicCamera(- d * aspect, d * aspect, d, - d, 1, 1000);
 			camera.position.set(50, 60, 70); // all components equal
 			camera.lookAt(0, 0, 0); // or the origin
 

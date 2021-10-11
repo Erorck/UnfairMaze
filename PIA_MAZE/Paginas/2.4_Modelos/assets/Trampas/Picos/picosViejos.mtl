@@ -1,0 +1,10 @@
+newmtl blinn1SG
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd wooden_picks_Diffuse.png
+map_Ka wooden_picks_Glossiness.png
+bump  -bm 0.421687 wooden_picks_Normal.png
+Ni 1.00
+Ks 0.50 0.50 0.50

@@ -1,0 +1,50 @@
+newmtl Big_Eye1SG
+illum 4
+Kd 0.35 0.03 0.05
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl Body1SG
+illum 4
+Kd 1.00 1.00 1.00
+Ka 1.00 1.00 1.00
+Tf 1.00 1.00 1.00
+map_Kd _Body1_Body1_color.jpg
+Ni 1.00
+newmtl Fang1SG
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd _Fang1_Fang1_color.jpg
+Ni 1.00
+newmtl Head1SG
+illum 4
+Kd 1.00 1.00 1.00
+Ka 1.00 1.00 1.00
+Tf 1.00 1.00 1.00
+map_Kd _Head1_Head1_color.jpg
+Ni 1.00
+newmtl LowerDigger_LeftSG
+illum 4
+Kd 1.00 1.00 1.00
+Ka 1.00 1.00 1.00
+Tf 1.00 1.00 1.00
+map_Kd _UpperDigger_Left_UpperDigger_Left_color.jpg
+Ni 1.00
+newmtl LowerLeg_LeftSG
+illum 4
+Kd 1.00 1.00 1.00
+Ka 1.00 1.00 1.00
+Tf 1.00 1.00 1.00
+map_Kd _UpperLeg_Left_UpperLeg_Left_color.jpg
+Ni 1.00
+newmtl ShellSG
+illum 4
+Kd 1.00 1.00 1.00
+Ka 1.00 1.00 1.00
+Tf 1.00 1.00 1.00
+map_Kd _Shell_Shell_color.jpg
+Ni 1.00
+Ks 0.50 0.50 0.50
+Ns 18.00

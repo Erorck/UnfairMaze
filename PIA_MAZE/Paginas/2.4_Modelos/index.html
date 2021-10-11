@@ -36,11 +36,20 @@
 			[19, 0], [19, 1], [19, 2], [19, 3], [19, 4], [19, 5], [19, 6], [19, 7], [19, 8], [19, 9], [19, 10], [19, 11], [19, 12], [19, 13], [190, 14], [19, 15], [19, 16], [19, 17], [19, 18], [19, 19]
 		];
 
-		var escenario = [
-			{path:"assets/MainMode/Bosque/Escenario/", obj:"cuboHojas.obj", mtl: "cuboHojas.mtl"},
-			{path:"assets/MainMode/Medieval/Escenario/", obj:"cuboLadrillo.obj", mtl: "cuboLadrillo.mtl"},
-			{path:"assets/MainMode/Futurista/Escenario/", obj:"cuboFuturista.obj", mtl: "cuboFuturista.mtl"}];
+		var mainModeHearts = [[8, 1], [9, 6], [18, 15]];
 
+		modelPaths = {
+			escenario: "escenario",
+			items: "items"
+		};
+		modelPaths.escenario = [
+			{ path: "assets/MainMode/Bosque/Escenario/", obj: "cuboHojas.obj", mtl: "cuboHojas.mtl" },
+			{ path: "assets/MainMode/Medieval/Escenario/", obj: "cuboLadrillo.obj", mtl: "cuboLadrillo.mtl" },
+			{ path: "assets/MainMode/Futurista/Escenario/", obj: "cuboFuturista.obj", mtl: "cuboFuturista.mtl" }];
+
+		modelPaths.items = [
+			{ path: "assets/Items/Corazon/", obj: "corazon.obj", mtl: "corazon.mtl" }
+		];
 		var geometriaCubo = new THREE.BoxGeometry(10, 10, 10);
 		var materialCubo = new THREE.MeshLambertMaterial({ color: new THREE.Color(0, 0.6, 0.7), wireframe: false });
 
@@ -52,14 +61,24 @@
 			spikes: "spikes",
 			crushWalls: "crushWalls",
 			mannequins: "mannequins",
+			items: "items"
 		};
 
 		objects.boxes = [];
-		objects.fakeBoxes = [{ x: "coordX", y: "posy", z: "coordZ" }];
-		objects.decorators = [{ x: "coordX", y: "posy", z: "coordZ" }];
-		objects.spikes = [{ x: "coordX", y: "posy", z: "coordZ" }];
-		objects.crushWalls = [{ x: "coordX", y: "posy", z: "coordZ" }];
-		objects.mannequins = [{ x: "coordX", y: "posy", z: "coordZ" }];
+		objects.fakeBoxes = [];
+		objects.decorators = [];
+		objects.crushWalls = [];
+		objects.mannequins = [];
+		objects.spikes = [];
+		objects.items = {
+			hearts: "hearts",
+			clocks: "clocks",
+			gifs: "gifs"
+		};
+
+		objects.items.hearts = [];
+		objects.items.clocks = [];
+		objects.items.gifs = [];
 
 		var clock;
 		var deltaTime;
@@ -71,12 +90,18 @@
 		var rayCaster;
 		var collisionObjects = [];
 		var isWorldReady = [false, false];
+
+
+
 		$(document).ready(function () {
 
 			setupScene();
 			rayCaster = new THREE.Raycaster();
 
-			function positionObject(object, mesh = new THREE.Mesh(geometriaCubo, materialCubo)) {
+			function positionObject(object, mesh = new THREE.Mesh(geometriaCubo, materialCubo), positions) {
+
+				var asset;
+
 				if (object == "testbox") {
 
 					var geometria = new THREE.BoxGeometry(10, 10, 10);
@@ -88,8 +113,8 @@
 					cubo.position.x = -44;
 					cubo.position.y = 5;
 
-					mainModeWalls.forEach(function (element) {
-						var asset = cubo.clone();
+					positions.forEach(function (element) {
+						asset = cubo.clone();
 
 						asset.coordZ = element[0];
 						asset.coordX = element[1];
@@ -104,8 +129,8 @@
 				}
 
 				if (object == "wallblock") {
-					mainModeWalls.forEach(function (element) {
-						var asset = mesh.clone();
+					positions.forEach(function (element) {
+						asset = mesh.clone();
 
 						asset.position.z = -40;
 						asset.position.x = -44;
@@ -118,8 +143,21 @@
 						objects.boxes.push(asset);
 					});
 
-					objects.boxes.forEach(function (box) {
-						collisionObjects.push(box);
+				}
+
+				if (object == "item") {
+					positions.forEach(function (element) {
+						asset = mesh.clone();
+
+						asset.position.z = -40;
+						asset.position.x = -44;
+						asset.position.y = 3;
+
+						asset.coordZ = element[0];
+						asset.coordX = element[1];
+						asset.position.x += asset.coordX * 10;
+						asset.position.z += asset.coordZ * 10;
+						objects.items.hearts.push(asset);
 					});
 				}
 			}
@@ -168,50 +206,31 @@
 				//isWorldReady[2] = true;
 			});
 
-			loadOBJWithMTL(escenario[1].path, escenario[1].obj, escenario[1].mtl, (object) => {
+			loadOBJWithMTL(modelPaths.escenario[2].path, modelPaths.escenario[2].obj, modelPaths.escenario[2].mtl, (object) => {
 
-				positionObject("wallblock", object);
+				positionObject("wallblock", object, mainModeWalls);
 
 				objects.boxes.forEach(function (block) {
-					scene.add(block);
-				});
-
-				collisionObjects.forEach(function (object) {
-					scene.add(object);
+					collisionObjects.push(block);
 				});
 
 				isWorldReady[0] = true;
 
 			});
 
-			(function () {
+			loadOBJWithMTL(modelPaths.items[0].path, modelPaths.items[0].obj, modelPaths.items[0].mtl, (object) => {
 
-				/*var geometria = new THREE.BoxGeometry(10, 10, 10);
-				var material = new THREE.MeshLambertMaterial( { color: new THREE.Color(0.7, 0, 0), wireframe:true } );
-				
-				cubo = new THREE.Mesh(geometria, material);
-				cubo2 = cubo.clone();
-				
-				cubo.position.z = -40;
-				cubo.position.x = 56;
-				cubo.position.y = 5;
-				
-				collisionObjects.push(cubo);
-	
-				cubo2.position.z = cubo.position.z + 90;
-				cubo2.position.x = cubo.position.x - 90;
-	
-				collisionObjects.push(cubo2);*/
+				positionObject("item", object, mainModeHearts);
 
+				objects.items.hearts.forEach(function (block) {
+					collisionObjects.push(block);
+				});
 
-				// positionObject("testbox");
+				collisionObjects.forEach(function (object) {
+					scene.add(object);
+				});
 
-				// collisionObjects.forEach(function(block){
-				// 	scene.add(block);
-				// })
-
-				// isWorldReady[0] = true;
-			}());
+			});
 
 			render();
 
@@ -297,6 +316,10 @@
 					}
 
 				}
+
+				objects.items.hearts.forEach(function (heart) {
+					heart.rotation.y += THREE.Math.degToRad(50) * deltaTime;					
+				});
 			}
 
 
@@ -316,7 +339,7 @@
 			camera.lookAt(0, 0, 0); // or the origin
 
 			//camera.rotation.y = THREE.Math.degToRad(-5);
-			camera.rotation.x = THREE.Math.degToRad(-70);
+			camera.rotation.x = THREE.Math.degToRad(-60);
 
 			camera.rays = [
 				new THREE.Vector3(1, 0, 0),

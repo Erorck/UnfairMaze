@@ -4,6 +4,6 @@ Kd 1.00 1.00 1.00
 Ka 1.00 1.00 1.00
 Tf 1.00 1.00 1.00
 map_Kd pared-Mohosa.png
-bump  -bm 0.60241 pared-Mohosa_Normal.png
+bump  -bm 0.481928 pared-Mohosa_Normal.png
 Ni 1.00
-Ks 0.50 0.50 0.50
+Ks 0.23 0.23 0.23

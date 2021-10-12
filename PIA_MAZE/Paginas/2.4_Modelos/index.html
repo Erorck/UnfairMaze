@@ -83,8 +83,14 @@
 				path: "assets/MainMode/Bosque/Escenario/", obj: "cuboHojas.obj", mtl: "cuboHojas.mtl",
 				path2: "assets/MainMode/Bosque/Escenario/", obj2: "cuboLodo.obj", mtl2: "cuboLodo.mtl"
 			},
-			{ path: "assets/MainMode/Medieval/Escenario/", obj: "cuboLadrillo.obj", mtl: "cuboLadrillo.mtl" },
-			{ path: "assets/MainMode/Futurista/Escenario/", obj: "cuboFuturista.obj", mtl: "cuboFuturista.mtl" }];
+			{ 
+				path: "assets/MainMode/Medieval/Escenario/", obj: "cuboLadrillo.obj", mtl: "cuboLadrillo.mtl",
+				path2: "assets/MainMode/Medieval/Escenario/", obj2: "cuboLadrilloPiso.obj", mtl2: "cuboLadrilloPiso.mtl" 
+			},
+			{ 
+				path: "assets/MainMode/Futurista/Escenario/", obj: "cuboFuturista.obj", mtl: "cuboFuturista.mtl",
+				path2: "assets/MainMode/Futurista/Escenario/", obj2: "cuboFuturistaPiso.obj", mtl2: "cuboFuturistaPiso.mtl" 
+			}];
 
 		modelPaths.items = [
 			{ path: "assets/Items/Corazon/", obj: "corazon.obj", mtl: "corazon.mtl" }
@@ -194,16 +200,16 @@
 				}
 
 				//POSICIONAMIENTO DE PAREDES
-				if (object == "wallblock" || object == "floorblock") {
+				if (object == "wallblock" || object == "floorblock" || object == "fakebox") {
 					positions.forEach(function (element) { //POR CADA POSICION SE HARA UNA COPIA DEL ASSET
 
 						asset = mesh.clone();
 
-						asset.position.z = -40; //SE POSICIONA EL ASSET
+						asset.position.z = -40; //SE POSICIONA EL ASSET EN EL ORIGEN (ESQUINA SUPERIOR IZQUIERDA DEL LABERINTO)
 						asset.position.x = -44;
 
-						if (object == "wallblock")
-							asset.position.y = 0;
+						if (object == "wallblock" || object == "fakebox")
+							asset.position.y = -0.1;
 						else
 							asset.position.y = -10;
 
@@ -211,7 +217,12 @@
 						asset.coordX = element[1];
 						asset.position.x += asset.coordX * 10; //POSICIONAMIENTO DE ACUERDO AL INDICE
 						asset.position.z += asset.coordZ * 10;
-						objects.boxes.push(asset); // SE AGREGA AL OBJETO MAESTRO EN SU RESPECTIVO ARREGLO
+						if (object == "wallblock")
+							objects.boxes.push(asset); // SE AGREGA AL OBJETO MAESTRO EN SU RESPECTIVO ARREGLO
+						else if (object == "floorblock")
+							objects.floorBoxes.push(asset);
+						else
+							objects.fakeBoxes.push(asset);	
 					});
 
 				}
@@ -287,10 +298,13 @@
 				isWorldReady[0] = true;*/
 			});
 
-			loadOBJWithMTL("assets/", "jetski.obj", "jetski.mtl", (object) => {
-				object.position.z = -26;
-				object.rotation.x = THREE.Math.degToRad(-90);
-				object.rotation.z = THREE.Math.degToRad(90);
+			loadOBJWithMTL("assets/Personaje_principal/", "testCharacter.obj", "testCharacter.mtl", (object) => {
+				//object.position.z = -26;
+				//object.rotation.x = THREE.Math.degToRad(-90);
+				// object.rotation.z = THREE.Math.degToRad(90);
+
+				object.position.z = -40 + 100; //SE POSICIONA EL ASSET
+				object.position.x = -44 + 100;
 
 				object.name = "moto";
 
@@ -314,12 +328,16 @@
 
 				positionObject("wallblock", object, mainModeWalls);//PAREDES REGULARES
 
-				positionObject("testbox", null, mainModeFakeWalls);//PAREDES ATRAVESABLES
+				positionObject("fakebox", object, mainModeFakeWalls);//PAREDES ATRAVESABLES
 
 				objects.boxes.forEach(function (block) { //AÑADIR CADA ELEMENTO A LAS ESCENA Y AL ARREGLO DE OBJETOS CON COLISION
 					scene.add(block);
 					collisionObjects.push(block);
 				});
+
+				objects.fakeBoxes.forEach(function(block) {
+					scene.add(block);
+				})
 
 			});
 
@@ -328,7 +346,7 @@
 
 				positionObject("floorblock", object, mainModeFloor);//PAREDES REGULARES
 
-				objects.boxes.forEach(function (block) { //AÑADIR CADA ELEMENTO A LAS ESCENA Y AL ARREGLO DE OBJETOS CON COLISION
+				objects.floorBoxes.forEach(function (block) { //AÑADIR CADA ELEMENTO A LAS ESCENA Y AL ARREGLO DE OBJETOS CON COLISION
 					scene.add(block);
 					//collisionObjects.push(block);
 				});
@@ -431,8 +449,8 @@
 
 
 			if (isWorldReady[0] && isWorldReady[1]) {
-				moto.rotation.z += yaw * deltaTime;
-				moto.translateX(forward * deltaTime);
+				moto.rotation.y += yaw * deltaTime;
+				moto.translateZ(forward * deltaTime);
 
 				camera.position.x = moto.position.x;
 				camera.position.z = moto.position.z + 30;
@@ -462,7 +480,7 @@
 					if (collision.length > 0 && collision[0].distance < 1) {
 						console.log("colisionando");
 						//Profe, esta fue la solución que encontré después de 4 horas, solo son 2 líneas de código evita que atravieses las cajas y te hace retroceder si quieres pasar a través de ellas
-						moto.translateX(-(forward * deltaTime));
+						moto.translateZ(-(forward * deltaTime));
 
 					}
 

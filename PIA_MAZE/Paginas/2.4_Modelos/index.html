@@ -61,6 +61,12 @@
 		//Coordenadas de los corazones del modo de juego principal
 		var mainModeHearts = [[8, 1], [9, 6], [18, 15]];
 
+		//Coordenadas de los relojes del modo de juego principal
+		var mainModeClocks = [[14, 2], [1, 3], [10, 17]];
+
+		//Coordenadas de los regalos del modo de juego principal
+		var mainModeGifts = [[3, 10], [13, 12], [2, 18]];
+
 		//Coordenadas de las paredes atravesables del modo de juego principal
 		var mainModeFakeWalls = [[9, 7], [11, 2], [17, 15]];
 
@@ -93,7 +99,10 @@
 			}];
 
 		modelPaths.items = [
-			{ path: "assets/Items/Corazon/", obj: "corazon.obj", mtl: "corazon.mtl" }
+			{ path: "assets/Items/Corazon/", obj: "corazon.obj", mtl: "corazon.mtl"},
+			{ path: "assets/Items/Reloj/", obj: "reloj.obj", mtl: "reloj.mtl" },
+			{ path: "assets/Items/Regalo/", obj: "Regalo.obj", mtl: "Regalo.mtl" }
+
 		];
 
 		modelPaths.spikes = [
@@ -136,13 +145,13 @@
 		objects.items = {
 			hearts: "hearts",
 			clocks: "clocks",
-			gifs: "gifs"
+			gifts: "gifts"
 		};
 
 		//Arreglo de cada tipo de item
 		objects.items.hearts = [];
 		objects.items.clocks = [];
-		objects.items.gifs = [];
+		objects.items.gifts = [];
 
 		//Index de que escenario esta seleccionado
 		// [0] -> Bosque
@@ -228,10 +237,10 @@
 				}
 
 				//POSICIONAMIENTO DE ITEMS
-				if (object == "item") {
+				if (object == "hearts") {
 					positions.forEach(function (element) {
 						asset = mesh.clone();
-
+	
 						asset.position.z = -40;
 						asset.position.x = -44;
 						asset.position.y = 3;
@@ -243,6 +252,39 @@
 						objects.items.hearts.push(asset);
 					});
 				}
+
+				if (object == "clocks") {
+					positions.forEach(function (element) {
+						asset = mesh.clone();
+	
+						asset.position.z = -40;
+						asset.position.x = -44;
+						asset.position.y = 3;
+
+						asset.coordZ = element[0];
+						asset.coordX = element[1];
+						asset.position.x += asset.coordX * 10;
+						asset.position.z += asset.coordZ * 10;
+						objects.items.clocks.push(asset);
+					});
+				}
+
+				if (object == "gifts") {
+					positions.forEach(function (element) {
+						asset = mesh.clone();
+				
+						asset.position.z = -40;
+						asset.position.x = -44;
+						asset.position.y = 3;
+
+						asset.coordZ = element[0];
+						asset.coordX = element[1];
+						asset.position.x += asset.coordX * 10;
+						asset.position.z += asset.coordZ * 10;
+						objects.items.gifts.push(asset);
+					});
+				}
+
 
 				//POSICIONAMIENTO DE TRAMPAS
 				//PICOS
@@ -356,13 +398,35 @@
 			//CARGA DE LOS CORAZONES
 			loadOBJWithMTL(modelPaths.items[0].path, modelPaths.items[0].obj, modelPaths.items[0].mtl, (object) => {
 
-				positionObject("item", object, mainModeHearts);
+				positionObject("hearts", object, mainModeHearts);
 
 				objects.items.hearts.forEach(function (block) {
 					scene.add(block);
 					collisionObjects.push(block);
 				});
 
+			});
+			//CARGA DE LOS RELOJES
+			loadOBJWithMTL(modelPaths.items[1].path, modelPaths.items[1].obj, modelPaths.items[1].mtl, (object) => {
+
+				positionObject("clocks", object, mainModeClocks);
+
+				objects.items.clocks.forEach(function (block) {
+					scene.add(block);
+					collisionObjects.push(block);
+				});
+
+			});
+
+			//CARGA DE LOS Regalos
+			loadOBJWithMTL(modelPaths.items[2].path, modelPaths.items[2].obj, modelPaths.items[2].mtl, (object) => {
+
+				positionObject("clocks", object, mainModeGifts);
+
+				objects.items.clocks.forEach(function (block) {
+					scene.add(block);
+					collisionObjects.push(block);
+				});
 
 			});
 
@@ -487,6 +551,10 @@
 				}
 
 				objects.items.hearts.forEach(function (heart) {
+					heart.rotation.y += THREE.Math.degToRad(50) * deltaTime;
+				});
+
+				objects.items.clocks.forEach(function (heart) {
 					heart.rotation.y += THREE.Math.degToRad(50) * deltaTime;
 				});
 			}

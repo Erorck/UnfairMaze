@@ -76,12 +76,16 @@
 		//Coordenadas de los señuelos del modo de juego principal
 		var mainModeMannequins = [[5, 2], [8, 12]];
 
+		//Coordenadas de las decoraciones del modo de juego principal
+		var mainModeDecorators = [[16, 1]];
+
 		//Direcciones de los assets
 		modelPaths = {
 			escenario: "escenario",
 			items: "items",
 			spikes: "spikes",
-			mannequins: "mannequins"
+			mannequins: "mannequins",
+			decorators: "decorators"
 		};
 
 		modelPaths.escenario = [
@@ -115,6 +119,12 @@
 			{ path: "assets/Enemigo/guardian/", obj: "guardian_Bosque.obj", mtl: "guardian_Bosque.mtl" },
 			{ path: "assets/Enemigo/fantasma/", obj: "fantasmita.obj", mtl: "fantasmita.mtl" },
 			{ path: "assets/Enemigo/alien/", obj: "alien.obj", mtl: "alien.mtl" }
+		]
+
+		modelPaths.decorators = [
+			{ path: "assets/Decoraciones/Bosque/", obj: "fuente_tiki.obj", mtl: "fuente_tiki.mtl" },
+			{ path: "assets/Decoraciones/Bosque/", obj: "fuente_tiki.obj", mtl: "fuente_tiki.mtl" },
+			{ path: "assets/Decoraciones/Bosque/", obj: "fuente_tiki.obj", mtl: "fuente_tiki.mtl" }			
 		]
 
 		//Material y mesh de prueba
@@ -316,6 +326,19 @@
 						objects.mannequins.push(asset);
 					});
 				}
+
+				//POSICIONAMIENTO DE DECORACIONES
+				if (object == "decorators") {
+					positions.forEach(function (element) {
+						asset = mesh.clone();
+
+						asset.coordZ = element[0];
+						asset.coordX = element[1];
+						asset.position.x += asset.coordX * 10;
+						asset.position.z += asset.coordZ * 10;
+						objects.decorators.push(asset);
+					});
+				}
 			}
 
 			loadOBJWithMTL("assets/", "laPared.obj", "laParedFuturo.mtl", (object) => {
@@ -406,6 +429,7 @@
 				});
 
 			});
+
 			//CARGA DE LOS RELOJES
 			loadOBJWithMTL(modelPaths.items[1].path, modelPaths.items[1].obj, modelPaths.items[1].mtl, (object) => {
 
@@ -418,7 +442,7 @@
 
 			});
 
-			//CARGA DE LOS Regalos
+			//CARGA DE LOS REGALOS
 			loadOBJWithMTL(modelPaths.items[2].path, modelPaths.items[2].obj, modelPaths.items[2].mtl, (object) => {
 
 				positionObject("clocks", object, mainModeGifts);
@@ -457,6 +481,21 @@
 				positionObject("mannequins", object, mainModeMannequins);
 
 				objects.mannequins.forEach(function (block) {
+					scene.add(block);
+					collisionObjects.push(block);
+				});			
+
+			});
+
+			//CARGA DE LAS DECORACIONES
+			loadOBJWithMTL(modelPaths.decorators[sceneIndex].path, modelPaths.decorators[sceneIndex].obj, modelPaths.decorators[sceneIndex].mtl, (object) => {
+
+				object.position.z = -40;
+				object.position.x = -44;
+				object.position.y = 0;
+			
+				positionObject("decorators", object, mainModeDecorators);
+				objects.decorators.forEach(function (block) {
 					scene.add(block);
 					collisionObjects.push(block);
 				});
@@ -567,11 +606,11 @@
 			var visibleSize = { width: window.innerWidth, height: window.innerHeight };
 			clock = new THREE.Clock();
 			scene = new THREE.Scene();
-			//camera = new THREE.PerspectiveCamera(100, visibleSize.width / visibleSize.height, 0.1, 120);
+			camera = new THREE.PerspectiveCamera(100, visibleSize.width / visibleSize.height, 0.1, 120);
 
 			var aspect = window.innerWidth / window.innerHeight;
 			var d = 70;
-			camera = new THREE.OrthographicCamera(- d * aspect, d * aspect, d, - d, 1, 1000);
+			//camera = new THREE.OrthographicCamera(- d * aspect, d * aspect, d, - d, 1, 1000);
 			camera.position.set(50, 60, 70); // all components equal
 			camera.lookAt(0, 0, 0); // or the origin
 

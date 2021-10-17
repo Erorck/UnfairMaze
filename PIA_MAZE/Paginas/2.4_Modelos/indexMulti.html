@@ -9,7 +9,7 @@
 	<script type="text/javascript" src="js/libs/three/MTLLoader.js"></script>
 	<script type="text/javascript" src="js/libs/three/FBXLoader.js"></script>
 	<script type="text/javascript" src="js/libs/three/OBJLoader.js"></script>
-	
+
 	<script type="text/javascript" src="js/libs/three/inflate.min.js"></script>
 
 
@@ -21,9 +21,9 @@
 		var controls;
 
 		// TODO: Modelo con animacion.
- var mixers = [];
- var mixers_2 = [];
-// TODO: End Modelo Animacion.
+		var mixers = [];
+		var mixers_2 = [];
+		// TODO: End Modelo Animacion.
 
 		//Coordenadas de las paredes del modo de juego principal
 		var mainModeWalls = [
@@ -105,17 +105,17 @@
 				path: "assets/MainMode/Bosque/Escenario/", obj: "cuboHojas.obj", mtl: "cuboHojas.mtl",
 				path2: "assets/MainMode/Bosque/Escenario/", obj2: "cuboLodo.obj", mtl2: "cuboLodo.mtl"
 			},
-			{ 
+			{
 				path: "assets/MainMode/Medieval/Escenario/", obj: "cuboLadrillo.obj", mtl: "cuboLadrillo.mtl",
-				path2: "assets/MainMode/Medieval/Escenario/", obj2: "cuboLadrilloPiso.obj", mtl2: "cuboLadrilloPiso.mtl" 
+				path2: "assets/MainMode/Medieval/Escenario/", obj2: "cuboLadrilloPiso.obj", mtl2: "cuboLadrilloPiso.mtl"
 			},
-			{ 
+			{
 				path: "assets/MainMode/Futurista/Escenario/", obj: "cuboFuturista.obj", mtl: "cuboFuturista.mtl",
-				path2: "assets/MainMode/Futurista/Escenario/", obj2: "cuboFuturistaPiso.obj", mtl2: "cuboFuturistaPiso.mtl" 
+				path2: "assets/MainMode/Futurista/Escenario/", obj2: "cuboFuturistaPiso.obj", mtl2: "cuboFuturistaPiso.mtl"
 			}];
 
 		modelPaths.items = [
-			{ path: "assets/Items/Corazon/", obj: "corazon.obj", mtl: "corazon.mtl"},
+			{ path: "assets/Items/Corazon/", obj: "corazon.obj", mtl: "corazon.mtl" },
 			{ path: "assets/Items/Reloj/", obj: "reloj.obj", mtl: "reloj.mtl" },
 			{ path: "assets/Items/Regalo/", obj: "Regalo.obj", mtl: "Regalo.mtl" }
 
@@ -136,14 +136,16 @@
 		modelPaths.decorators = [
 			{ path: "assets/Decoraciones/Bosque/", obj: "fuente_tiki.obj", mtl: "fuente_tiki.mtl" },
 			{ path: "assets/Decoraciones/Medieval/", obj: "estatua_medieval.obj", mtl: "estatua_medieval.mtl" },
-			{ path: "assets/Decoraciones/Futurista/", obj: "flor_alienigena_2.obj", mtl: "flor_alienigena_2.mtl" }			
+			{ path: "assets/Decoraciones/Futurista/", obj: "flor_alienigena_2.obj", mtl: "flor_alienigena_2.mtl" }
 		]
 
 		//Material y mesh de prueba
 		var geometriaCubo = new THREE.BoxGeometry(10, 10, 10);
 		var materialCubo = new THREE.MeshLambertMaterial({ color: new THREE.Color(0, 0.6, 0.7), wireframe: false });
-		var materialCuboInv = new THREE.MeshLambertMaterial({ color: new THREE.Color(0, 0.6, 0.7), opacity: 0.0,
-    transparent: true });
+		var materialCuboInv = new THREE.MeshLambertMaterial({
+			color: new THREE.Color(0, 0.6, 0.7), opacity: 0.0,
+			transparent: true
+		});
 
 
 		//Objecto maestro de todos los assets en la escena
@@ -191,6 +193,7 @@
 		// Clase que nos permite "lanzar" un rayo hacia diferentes direcciones
 		// y detectar si el "rayo" colisiona con un objeto en esa direccion
 		var rayCaster;
+		var rayCaster2;
 		var collisionObjects = [];
 		var collisionTraps = [];
 		var isWorldReady = [false, false];
@@ -200,6 +203,7 @@
 
 			setupScene();
 			rayCaster = new THREE.Raycaster();
+			rayCaster2 = new THREE.Raycaster();
 
 			//FUNCION DE POSICIONAMIENTO EN X,Z parametros(String tipo de mesh, asset, arreglo de posiciones)
 			function positionObject(object, mesh = new THREE.Mesh(geometriaCubo, materialCubo), positions) {
@@ -256,7 +260,7 @@
 						else if (object == "floorblock")
 							objects.floorBoxes.push(asset);
 						else
-							objects.fakeBoxes.push(asset);	
+							objects.fakeBoxes.push(asset);
 					});
 
 				}
@@ -265,7 +269,7 @@
 				if (object == "hearts") {
 					positions.forEach(function (element) {
 						asset = mesh.clone();
-	
+
 						asset.position.z = -40;
 						asset.position.x = -44;
 						asset.position.y = 3;
@@ -281,7 +285,7 @@
 				if (object == "clocks") {
 					positions.forEach(function (element) {
 						asset = mesh.clone();
-	
+
 						asset.position.z = -40;
 						asset.position.x = -44;
 						asset.position.y = 3;
@@ -297,7 +301,7 @@
 				if (object == "gifts") {
 					positions.forEach(function (element) {
 						asset = mesh.clone();
-				
+
 						asset.position.z = -40;
 						asset.position.x = -44;
 						asset.position.y = 3;
@@ -369,44 +373,7 @@
 						objects.decorators.push(asset);
 					});
 				}
-			}
-
-			loadOBJWithMTL("assets/", "laPared.obj", "laParedFuturo.mtl", (object) => {
-				/*//Primera pared-----------------------------------------------------------------------------
-				object.position.z = -43;
-				object.position.x = 34;
-				object.position.y = -2;
-				//object.scale.set(1.92,2,1);
-				object.scale.set(1.92, 2,1);
-	
-				var box2 = object.clone();
-				box2.position.x = -0.4;
-			
-				var box3 = object.clone();
-				box3.position.x = -33;
-				
-	
-				collisionObjects.forEach(function(pared){
-					scene.add(pared);
-				})
-	
-				isWorldReady[0] = true;*/
-			});
-
-			// loadOBJWithMTL("assets/Personaje_principal/", "testCharacter.obj", "testCharacter.mtl", (object) => {
-			// 	//object.position.z = -26;
-			// 	//object.rotation.x = THREE.Math.degToRad(-90);
-			// 	// object.rotation.z = THREE.Math.degToRad(90);
-
-			// 	object.position.z = -40 + 100; //SE POSICIONA EL ASSET
-			// 	object.position.x = -44 + 100;
-
-			// 	object.name = "moto";
-
-			// 	scene.add(object);
-			// 	//collisionObjects.push(object);//colision con la moto
-			// 	isWorldReady[1] = true;
-			// });
+			}			
 
 			loadOBJWithMTL("assets/", "plataforma.obj", "plataforma.mtl", (object) => {
 				object.position.z = 1;
@@ -430,7 +397,7 @@
 					collisionObjects.push(block);
 				});
 
-				objects.fakeBoxes.forEach(function(block) {
+				objects.fakeBoxes.forEach(function (block) {
 					scene.add(block);
 				})
 
@@ -517,7 +484,7 @@
 				objects.mannequins.forEach(function (block) {
 					scene.add(block);
 					collisionObjects.push(block);
-				});			
+				});
 
 			});
 
@@ -527,7 +494,7 @@
 				object.position.z = -40;
 				object.position.x = -44;
 				object.position.y = 0;
-			
+
 				positionObject("decorators", object, mainModeDecorators);
 				objects.decorators.forEach(function (block) {
 					scene.add(block);
@@ -544,29 +511,43 @@
 			document.addEventListener('keyup', onKeyUp);
 
 
-//Carga del personaje principal
-var loader = new THREE.FBXLoader();
- loader.load('assets/Animacion.fbx', function (personaje) {
- personaje.mixer = new THREE.AnimationMixer(personaje);
- mixers.push(personaje.mixer);
- var action = 
-personaje.mixer.clipAction(personaje.animations[0]);
- action.play();
+			//Carga del personaje principal
+			var loader = new THREE.FBXLoader();
+			loader.load('assets/Animacion.fbx', function (personaje) {
+				personaje.mixer = new THREE.AnimationMixer(personaje);
+				mixers.push(personaje.mixer);
+				var action =
+					personaje.mixer.clipAction(personaje.animations[0]);
+				action.play();
 
 
- 				personaje.position.z = -2 + 115; //SE POSICIONA EL ASSET
+				personaje.position.z = -2 + 115; //SE POSICIONA EL ASSET
 				personaje.position.x = -2 + 138;
-
-				personaje.name = "moto";
+				personaje.name = "player1";
 
 				scene.add(personaje);
-				//collisionObjects.push(object);//colision con la moto
+				//collisionObjects.push(object);//colision con la moto				
+			});
+
+			//Carga del otro jugador (apartado)
+			loader.load('assets/Animacion.fbx', function (personaje) {
+				personaje.mixer = new THREE.AnimationMixer(personaje);
+				mixers.push(personaje.mixer);
+				var action =
+					personaje.mixer.clipAction(personaje.animations[0]);
+				action.play();
+
+
+				personaje.position.z = -2 + 115; //SE POSICIONA EL ASSET
+				personaje.position.x = -2 + 138;
+				personaje.name = "player2";
+
+				scene.add(personaje);
+				
 				isWorldReady[1] = true;
- });
+			});
 
- //Carga del otro jugador (apartado)
-
-});
+		});
 
 		function loadOBJWithMTL(path, objFile, mtlFile, onLoadCallback) {
 			var mtlLoader = new THREE.MTLLoader();
@@ -594,38 +575,56 @@ personaje.mixer.clipAction(personaje.animations[0]);
 		function render() {
 			requestAnimationFrame(render);
 			deltaTime = clock.getDelta();
-			moto = scene.getObjectByName("moto");
-			var yaw = 0;
-			var forward = 0;
+			player_1 = scene.getObjectByName("player1");
+			player_2 = scene.getObjectByName("player2");
+			var yaw = [0, 0];
+			var forward = [0, 0];
+			var moving = [false, false];
+			
+
 			if (keys["A"]) {
-				yaw = 5;
+				yaw[0] = 5;
 			} else if (keys["D"]) {
-				yaw = -5;
+				yaw[0] = -5;				
 			}
 			if (keys["W"]) {
-				forward = 20;
+				forward[0] = 20;
+				moving[0] = true;
 			} else if (keys["S"]) {
-				forward = -20;
+				forward[0] = -20;
+				moving[0] = true;
+			}
+
+			if (keys["J"]) {
+				yaw[1] = 5;
+			} else if (keys["L"]) {
+				yaw[1] = -5;				
+			}
+			if (keys["I"]) {
+				forward[1] = 20;
+				moving[1] = true;
+			} else if (keys["K"]) {
+				forward[1] = -20;
+				moving[1] = true;
 			}
 
 
 			////CON ESTO SE ACTIVA LA ANIMACION
-if (mixers.length > 0) {
- for (var i = 0; i < mixers.length; i++) {
- mixers[i].update(deltaTime);
- }
- }
- if (mixers.length > 0) {
- for (var i = 0; i < mixers.length; i++) {
- mixers[i].update(deltaTime);
- }
- }
+			if (mixers.length > 0) {
+				for (var i = 0; i < mixers.length; i++) {
+					if(moving[i])
+						mixers[i].update(deltaTime);
+				}
+			}
+			
 
- 
- ////
+			//// LOGICA DE COLISIONES
 			if (isWorldReady[0] && isWorldReady[1]) {
-				moto.rotation.y += yaw * deltaTime;
-				moto.translateZ(forward * deltaTime);
+				player_1.rotation.y += yaw[0] * deltaTime;
+				player_1.translateZ(forward[0] * deltaTime);
+
+				player_2.rotation.y += yaw[1] * deltaTime;
+				player_2.translateZ(forward[1] * deltaTime);
 
 				//camera.position.x = moto.position.x;
 				//camera.position.z = moto.position.z + 30;
@@ -636,7 +635,8 @@ if (mixers.length > 0) {
 					// Lanzamos el rayo
 					// El primero parametro es para saber desde donde vamos a lanzar el rayo (desde la camara)
 					// El segundo parametro es para saber la direccion a la cual lanzaremos el rayo
-					rayCaster.set(moto.position, camera.rays[i]);
+					rayCaster.set(player_1.position, camera.rays[i]);
+					rayCaster2.set(player_2.position, camera.rays[i]);
 					// Verificamos si hay colision con algun objeto.
 					// El primer parametro es el objeto o la coleccion de objetos 
 					// los cuales vamos a tomar en cuenta para colisionar
@@ -644,6 +644,9 @@ if (mixers.length > 0) {
 					// si existe colision con estos objetos tambien verifique colision con los hijos de estos objetos
 					var collision = rayCaster.intersectObjects(collisionObjects, true);
 					var collisionT = rayCaster.intersectObjects(collisionTraps, true);
+
+					var collision2 = rayCaster2.intersectObjects(collisionObjects, true);
+					var collisionT2 = rayCaster2.intersectObjects(collisionTraps, true);
 
 					// if(collision.length){
 					// 	console.log(collision[0].distance);
@@ -654,31 +657,44 @@ if (mixers.length > 0) {
 
 					// En el if podemos ver que tambien tenemos control para saber a que distancia esta colisionando
 					if (collision.length > 0 && collision[0].distance < 1) {
-						console.log("colisionando");
+						console.log("colisionando jugador 1");
 						//Profe, esta fue la solución que encontré después de 4 horas, solo son 2 líneas de código evita que atravieses las cajas y te hace retroceder si quieres pasar a través de ellas
-						moto.translateZ(-(forward * deltaTime));
+						player_1.translateZ(-(forward[0] * deltaTime));
 
 					}
 
-					objects.spikes.forEach(function(spike){
-						if(spike.activated && spike.model.position.y < 0) {
+					if (collision2.length > 0 && collision2[0].distance < 1) {
+						console.log("colisionando jugador 2");
+						//Profe, esta fue la solución que encontré después de 4 horas, solo son 2 líneas de código evita que atravieses las cajas y te hace retroceder si quieres pasar a través de ellas
+						player_2.translateZ(-(forward[1] * deltaTime));
+
+					}
+
+					objects.spikes.forEach(function (spike) {
+						if (spike.activated && spike.model.position.y < 0) {
 							spike.model.position.y += 10 * deltaTime;
-						}
-						/*else{
-							spike.model.position.y=-7;
-						}*/
+						}						
 					})
 
 					if (collisionT.length > 0 && collisionT[0].distance < 1) {
-						if(!collisionT[0].object.activated)
+						if (!collisionT[0].object.activated)
 							collisionT[0].object.activated = true;
 
 						// if(collisionT[0].activated && collisionT[0].object.model.position.y < 0) {
 						// 	collisionT[0].object.model.position.y += 70 * deltaTime;
 						// }
-						console.log("Picos activados");
+						console.log("Picos activados jugador 1");
 						//Profe, esta fue la solución que encontré después de 4 horas, solo son 2 líneas de código evita que atravieses las cajas y te hace retroceder si quieres pasar a través de ellas
-						moto.translateZ(-(forward * deltaTime));
+						player_1.translateZ(-(forward[0] * deltaTime));
+
+					}
+
+					if (collisionT2.length > 0 && collisionT2[0].distance < 1) {
+						if (!collisionT2[0].object.activated)
+							collisionT2[0].object.activated = true;
+						
+						console.log("Picos activados jugador 2");
+						player_2.translateZ(-(forward[1] * deltaTime));
 
 					}
 

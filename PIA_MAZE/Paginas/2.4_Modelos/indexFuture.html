@@ -544,7 +544,7 @@
 			document.addEventListener('keyup', onKeyUp);
 
 
-
+//Carga del personaje principal
 var loader = new THREE.FBXLoader();
  loader.load('assets/Animacion.fbx', function (personaje) {
  personaje.mixer = new THREE.AnimationMixer(personaje);
@@ -563,11 +563,6 @@ personaje.mixer.clipAction(personaje.animations[0]);
 				//collisionObjects.push(object);//colision con la moto
 				isWorldReady[1] = true;
  });
-
-
-
- 
-
 
 });
 

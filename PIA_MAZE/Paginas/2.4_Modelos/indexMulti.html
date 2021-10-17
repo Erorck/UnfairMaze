@@ -1,7 +1,7 @@
 <html>
 
 <head>
-	<title>Multijugador</title>
+	<title>UnfairMaze</title>
 	<script type="text/javascript" src="js/libs/jquery/jquery-2.1.4.min.js"></script>
 	<script type="text/javascript" src="js/libs/three/three.js"></script>
 	<script type="text/javascript" src="js/libs/three/three2.js"></script>
@@ -544,7 +544,7 @@
 			document.addEventListener('keyup', onKeyUp);
 
 
-
+//Carga del personaje principal
 var loader = new THREE.FBXLoader();
  loader.load('assets/Animacion.fbx', function (personaje) {
  personaje.mixer = new THREE.AnimationMixer(personaje);
@@ -554,7 +554,7 @@ personaje.mixer.clipAction(personaje.animations[0]);
  action.play();
 
 
-				personaje.position.z = -2 + 115; //SE POSICIONA EL ASSET
+ 				personaje.position.z = -2 + 115; //SE POSICIONA EL ASSET
 				personaje.position.x = -2 + 138;
 
 				personaje.name = "moto";
@@ -564,10 +564,7 @@ personaje.mixer.clipAction(personaje.animations[0]);
 				isWorldReady[1] = true;
  });
 
-
-
- 
-
+ //Carga del otro jugador (apartado)
 
 });
 
@@ -630,8 +627,8 @@ if (mixers.length > 0) {
 				moto.rotation.y += yaw * deltaTime;
 				moto.translateZ(forward * deltaTime);
 
-				camera.position.x = moto.position.x;
-				camera.position.z = moto.position.z + 30;
+				//camera.position.x = moto.position.x;
+				//camera.position.z = moto.position.z + 30;
 
 				// Collision
 				// Recorremos los "rayos" a lanzar para detectar las colisiones
@@ -707,9 +704,9 @@ if (mixers.length > 0) {
 			//camera = new THREE.PerspectiveCamera(100, visibleSize.width / visibleSize.height, 0.1, 120);
 
 			var aspect = window.innerWidth / window.innerHeight;
-			var d = 70;
+			var d = 90;
 			camera = new THREE.OrthographicCamera(- d * aspect, d * aspect, d, - d, 1, 1000);
-			camera.position.set(50, 60, 70); // all components equal
+			camera.position.set(50, 56, 70); // all components equal
 			//camera.lookAt(0, 0, 0); // or the origin
 
 			//camera.rotation.y = THREE.Math.degToRad(-5);

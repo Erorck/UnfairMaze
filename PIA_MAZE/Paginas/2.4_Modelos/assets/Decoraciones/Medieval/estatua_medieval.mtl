@@ -1,0 +1,11 @@
+newmtl blinn1SG
+illum 4
+Kd 1.00 1.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd LP_albedo.jpg
+map_Ka LP_AO.jpg
+bump  -bm 1 LP_normal.jpg
+Ni 1.00
+Ks 0.00 0.00 0.00
+map_Ks LP_roughness.jpg

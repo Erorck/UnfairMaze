@@ -135,13 +135,15 @@
 
 		modelPaths.decorators = [
 			{ path: "assets/Decoraciones/Bosque/", obj: "fuente_tiki.obj", mtl: "fuente_tiki.mtl" },
-			{ path: "assets/Decoraciones/Bosque/", obj: "fuente_tiki.obj", mtl: "fuente_tiki.mtl" },
-			{ path: "assets/Decoraciones/Bosque/", obj: "fuente_tiki.obj", mtl: "fuente_tiki.mtl" }			
+			{ path: "assets/Decoraciones/Medieval/", obj: "estatua_medieval.obj", mtl: "estatua_medieval.mtl" },
+			{ path: "assets/Decoraciones/Futurista/", obj: "flor_alienigena_2.obj", mtl: "flor_alienigena_2.mtl" }			
 		]
 
 		//Material y mesh de prueba
 		var geometriaCubo = new THREE.BoxGeometry(10, 10, 10);
 		var materialCubo = new THREE.MeshLambertMaterial({ color: new THREE.Color(0, 0.6, 0.7), wireframe: false });
+		var materialCuboInv = new THREE.MeshLambertMaterial({ color: new THREE.Color(0, 0.6, 0.7), opacity: 0.0,
+    transparent: true });
 
 
 		//Objecto maestro de todos los assets en la escena
@@ -179,7 +181,7 @@
 		// [0] -> Bosque
 		// [1] -> Medieval
 		// [2] -> Futurista
-		var sceneIndex = 0;
+		var sceneIndex = 2;
 
 		var clock;
 		var deltaTime;
@@ -190,6 +192,7 @@
 		// y detectar si el "rayo" colisiona con un objeto en esa direccion
 		var rayCaster;
 		var collisionObjects = [];
+		var collisionTraps = [];
 		var isWorldReady = [false, false];
 
 
@@ -313,16 +316,31 @@
 				if (object == "trap_spike") {
 					positions.forEach(function (element) {
 						asset = mesh.clone();
+						var assetColl = new THREE.Mesh(geometriaCubo, materialCuboInv);
 
-						asset.position.z = -40;
-						asset.position.x = -44;
-						asset.position.y = 0;
+						asset.position.z = assetColl.position.z = -40;
+						asset.position.x = assetColl.position.x = -44;
+						asset.position.y = -6;
+						assetColl.position.y = 5;
 
-						asset.coordZ = element[0];
-						asset.coordX = element[1];
+						asset.coordZ = assetColl.coordZ = element[0];
+						asset.coordX = assetColl.coordX = element[1];
 						asset.position.x += asset.coordX * 10;
 						asset.position.z += asset.coordZ * 10;
-						objects.spikes.push(asset);
+						assetColl.position.x = asset.position.x;
+						assetColl.position.z = asset.position.z;
+						// var spikeObj = {
+						// 	activated:"activated",
+						// 	mesh: "mesh"
+						// }
+
+						// spikeObj.activated = false;
+						// spikeObj.mesh = asset;
+
+						assetColl.activated = false;
+						assetColl.model = asset;
+
+						objects.spikes.push(assetColl);
 					});
 				}
 
@@ -472,8 +490,12 @@
 				positionObject("trap_spike", object, mainModeSpikes);
 
 				objects.spikes.forEach(function (block) {
+					// scene.add(block["mesh"]);
+					// collisionObjects.push(block["mesh"]);
 					scene.add(block);
-					collisionObjects.push(block);
+					scene.add(block.model);
+					//collisionObjects.push(block);
+					collisionTraps.push(block);
 				});
 
 			});
@@ -624,6 +646,7 @@ if (mixers.length > 0) {
 					// El segundo parametro es para indicar que aparte de verificar
 					// si existe colision con estos objetos tambien verifique colision con los hijos de estos objetos
 					var collision = rayCaster.intersectObjects(collisionObjects, true);
+					var collisionT = rayCaster.intersectObjects(collisionTraps, true);
 
 					// if(collision.length){
 					// 	console.log(collision[0].distance);
@@ -635,6 +658,25 @@ if (mixers.length > 0) {
 					// En el if podemos ver que tambien tenemos control para saber a que distancia esta colisionando
 					if (collision.length > 0 && collision[0].distance < 1) {
 						console.log("colisionando");
+						//Profe, esta fue la solución que encontré después de 4 horas, solo son 2 líneas de código evita que atravieses las cajas y te hace retroceder si quieres pasar a través de ellas
+						moto.translateZ(-(forward * deltaTime));
+
+					}
+
+					objects.spikes.forEach(function(spike){
+						if(spike.activated && spike.model.position.y < 0) {
+							spike.model.position.y += 10 * deltaTime;
+						}
+					})
+
+					if (collisionT.length > 0 && collisionT[0].distance < 1) {
+						if(!collisionT[0].object.activated)
+							collisionT[0].object.activated = true;
+
+						// if(collisionT[0].activated && collisionT[0].object.model.position.y < 0) {
+						// 	collisionT[0].object.model.position.y += 70 * deltaTime;
+						// }
+						console.log("Picos activados");
 						//Profe, esta fue la solución que encontré después de 4 horas, solo son 2 líneas de código evita que atravieses las cajas y te hace retroceder si quieres pasar a través de ellas
 						moto.translateZ(-(forward * deltaTime));
 
@@ -659,13 +701,13 @@ if (mixers.length > 0) {
 			var visibleSize = { width: window.innerWidth, height: window.innerHeight };
 			clock = new THREE.Clock();
 			scene = new THREE.Scene();
-			camera = new THREE.PerspectiveCamera(100, visibleSize.width / visibleSize.height, 0.1, 120);
+			//camera = new THREE.PerspectiveCamera(100, visibleSize.width / visibleSize.height, 0.1, 120);
 
 			var aspect = window.innerWidth / window.innerHeight;
 			var d = 70;
-			//camera = new THREE.OrthographicCamera(- d * aspect, d * aspect, d, - d, 1, 1000);
+			camera = new THREE.OrthographicCamera(- d * aspect, d * aspect, d, - d, 1, 1000);
 			camera.position.set(50, 60, 70); // all components equal
-			camera.lookAt(0, 0, 0); // or the origin
+			//camera.lookAt(0, 0, 0); // or the origin
 
 			//camera.rotation.y = THREE.Math.degToRad(-5);
 			camera.rotation.x = THREE.Math.degToRad(-60);

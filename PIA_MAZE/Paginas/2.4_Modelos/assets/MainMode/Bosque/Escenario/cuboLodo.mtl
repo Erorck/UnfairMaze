@@ -6,5 +6,5 @@ Tf 1.00 1.00 1.00
 map_Kd Forest_Floor_Base_Color.png
 bump  -bm 1.144578 Forest_Floor_Normal.png
 Ni 1.00
-Ks 0.00 0.00 0.00
+Ks 0.10 0.10 0.10
 map_Ks Forest_Floor_Specular.png

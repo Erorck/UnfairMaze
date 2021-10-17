@@ -667,6 +667,9 @@ if (mixers.length > 0) {
 						if(spike.activated && spike.model.position.y < 0) {
 							spike.model.position.y += 10 * deltaTime;
 						}
+						/*else{
+							spike.model.position.y=-7;
+						}*/
 					})
 
 					if (collisionT.length > 0 && collisionT[0].distance < 1) {

@@ -20,10 +20,15 @@
 		var renderer;
 		var controls;
 
+		//variables globales para la funcion
+			var contador=0;
+			var posInicial =-6; //posicion para el primer  alien
+			var posInicial2 =6; //posicion para el segundo alien
+			var distancia=18;
 		// TODO: Modelo con animacion.
- var mixers = [];
- var mixers_2 = [];
-// TODO: End Modelo Animacion.
+			 var mixers = [];
+			 var mixers_2 = [];
+			// TODO: End Modelo Animacion.
 
 		//Coordenadas de las paredes del modo de juego principal
 		var mainModeWalls = [
@@ -96,7 +101,8 @@
 		var mainModeSpikes = [[1, 14], [2, 14], [3, 2], [4, 7], [4, 17], [5, 11], [6, 15], [7, 2], [8, 14], [10, 8], [11, 13], [13, 3], [14, 6], [14, 16], [15, 1], [15, 9]];
 
 		//Coordenadas de los señuelos del modo de juego principal
-		var mainModeMannequins = [[5, 2], [8, 12]];
+		var mainModeMannequins = [[5, 2]];
+		var mainModeMannequins2 = [[8, 12]];
 
 		//Coordenadas de las decoraciones del modo de juego principal
 		var mainModeDecorators = [
@@ -118,6 +124,7 @@
 			items: "items",
 			spikes: "spikes",
 			mannequins: "mannequins",
+			mannequins2: "mannequins2",
 			decorators: "decorators"
 		};
 
@@ -152,13 +159,19 @@
 			{ path: "assets/Enemigo/guardian/", obj: "guardian_Bosque.obj", mtl: "guardian_Bosque.mtl" },
 			{ path: "assets/Enemigo/fantasma/", obj: "fantasmita.obj", mtl: "fantasmita.mtl" },
 			{ path: "assets/Enemigo/alien/", obj: "alien.obj", mtl: "alien.mtl" }
-		]
+		];
+
+		modelPaths.mannequins2 = [
+			{ path: "assets/Enemigo/guardian/", obj: "guardian_Bosque.obj", mtl: "guardian_Bosque.mtl" },
+			{ path: "assets/Enemigo/fantasma/", obj: "fantasmita.obj", mtl: "fantasmita.mtl" },
+			{ path: "assets/Enemigo/alien/", obj: "alien.obj", mtl: "alien.mtl" }
+		];
 
 		modelPaths.decorators = [
 			{ path: "assets/Decoraciones/Bosque/", obj: "fuente_tiki.obj", mtl: "fuente_tiki.mtl" },
 			{ path: "assets/Decoraciones/Medieval/", obj: "estatua_medieval.obj", mtl: "estatua_medieval.mtl" },
 			{ path: "assets/Decoraciones/Futurista/", obj: "flor_alienigena_2.obj", mtl: "flor_alienigena_2.mtl" }			
-		]
+		];
 
 		//Material y mesh de prueba
 		var geometriaCubo = new THREE.BoxGeometry(10, 10, 10);
@@ -176,6 +189,7 @@
 			spikes: "spikes",
 			crushWalls: "crushWalls",
 			mannequins: "mannequins",
+			mannequins2: "mannequins2",
 			items: "items"
 		};
 
@@ -186,6 +200,7 @@
 		objects.decorators = [];
 		objects.crushWalls = [];
 		objects.mannequins = [];
+		objects.mannequins2 = [];
 		objects.spikes = [];
 		objects.items = {
 			hearts: "hearts",
@@ -378,6 +393,18 @@
 					});
 				}
 
+				if (object == "mannequins2") {
+					positions.forEach(function (element) {
+						asset = mesh.clone();
+
+						asset.coordZ = element[0];
+						asset.coordX = element[1];
+						asset.position.x += asset.coordX * 10;
+						asset.position.z += asset.coordZ * 10;
+						objects.mannequins2.push(asset);
+					});
+				}
+
 				//POSICIONAMIENTO DE DECORACIONES
 				if (object == "decorators") {
 					positions.forEach(function (element) {
@@ -536,6 +563,9 @@
 
 				object.position.z = -40;
 				object.position.x = -44;
+				
+				object.rotation.z=THREE.Math.degToRad(-60);
+				object.rotation.y=THREE.Math.degToRad(90);
 				if (sceneIndex == 1) {
 					object.position.y = 5;
 				}
@@ -546,6 +576,26 @@
 				positionObject("mannequins", object, mainModeMannequins);
 
 				objects.mannequins.forEach(function (block) {
+					scene.add(block);
+					collisionObjects.push(block);
+				});			
+
+			});
+
+			loadOBJWithMTL(modelPaths.mannequins2[sceneIndex].path, modelPaths.mannequins2[sceneIndex].obj, modelPaths.mannequins2[sceneIndex].mtl, (object) => {
+
+				object.position.z = -70;
+				object.position.x = -44;
+				if (sceneIndex == 1) {
+					object.position.y = 5;
+				}
+				else {
+					object.position.y = 0;
+				}
+
+				positionObject("mannequins2", object, mainModeMannequins2);
+
+				objects.mannequins2.forEach(function (block) {
 					scene.add(block);
 					collisionObjects.push(block);
 				});			
@@ -722,6 +772,16 @@ if (mixers.length > 0) {
 				objects.items.clocks.forEach(function (heart) {
 					heart.rotation.y += THREE.Math.degToRad(50) * deltaTime;
 				});
+			objects.mannequins.forEach(function (enemy) {
+				//enemy.position.x= (Math.sin(contador)+1)/2*distancia+posInicial;
+				enemy.position.y= (Math.sin(contador)+1)/2*distancia+posInicial;
+				contador+=0.1;
+			});
+			objects.mannequins2.forEach(function (enemy2) {
+				enemy2.position.z= -(Math.sin(contador)+1)/2*distancia+posInicial2;
+				//contador+=0.01;
+			});
+				
 			}
 
 

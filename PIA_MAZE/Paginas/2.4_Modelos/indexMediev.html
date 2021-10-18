@@ -20,6 +20,12 @@
 		var renderer;
 		var controls;
 
+		//variables globales para la funcion
+	var contador=0;
+	var posInicial =-4; //posicion para el primer cubo
+	var posInicial2 =4; //posicion para el segundo cubo
+	var distancia=8;
+
 		// TODO: Modelo con animacion.
  var mixers = [];
  var mixers_2 = [];
@@ -538,13 +544,23 @@
 				object.position.x = -44;
 				if (sceneIndex == 1) {
 					object.position.y = 5;
+					object.position.x = (Math.sin(contador)+1)/2*distancia+posInicial; //asignandole la posición al cubo 1
+				object.position.x = -(Math.sin(contador)+1)/2*distancia+posInicial2; //asignandole la posición al cubo 2
+
+				contador+=0.01;//aumentando  el contador 
 				}
 				else {
 					object.position.y = 0;
 				}
 
-				positionObject("mannequins", object, mainModeMannequins);
+				
+			
+			
+				
+			
 
+				positionObject("mannequins", object, mainModeMannequins);
+				
 				objects.mannequins.forEach(function (block) {
 					scene.add(block);
 					collisionObjects.push(block);
@@ -575,6 +591,10 @@
 
 			document.addEventListener('keydown', onKeyDown);
 			document.addEventListener('keyup', onKeyUp);
+
+
+//Funcion para mover los enemigos de extremo a extremo de forma ciclica---------------------------------------------------------------------------
+
 
 
 //Carga del personaje principal
@@ -628,7 +648,10 @@ personaje.mixer.clipAction(personaje.animations[0]);
 			keys[String.fromCharCode(event.keyCode)] = false;
 		}
 
+	
+
 		function render() {
+			
 			requestAnimationFrame(render);
 			deltaTime = clock.getDelta();
 			moto = scene.getObjectByName("moto");
@@ -657,7 +680,7 @@ if (mixers.length > 0) {
  mixers[i].update(deltaTime);
  }
  }
-
+ 
  
  ////
 			if (isWorldReady[0] && isWorldReady[1]) {
@@ -729,7 +752,7 @@ if (mixers.length > 0) {
 					heart.rotation.y += THREE.Math.degToRad(50) * deltaTime;
 				});
 			}
-
+	
 
 			renderer.render(scene, camera);
 		}

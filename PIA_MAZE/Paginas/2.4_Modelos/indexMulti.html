@@ -348,18 +348,18 @@
 					});
 				}
 
-				// // POSICIONAMIENTO DE MANIQUIS
-				// if (object == "mannequins") {
-				// 	positions.forEach(function (element) {
-				// 		asset = mesh.clone();
+				// POSICIONAMIENTO DE MANIQUIS
+				if (object == "mannequins") {
+					positions.forEach(function (element) {
+						asset = mesh.clone();
 
-				// 		asset.coordZ = element[0];
-				// 		asset.coordX = element[1];
-				// 		asset.position.x += asset.coordX * 10;
-				// 		asset.position.z += asset.coordZ * 10;
-				// 		objects.mannequins.push(asset);
-				// 	});
-				// }
+						asset.coordZ = element[0];
+						asset.coordX = element[1];
+						asset.position.x += asset.coordX * 10;
+						asset.position.z += asset.coordZ * 10;
+						objects.mannequins.push(asset);
+					});
+				}
 
 				//POSICIONAMIENTO DE DECORACIONES
 				if (object == "decorators") {
@@ -538,56 +538,14 @@
 				action.play();
 
 
-				personaje.position.z = -2 + 115; //SE POSICIONA EL ASSET
-				personaje.position.x = -2 + 138;
+				personaje.position.z = -18 - 14; //SE POSICIONA EL ASSET
+				personaje.position.x = -18 - 14;
 				personaje.name = "player2";
 
 				scene.add(personaje);
 				
 				isWorldReady[1] = true;
 			});
-
-			
-// /////Carga del minotauro
-
-// var loader = new THREE.FBXLoader();
-//  loader.load('assets/Minotauro.fbx', function (minotauros) {
-// 	minotauros.mixer = new THREE.AnimationMixer(minotauros);
-//  mixers.push(minotauros.mixer);
-//  var action = 
-//  minotauros.mixer.clipAction(minotauros.animations[0]);
-//  action.play();
-
-
-//  minotauros.position.z = -65 + 100; //SE POSICIONA EL ASSET
-//  minotauros.position.x = -24 + 100;
-
-			
-
-// 				scene.add(minotauros);
-// 				//collisionObjects.push(object);//colision con la moto
-// 				isWorldReady[1] = true;
-//  });
-// /////Carga del minotauro2
-//  var loader = new THREE.FBXLoader();
-//  loader.load('assets/Minotauro.fbx', function (minotauros1) {
-// 	minotauros1.mixer = new THREE.AnimationMixer(minotauros1);
-//  mixers.push(minotauros1.mixer);
-//  var action = 
-//  minotauros1.mixer.clipAction(minotauros1.animations[0]);
-//  action.play();
-
-
-//  minotauros1.position.z = -92 + 100; //SE POSICIONA EL ASSET
-//  minotauros1.position.x = -120 + 100;
-
-			
-
-// 				scene.add(minotauros1);
-// 				//collisionObjects.push(object);//colision con la moto
-// 				isWorldReady[1] = true;
-//  });
-
 
 		});
 

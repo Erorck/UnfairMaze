@@ -2,6 +2,8 @@
 
 <head>
 	<title>UnfairMaze</title>
+	<link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/jugar.css">
 	<script type="text/javascript" src="js/libs/jquery/jquery-2.1.4.min.js"></script>
 	<script type="text/javascript" src="js/libs/three/three.js"></script>
 	<script type="text/javascript" src="js/libs/three/three2.js"></script>
@@ -19,6 +21,7 @@
 		var camera;
 		var renderer;
 		var controls;
+		var estaPausado=false;
 
 		//variables globales para la funcion
 			var contador=0;
@@ -688,19 +691,28 @@ personaje.mixer.clipAction(personaje.animations[0]);
 			} else if (keys["S"]) {
 				forward = -20;
 			}
+			else if (keys["G"]) {
+				estaPausado = true;
+				$("#menuPausa").show();
+			}
+			else if (keys["N"]) {
+				estaPausado = false;
+				$("#menuPausa").hide();
+			}
+			if(estaPausado == false){
 
 
 			////CON ESTO SE ACTIVA LA ANIMACION
-if (mixers.length > 0) {
- for (var i = 0; i < mixers.length; i++) {
- mixers[i].update(deltaTime);
- }
- }
- if (mixers.length > 0) {
- for (var i = 0; i < mixers.length; i++) {
- mixers[i].update(deltaTime);
- }
- }
+			if (mixers.length > 0) {
+			 for (var i = 0; i < mixers.length; i++) {
+			 mixers[i].update(deltaTime);
+			 }
+			 }
+			 if (mixers.length > 0) {
+			 for (var i = 0; i < mixers.length; i++) {
+			 mixers[i].update(deltaTime);
+			 }
+			 }
 
  
  ////
@@ -786,7 +798,9 @@ if (mixers.length > 0) {
 
 
 			renderer.render(scene, camera);
+		
 		}
+	}
 
 		function setupScene() {
 			var visibleSize = { width: window.innerWidth, height: window.innerHeight };
@@ -836,6 +850,29 @@ if (mixers.length > 0) {
 <body>
 
 	<div id="scene-section"></div>
+
+	<div class="modal-dialog" id="menuPausa" style="position: absolute; top:20%; left:40%;">
+		<div class="modal-content">
+		  
+			<div class="modal-header">
+			  <h5 class="modal-title" id="exampleModalLabel">Juego en pausa</h5>
+			  
+			</div>
+			<div class="modal-body">
+			  
+			  <br>
+			  <button type="button" class="btn btn-dark border border-warning">
+				 <a class="btnSave" style=" top:20%; right:90%;"href="../index.html">Guardar y salir</a>
+			 </button>
+			  <br>
+			  <br>
+			  <button type="button" class="btn btn-dark border border-warning">
+				 <a class="btnSave" href="../index.html">Salir sin guardar</a>
+			 </button>
+			</div>
+			
+		</div>
+	</div>
 
 </body>
 

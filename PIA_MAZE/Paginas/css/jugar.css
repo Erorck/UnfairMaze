@@ -59,6 +59,8 @@ body{
 	color: #000;
 }
 
+
+
 .modal-body .btn{
 	 font-family: 'Metal Mania', cursive;
 	font-size: 30px;
@@ -79,6 +81,7 @@ body{
 .modal-body .btnSave{
 	text-decoration: none;
 	color:#fff;
+	margin-right: 40px;
 }
 
 .modal-body .btnSave:hover{

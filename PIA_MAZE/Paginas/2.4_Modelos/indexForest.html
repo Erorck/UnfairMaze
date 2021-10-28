@@ -20,6 +20,7 @@
 		var camera;
 		var renderer;
 		var controls;
+		var estaPausado=false;
 
 		// TODO: Modelo con animacion.
  var mixers = [];
@@ -222,6 +223,8 @@
 
 			setupScene();
 			rayCaster = new THREE.Raycaster();
+
+			$("#menuPausa").hide();
 
 			//FUNCION DE POSICIONAMIENTO EN X,Z parametros(String tipo de mesh, asset, arreglo de posiciones)
 			function positionObject(object, mesh = new THREE.Mesh(geometriaCubo, materialCubo), positions) {
@@ -684,20 +687,30 @@ var loader = new THREE.FBXLoader();
 			} else if (keys["S"]) {
 				forward = -20;
 			}
+			 else if (keys["G"]) {
+				estaPausado = true;
+				$("#menuPausa").show();
+			}
+			else if (keys["N"]) {
+				estaPausado = false;
+				$("#menuPausa").hide();
+			}
+			if(estaPausado == false){
+
 
 
 			////CON ESTO SE ACTIVA LA ANIMACION
-if (mixers.length > 0) {
- for (var i = 0; i < mixers.length; i++) {
- mixers[i].update(deltaTime);
- }
- }
- if (mixers.length > 0) {
- for (var i = 0; i < mixers.length; i++) {
- mixers[i].update(deltaTime);
- }
- }
-
+		if (mixers.length > 0) {
+			 for (var i = 0; i < mixers.length; i++) {
+			 mixers[i].update(deltaTime);
+		 }
+		 }
+		 if (mixers.length > 0) {
+			 for (var i = 0; i < mixers.length; i++) {
+			 mixers[i].update(deltaTime);
+		 }
+		 }
+ 
  
  ////
 			if (isWorldReady[0] && isWorldReady[1]) {
@@ -773,6 +786,7 @@ if (mixers.length > 0) {
 
 			renderer.render(scene, camera);
 		}
+	}
 
 		function setupScene() {
 			var visibleSize = { width: window.innerWidth, height: window.innerHeight };
@@ -822,24 +836,26 @@ if (mixers.length > 0) {
 <body>
 
 	<div id="scene-section"></div>
-	
+
+	<!--<div id="menuPausa" style="position: absolute; top:50%; left:50%;">
+		<label style = "color: rgb(1,1,0);">PAUSA</label>
+	</div>-->
 	
 		<!-- Modal -->
 		
 		   
-			  <div class="modal-dialog"  >
-				  <div class="modal-content"style="position: absolute;">
+			  <div class="modal-dialog" id="menuPausa" style="position: absolute; top:20%; left:40%;">
+				  <div class="modal-content">
 					
 					  <div class="modal-header">
 						<h5 class="modal-title" id="exampleModalLabel">Juego en pausa</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						
 					  </div>
 					  <div class="modal-body">
-						<button type="button" class="btn btnReturn btn-dark border border-warning" data-bs-dismiss="modal">Regresar</button>
-						<br>
+						
 						<br>
 						<button type="button" class="btn btn-dark border border-warning">
-						   <a class="btnSave" href="../index.html">Guardar y salir</a>
+						   <a class="btnSave" style=" top:20%; right:90%;"href="../index.html">Guardar y salir</a>
 					   </button>
 						<br>
 						<br>
@@ -854,16 +870,7 @@ if (mixers.length > 0) {
 		
 		
 
-		<script>var beepOne = $("#theSound")[0];
-					$(".modal-dialog button")
-						.mouseenter(function() {
-							beepOne.play();
-						});
-				   $("#btnReturnToIndex, #btnPaused")
-				   .mouseenter(function() {
-					   beepOne.play();
-				   });
-				 </script>
+		
 	  
 	<script src="../js/jugar.js"></script>
 </body>

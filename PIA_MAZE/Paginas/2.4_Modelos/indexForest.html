@@ -11,7 +11,6 @@
 	<script type="text/javascript" src="js/libs/three/MTLLoader.js"></script>
 	<script type="text/javascript" src="js/libs/three/FBXLoader.js"></script>
 	<script type="text/javascript" src="js/libs/three/OBJLoader.js"></script>
-	
 	<script type="text/javascript" src="js/libs/three/inflate.min.js"></script>
 
 
@@ -823,20 +822,13 @@ if (mixers.length > 0) {
 <body>
 
 	<div id="scene-section"></div>
-	<div class="container" id="menuPausa">
-            
-		<!-- Button trigger modal -->
-		<button type="button" id="btnPaused" class="btnPause btn btn-dark border border-warning"  data-bs-toggle="modal" data-bs-target="#exampleModal">
-		  Pausa
-		</button>
-  
+	
+	
 		<!-- Modal -->
-		<div class="pauseMenu modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		  <audio id="theSound" controls="controls" preload="auto" hidden>
-									<source src="audio/AndrossEnter.mp3" controls >
-							</audio>  
-			  <div class="modal-dialog">
-				  <div class="modal-content">
+		
+		   
+			  <div class="modal-dialog"  >
+				  <div class="modal-content"style="position: absolute;">
 					
 					  <div class="modal-header">
 						<h5 class="modal-title" id="exampleModalLabel">Juego en pausa</h5>
@@ -847,20 +839,20 @@ if (mixers.length > 0) {
 						<br>
 						<br>
 						<button type="button" class="btn btn-dark border border-warning">
-						   <a class="btnSave" href="index.html">Guardar y salir</a>
+						   <a class="btnSave" href="../index.html">Guardar y salir</a>
 					   </button>
 						<br>
 						<br>
 						<button type="button" class="btn btn-dark border border-warning">
-						   <a class="btnSave" href="index.html">Salir sin guardar</a>
+						   <a class="btnSave" href="../index.html">Salir sin guardar</a>
 					   </button>
 					  </div>
 					  
 				  </div>
 			  </div>
 
-		</div>
-		<button id="btnReturnToIndex" onclick="location.href='../index.html'">Cerrar-Sesion</button>
+		
+		
 
 		<script>var beepOne = $("#theSound")[0];
 					$(".modal-dialog button")
@@ -872,8 +864,8 @@ if (mixers.length > 0) {
 					   beepOne.play();
 				   });
 				 </script>
-	  </div>
-	<script src="js/jugar.js"></script>
+	  
+	<script src="../js/jugar.js"></script>
 </body>
 
 </html>

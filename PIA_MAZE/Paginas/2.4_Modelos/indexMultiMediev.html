@@ -2,7 +2,7 @@
 
 <head>
 	<title>UnfairMaze</title>
-	<link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/jugar.css">
 	<script type="text/javascript" src="js/libs/jquery/jquery-2.1.4.min.js"></script>
 	<script type="text/javascript" src="js/libs/three/three.js"></script>
@@ -21,6 +21,12 @@
 		var camera;
 		var renderer;
 		var controls;
+
+        //variables globales para la funcion
+	    var contador=0;
+	    var posInicial =-4; //posicion para el primer fantasma
+	    var posInicial2 =4; //posicion para el segundo fantasma
+	    var distancia=8;
 
 		// TODO: Modelo con animacion.
 		var mixers = [];
@@ -88,7 +94,8 @@
 		var mainModeSpikes = [[1, 14], [2, 14], [3, 2], [4, 7], [4, 17], [5, 11], [6, 15], [7, 2], [8, 14], [10, 8], [11, 13], [13, 3], [14, 6], [14, 16], [15, 1], [15, 9]];
 
 		//Coordenadas de los señuelos del modo de juego principal
-		var mainModeMannequins = [[5, 2], [8, 12]];
+		var mainModeMannequins = [[5, 2]];
+        var mainModeMannequins2 = [[8, 12]];
 
 		//Coordenadas de las decoraciones del modo de juego principal
 		var mainModeDecorators = [[16, 1]];
@@ -99,6 +106,7 @@
 			items: "items",
 			spikes: "spikes",
 			mannequins: "mannequins",
+            mannequins2: "mannequins2",
 			decorators: "decorators"
 		};
 
@@ -135,6 +143,12 @@
 			{ path: "assets/Enemigo/alien/", obj: "alien.obj", mtl: "alien.mtl" }
 		]
 
+        modelPaths.mannequins2 = [
+			{ path: "assets/Enemigo/guardian/", obj: "guardian_Bosque.obj", mtl: "guardian_Bosque.mtl" },
+			{ path: "assets/Enemigo/fantasma/", obj: "fantasmita.obj", mtl: "fantasmita.mtl" },
+			{ path: "assets/Enemigo/alien/", obj: "alien.obj", mtl: "alien.mtl" }
+		]
+
 		modelPaths.decorators = [
 			{ path: "assets/Decoraciones/Bosque/", obj: "fuente_tiki.obj", mtl: "fuente_tiki.mtl" },
 			{ path: "assets/Decoraciones/Medieval/", obj: "estatua_medieval.obj", mtl: "estatua_medieval.mtl" },
@@ -159,6 +173,7 @@
 			spikes: "spikes",
 			crushWalls: "crushWalls",
 			mannequins: "mannequins",
+            mannequins2: "mannequins2",
 			items: "items"
 		};
 
@@ -169,6 +184,7 @@
 		objects.decorators = [];
 		objects.crushWalls = [];
 		objects.mannequins = [];
+        objects.mannequins2 = [];
 		objects.spikes = [];
 		objects.items = {
 			hearts: "hearts",
@@ -185,7 +201,7 @@
 		// [0] -> Bosque
 		// [1] -> Medieval
 		// [2] -> Futurista
-		var sceneIndex = 0;
+		var sceneIndex = 1;
 
 		var clock;
 		var deltaTime;
@@ -362,6 +378,17 @@
 						objects.mannequins.push(asset);
 					});
 				}
+                if (object == "mannequins2") {
+					positions.forEach(function (element) {
+						asset = mesh.clone();
+
+						asset.coordZ = element[0];
+						asset.coordX = element[1];
+						asset.position.x += asset.coordX * 10;
+						asset.position.z += asset.coordZ * 10;
+						objects.mannequins2.push(asset);
+					});
+				}
 
 				//POSICIONAMIENTO DE DECORACIONES
 				if (object == "decorators") {
@@ -487,6 +514,25 @@
 					scene.add(block);
 					collisionObjects.push(block);
 				});
+
+			});
+
+            //CARGA DE LOS SEÑUELOS DE ENEMIGOS
+			loadOBJWithMTL(modelPaths.mannequins2[sceneIndex].path, modelPaths.mannequins2[sceneIndex].obj, modelPaths.mannequins2[sceneIndex].mtl, (object) => {
+
+			object.position.z = -70;
+			object.position.x = -44;
+			if (sceneIndex == 1) {
+				object.position.y = 5;
+			}
+			else {
+				object.position.y = 0;
+			}
+			positionObject("mannequins2", object, mainModeMannequins2);
+			objects.mannequins2.forEach(function (block) {
+				scene.add(block);
+				collisionObjects.push(block);
+			});			
 
 			});
 
@@ -710,6 +756,14 @@
 
 				objects.items.clocks.forEach(function (heart) {
 					heart.rotation.y += THREE.Math.degToRad(50) * deltaTime;
+				});
+                objects.mannequins.forEach(function (enemy) {
+					enemy.position.x= (Math.sin(contador)+1)/2*distancia+posInicial;
+					contador+=0.01;
+				});
+				objects.mannequins2.forEach(function (enemy2) {
+					enemy2.position.z= -(Math.sin(contador)+1)/2*distancia+posInicial2;
+					contador+=0.01;
 				});
 			}
 

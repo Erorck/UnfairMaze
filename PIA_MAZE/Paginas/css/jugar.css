@@ -118,3 +118,10 @@ body{
 	background: #FFC300;
 	color: #000;
 }
+
+#playNombre,#playNombre2{
+	font-family: 'Metal Mania', cursive;
+	color: #000;
+	border: #FFC300;
+	
+}

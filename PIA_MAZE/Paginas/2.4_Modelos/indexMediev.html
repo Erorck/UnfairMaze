@@ -241,7 +241,7 @@
 
 			setupScene();
 			rayCaster = new THREE.Raycaster();
-
+			$("#menuPausa").hide();
 			//FUNCION DE POSICIONAMIENTO EN X,Z parametros(String tipo de mesh, asset, arreglo de posiciones)
 			function positionObject(object, mesh = new THREE.Mesh(geometriaCubo, materialCubo), positions) {
 
@@ -690,6 +690,7 @@ personaje.mixer.clipAction(personaje.animations[0]);
 		function render() {
 			
 			requestAnimationFrame(render);
+			$("#playNombre").show();
 			deltaTime = clock.getDelta();
 			moto = scene.getObjectByName("moto");
 			var yaw = 0;
@@ -868,7 +869,11 @@ if (mixers.length > 0) {
 	</div>-->
 	
 		<!-- Modal -->
-		
+		<div class="nameplay" id="playNombre" style="position: absolute; top:10%; left:80%; color:beige;">
+			<label for="">Nombre del jugador: </label>
+			<br>
+			<label for="">Puntuacion:: </label>
+	   </div>
 		   
 		<div class="modal-dialog" id="menuPausa" style="position: absolute; top:20%; left:40%;">
 			<div class="modal-content">

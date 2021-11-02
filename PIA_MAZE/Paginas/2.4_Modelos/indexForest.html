@@ -673,6 +673,7 @@ var loader = new THREE.FBXLoader();
 
 		function render() {
 			requestAnimationFrame(render);
+			$("#playNombre").show();
 			deltaTime = clock.getDelta();
 			moto = scene.getObjectByName("moto");
 			var yaw = 0;
@@ -843,7 +844,12 @@ var loader = new THREE.FBXLoader();
 	
 		<!-- Modal -->
 		
-		   
+		   <div class="nameplay" id="playNombre" style="position: absolute; top:10%; left:80%; color:beige;">
+				<label for="">Nombre del jugador: </label>
+				<br>
+				<label for="">Puntuacion:: </label>
+		   </div>
+
 			  <div class="modal-dialog" id="menuPausa" style="position: absolute; top:20%; left:40%;">
 				  <div class="modal-content">
 					

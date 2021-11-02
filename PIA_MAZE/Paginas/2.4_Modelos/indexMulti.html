@@ -574,6 +574,8 @@
 
 		function render() {
 			requestAnimationFrame(render);
+			$("#playNombre").show();
+			$("#playNombre2").show();
 			deltaTime = clock.getDelta();
 			player_1 = scene.getObjectByName("player1");
 			player_2 = scene.getObjectByName("player2");
@@ -761,6 +763,18 @@
 <body>
 
 	<div id="scene-section"></div>
+
+	<div class="nameplay" id="playNombre" style="position: absolute; top:10%; left:80%; color:beige;">
+		<label for="">Jugador 1: </label>
+		<br>
+		<label for="">Puntuacion: </label>
+   </div>
+
+   <div class="nameplay" id="playNombre2" style="position: absolute; top:10%; right:80%; color:beige;">
+	<label for="">Jugador 2: </label>
+	<br>
+	<label for="">Puntuacion: </label>
+</div>
 
 </body>
 

@@ -22,6 +22,7 @@
 		var controls;
 		var estaPausado = false;
 
+
 		// TODO: Modelo con animacion.
 		var mixers = [];
 		var mixers_2 = [];
@@ -167,6 +168,7 @@
 
 		//Material y mesh de prueba
 		var geometriaCubo = new THREE.BoxGeometry(10, 10, 10);
+		var geometriaPrismaRectangular = new THREE.BoxGeometry(5, 10, 5);
 		var materialCubo = new THREE.MeshLambertMaterial({ color: new THREE.Color(0, 0.6, 0.7), wireframe: false });
 		var materialCuboInv = new THREE.MeshLambertMaterial({
 			color: new THREE.Color(0, 0.6, 0.7), opacity: 0.0,
@@ -225,6 +227,7 @@
 		var collisionObjects = [];
 		var collisionTraps = [];
 		var winCollision = [];
+		var collisionItems = [];
 		var isWorldReady = [false, false];
 
 
@@ -235,6 +238,7 @@
 
 			$("#menuPausa").hide();
 			$("#VictoryScreen").hide();
+			$("#DeathScreen").hide();
 
 			//FUNCION DE POSICIONAMIENTO EN X,Z parametros(String tipo de mesh, asset, arreglo de posiciones)
 			function positionObject(object, mesh = new THREE.Mesh(geometriaCubo, materialCubo), positions) {
@@ -264,6 +268,31 @@
 					});
 
 					objects.boxes.forEach(function (box) {
+						collisionObjects.push(box);
+					});
+				}
+
+				if (object == "testboxThin") {
+
+
+					cubo = new THREE.Mesh(geometriaPrismaRectangular, materialCubo);
+
+					cubo.position.z = -40;
+					cubo.position.x = -44;
+					cubo.position.y = 5;
+
+					positions.forEach(function (element) {
+						asset = cubo.clone();
+
+						asset.coordZ = element[0];
+						asset.coordX = element[1];
+						asset.position.x += asset.coordX * 10;
+						asset.position.z += asset.coordZ * 10;
+						objects.boxes.push(asset);
+					});
+
+					objects.boxes.forEach(function (box) {
+						scene.add(box);
 						collisionObjects.push(box);
 					});
 				}
@@ -298,51 +327,40 @@
 
 
 				//POSICIONAMIENTO DE ITEMS
-				if (object == "hearts") {
+				if (object == "hearts" || object == "clocks" || object == "gifts") {
 					positions.forEach(function (element) {
 						asset = mesh.clone();
+						var assetColl = new THREE.Mesh(geometriaPrismaRectangular, materialCuboInv);
 
-						asset.position.z = -40;
-						asset.position.x = -44;
+						asset.position.z = assetColl.position.z = -40;
+						asset.position.x = assetColl.position.x = -44;
 						asset.position.y = 3;
+						assetColl.position.y = 5;
 
-						asset.coordZ = element[0];
-						asset.coordX = element[1];
+						asset.coordZ = assetColl.coordZ = element[0];
+						asset.coordX = assetColl.coordX = element[1];
 						asset.position.x += asset.coordX * 10;
 						asset.position.z += asset.coordZ * 10;
-						objects.items.hearts.push(asset);
-					});
-				}
+						assetColl.position.x = asset.position.x;
+						assetColl.position.z = asset.position.z;
 
-				if (object == "clocks") {
-					positions.forEach(function (element) {
-						asset = mesh.clone();
+						assetColl.taken = false;
+						assetColl.model = asset;
 
-						asset.position.z = -40;
-						asset.position.x = -44;
-						asset.position.y = 3;
+						if (object == "hearts") {
+							assetColl.itemType = "heart";
+							objects.items.hearts.push(assetColl);
+						}
 
-						asset.coordZ = element[0];
-						asset.coordX = element[1];
-						asset.position.x += asset.coordX * 10;
-						asset.position.z += asset.coordZ * 10;
-						objects.items.clocks.push(asset);
-					});
-				}
+						if (object == "clocks") {
+							assetColl.itemType = "clock";
+							objects.items.clocks.push(assetColl);
+						}
 
-				if (object == "gifts") {
-					positions.forEach(function (element) {
-						asset = mesh.clone();
-
-						asset.position.z = -40;
-						asset.position.x = -44;
-						asset.position.y = 3;
-
-						asset.coordZ = element[0];
-						asset.coordX = element[1];
-						asset.position.x += asset.coordX * 10;
-						asset.position.z += asset.coordZ * 10;
-						objects.items.gifts.push(asset);
+						if (object == "gifts") {
+							assetColl.itemType = "gift";
+							objects.items.gifts.push(assetColl);
+						}
 					});
 				}
 
@@ -486,10 +504,12 @@
 			loadOBJWithMTL(modelPaths.items[0].path, modelPaths.items[0].obj, modelPaths.items[0].mtl, (object) => {
 
 				positionObject("hearts", object, mainModeHearts);
+				//positionObject("testboxThin", object, mainModeHearts);
 
 				objects.items.hearts.forEach(function (block) {
 					scene.add(block);
-					collisionObjects.push(block);
+					scene.add(block.model);
+					collisionItems.push(block);
 				});
 
 			});
@@ -501,7 +521,8 @@
 
 				objects.items.clocks.forEach(function (block) {
 					scene.add(block);
-					collisionObjects.push(block);
+					scene.add(block.model);
+					collisionItems.push(block);
 				});
 
 			});
@@ -509,11 +530,12 @@
 			//CARGA DE LOS REGALOS
 			loadOBJWithMTL(modelPaths.items[2].path, modelPaths.items[2].obj, modelPaths.items[2].mtl, (object) => {
 
-				positionObject("clocks", object, mainModeGifts);
+				positionObject("gifts", object, mainModeGifts);
 
-				objects.items.clocks.forEach(function (block) {
+				objects.items.gifts.forEach(function (block) {
 					scene.add(block);
-					collisionObjects.push(block);
+					scene.add(block.model);
+					collisionItems.push(block);
 				});
 
 			});
@@ -626,6 +648,7 @@
 				personaje.rotation.y = -0.0;
 
 				personaje.name = "player";
+				personaje.lives = 3;
 
 				scene.add(personaje);
 				isWorldReady[1] = true;
@@ -710,8 +733,9 @@
 					}
 				}
 
-
-				////COLISIONES
+				////////////////////////////////
+				////COLISIONES//////////////////
+				////////////////////////////////
 				if (isWorldReady[0] && isWorldReady[1]) {
 
 					//MOVIMIENTO DEL JUGADOR
@@ -722,7 +746,10 @@
 					camera.position.x = player.position.x;
 					camera.position.z = player.position.z + 30;
 
-
+					if (player.lives <= 0) {
+						estaPausado = true;
+						$("#DeathScreen").show();
+					}
 
 					// Collision
 					// Recorremos los "rayos" a lanzar para detectar las colisiones
@@ -739,6 +766,7 @@
 						var collision = rayCaster.intersectObjects(collisionObjects, true);
 						var collisionT = rayCaster.intersectObjects(collisionTraps, true);
 						var collisionW = rayCaster.intersectObjects(winCollision, true);
+						var collisionIt = rayCaster.intersectObjects(collisionItems, true);
 
 						// if(collision.length){
 						// 	console.log(collision[0].distance);
@@ -770,18 +798,59 @@
 							if (!collisionT[0].object.activated)
 								collisionT[0].object.activated = true;
 
-							// if(collisionT[0].activated && collisionT[0].object.model.position.y < 0) {
-							// 	collisionT[0].object.model.position.y += 70 * deltaTime;
-							// }
+							
 							console.log("Picos activados");
-							//Profe, esta fue la solución que encontré después de 4 horas, solo son 2 líneas de código evita que atravieses las cajas y te hace retroceder si quieres pasar a través de ellas
-							player.translateZ(-(forward * deltaTime));
+							player.translateZ(-(forward * 0.90 * deltaTime));
 
-							player.position.z = -40 + 100; //SE POSICIONA EL ASSET
-							player.position.x = -44 + 100;
-							player.rotation.y = 0.0;
+
+							if (timer.getElapsedTime() > 0.6) {
+								player.position.z = -40 + 100; //SE POSICIONA EL ASSET
+								player.position.x = -44 + 100;
+								player.rotation.y = 0.0;
+								player.lives -= 1;
+								console.log("Vidas: " + player.lives);
+
+								timer.stop();
+							}
 
 						}
+
+						/////////////////////////////////
+						/////COLISIONES CON ITEMS/////
+						/////////////////////////////////
+
+						Object.keys(objects.items).forEach(function (key) {
+							objects.items[key].forEach(function (item) {
+								if (item.taken && item.model.scale.x > 0) {
+									item.model.scale.x -= 0.5 * deltaTime;
+									item.model.scale.y -= 0.5 * deltaTime;
+									item.model.scale.z -= 0.5 * deltaTime;
+									item.model.rotation.y += THREE.Math.degToRad(150) * deltaTime;
+								}
+								else if (item.taken) {
+									scene.remove(item.model);
+									scene.remove(item);
+								}
+							})
+						})
+
+
+						if (collisionIt.length > 0 && collisionIt[0].distance < 1) {
+							if (!collisionIt[0].object.taken) {
+								collisionIt[0].object.taken = true;
+
+								if (collisionIt[0].object.itemType == "heart") {
+									console.log("Vida extra");
+									player.lives += 1;
+								}
+
+								if (collisionIt[0].object.itemType == "gift") {
+									console.log("Vida perdida");
+									player.lives -= 1;
+								}
+							}
+						}
+
 
 						/////////////////////////////////
 						/////COLISIONES CON SALIDA DEL LABERINTO://///
@@ -794,11 +863,11 @@
 					}
 
 					objects.items.hearts.forEach(function (heart) {
-						heart.rotation.y += THREE.Math.degToRad(50) * deltaTime;
+						heart.model.rotation.y += THREE.Math.degToRad(50) * deltaTime;
 					});
 
-					objects.items.clocks.forEach(function (heart) {
-						heart.rotation.y += THREE.Math.degToRad(50) * deltaTime;
+					objects.items.clocks.forEach(function (clock) {
+						clock.model.rotation.y += THREE.Math.degToRad(50) * deltaTime;
 					});
 
 					renderer.render(scene, camera);
@@ -922,7 +991,33 @@
 		</div>
 	</div>
 
+	<div class="modal-dialog" id="DeathScreen" style="position: absolute; top:20%; left:40%;">
+		<div class="modal-content">
 
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">¡HAS PERDIDO!</h5>
+
+			</div>
+			<div class="modal-body">
+
+				<br>
+				<button type="button" class="btn btn-dark border border-warning">
+					<a class="btnSave" style=" top:20%; right:90%;" href="../index.html">Volver al menú principal</a>
+				</button>
+				<br>
+				<br>
+				<button type="button" class="btn btn-dark border border-warning">
+					<a class="btnSave" href="indexForest.html">Volver a intentar</a>
+				</button>
+				<br>
+				<br>
+				<button type="button" class="btn btn-dark border border-warning">
+					<a class="btnSave" href="../elegirEscenario.html">Seleccionar otro nivel</a>
+				</button>
+			</div>
+
+		</div>
+	</div>
 
 
 	<script src="../js/jugar.js"></script>

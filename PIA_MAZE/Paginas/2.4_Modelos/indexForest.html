@@ -35,7 +35,7 @@
 			[2, 0], [2, 2], [2, 3], [2, 4], [2, 8], [2, 11], [2, 19],
 			[3, 0], [3, 8], [3, 11], [3, 14], [3, 15], [3, 16], [3, 19],
 			[4, 0], [4, 4], [4, 5], [4, 6], [4, 8], [4, 11], [4, 13], [4, 19],
-			[5, 0], [5, 8], [0, 9], [5, 16], [5, 17], [5, 19],
+			[5, 0], [5, 8], [5, 16], [5, 17], [5, 19],
 			[6, 0], [6, 2], [6, 3], [6, 4], [6, 5], [6, 8], [6, 10], [6, 11], [6, 12], [6, 14], [6, 19],
 			[7, 0], [7, 17], [7, 19],
 			[8, 0], [8, 2], [8, 4], [8, 5], [8, 6], [8, 9], [8, 11], [8, 13], [8, 19],
@@ -239,6 +239,152 @@
 			$("#menuPausa").hide();
 			$("#VictoryScreen").hide();
 			$("#DeathScreen").hide();
+
+			function getRandomInt(min, max) {
+				min = Math.ceil(min);
+				max = Math.floor(max);
+				return Math.floor(Math.random() * (max - min + 1)) + min;
+			}
+
+			function positionExists(position, list) {
+				//var exists = false;
+
+				for (var i = 0; i < list.length; i++) {
+					listItem = list[i];
+					if (position[0] == listItem[0] && position[1] == listItem[1]) {
+						return true;
+					}
+				}
+				return false;
+			}
+
+			function rotateObjects(objects, walls) {
+				objects.forEach(function (asset) {
+					var surrounding = [
+						[asset.coordZ - 1, asset.coordX - 1],
+						[asset.coordZ - 1, asset.coordX],
+						[asset.coordZ - 1, asset.coordX + 1],
+						[asset.coordZ, asset.coordX - 1],
+						[asset.coordZ, asset.coordX + 1],
+						[asset.coordZ + 1, asset.coordX - 1],
+						[asset.coordZ + 1, asset.coordX],
+						[asset.coordZ + 1, asset.coordX + 1]
+					];
+
+					var surroundingExists = [];
+					surrounding.forEach(function (obj) {
+						surroundingExists.push(positionExists(obj, walls));
+					});
+
+					var front = 4;
+					var frontP;
+					var rotations = 1;
+					var randomNumber = getRandomInt(0, 3);
+
+					switch (randomNumber) {
+						case 1:
+							front = 6;
+							break;
+
+						case 2:
+							front = 3;
+							break;
+
+						case 3:
+							front = 1;
+							break;						
+
+						default:
+							front = 4;
+							break;
+					}
+
+					frontP = front;
+
+					asset.model.rotation.y -= THREE.Math.degToRad(90) * randomNumber;
+
+
+					while (surroundingExists[front]) {
+						asset.model.rotation.y -= THREE.Math.degToRad(90);
+						rotations++;
+
+						switch (rotations) {
+							case 1:
+								front = frontP;
+								break;
+
+							case 2:
+								switch (front) {
+
+									case 6:
+										front = 3;
+										break;
+
+									case 3:
+										front = 1;
+										break;
+
+									case 1:
+										front = 4;
+										break;
+
+									default:
+										front = 6;
+										break;
+								}
+								break;
+
+							case 3:
+								switch (front) {
+
+									case 6:
+										front = 1;
+										break;
+
+									case 3:
+										front = 4;
+										break;
+
+									case 1:
+										front = 6;
+										break;
+
+									default:
+										front = 3;
+										break;
+								}
+								break;
+
+							case 4:
+								switch (front) {
+
+									case 6:
+										front = 4;
+										break;
+
+									case 3:
+										front = 6;
+										break;
+
+									case 1:
+										front = 3;
+										break;
+
+									default:
+										front = 1;
+										break;
+								}
+								break;
+
+							default:
+								break;
+						}
+
+					}
+
+
+				})
+			}
 
 			//FUNCION DE POSICIONAMIENTO EN X,Z parametros(String tipo de mesh, asset, arreglo de posiciones)
 			function positionObject(object, mesh = new THREE.Mesh(geometriaCubo, materialCubo), positions) {
@@ -460,7 +606,6 @@
 				}
 			}
 
-
 			//CARGA DE LAS PAREDES - SUELO - SALIDAS DEL LABERINTO
 			loadOBJWithMTL(modelPaths.escenario[sceneIndex].path, modelPaths.escenario[sceneIndex].obj, modelPaths.escenario[sceneIndex].mtl, (object) => {
 
@@ -586,6 +731,8 @@
 
 				positionObject("decorators", object, mainModeDecorators);
 
+				rotateObjects(objects.decorators, mainModeWalls);
+
 				objects.decorators.forEach(function (block) {
 					scene.add(block);
 					scene.add(block.model);
@@ -624,7 +771,7 @@
 					minotauros1.mixer.clipAction(minotauros1.animations[0]);
 				action.play();
 
-
+				minotauros1.rotation.y += THREE.Math.degToRad(90);
 				minotauros1.position.z = -92 + 100; //SE POSICIONA EL ASSET
 				minotauros1.position.x = -120 + 100;
 
@@ -798,7 +945,7 @@
 							if (!collisionT[0].object.activated)
 								collisionT[0].object.activated = true;
 
-							
+
 							console.log("Picos activados");
 							player.translateZ(-(forward * 0.90 * deltaTime));
 
@@ -862,13 +1009,13 @@
 
 					}
 
-					objects.items.hearts.forEach(function (heart) {
-						heart.model.rotation.y += THREE.Math.degToRad(50) * deltaTime;
-					});
+					Object.keys(objects.items).forEach(function (key) {
+						objects.items[key].forEach(function (item) {
+							item.model.rotation.y += THREE.Math.degToRad(50) * deltaTime;
+						});
+					})
 
-					objects.items.clocks.forEach(function (clock) {
-						clock.model.rotation.y += THREE.Math.degToRad(50) * deltaTime;
-					});
+
 
 					renderer.render(scene, camera);
 				}
@@ -880,17 +1027,17 @@
 			var visibleSize = { width: window.innerWidth, height: window.innerHeight };
 			clock = new THREE.Clock();
 			scene = new THREE.Scene();
-			camera = new THREE.PerspectiveCamera(100, visibleSize.width / visibleSize.height, 0.1, 120);
+			//camera = new THREE.PerspectiveCamera(100, visibleSize.width / visibleSize.height, 0.1, 120);
 
 			var aspect = window.innerWidth / window.innerHeight;
 			var d = 70;
-			//camera = new THREE.OrthographicCamera(- d * aspect, d * aspect, d, - d, 1, 1000);
-			//camera.position.set(50, 60, 70); // all components equal
-			camera.position.set(0, 60, 0); // all components equal
+			camera = new THREE.OrthographicCamera(- d * aspect, d * aspect, d, - d, 1, 1000);
+			camera.position.set(50, 60, 70); // all components equal
+			//camera.position.set(0, 60, 0); // all components equal
 			//camera.lookAt(0, 0, 0); // or the origin
 
 			//camera.rotation.y = THREE.Math.degToRad(-5);
-			camera.rotation.x = THREE.Math.degToRad(-90);
+			camera.rotation.x = THREE.Math.degToRad(-70);
 
 			camera.rays = [
 				new THREE.Vector3(1, 0, 0),

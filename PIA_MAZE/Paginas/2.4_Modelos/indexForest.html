@@ -40,7 +40,7 @@
 			[7, 0], [7, 17], [7, 19],
 			[8, 0], [8, 2], [8, 4], [8, 5], [8, 6], [8, 9], [8, 11], [8, 13], [8, 19],
 			[9, 0], [9, 2], [9, 13], [9, 17], [9, 19],
-			[10, 0], [10, 2], [10, 3], [10, 4], [10, 5], [10, 6], [10, 7], [10, 9], [0, 10], [10, 12], [10, 13], [10, 14], [10, 19],
+			[10, 0], [10, 2], [10, 4], [10, 5], [10, 6], [10, 7], [10, 9], [0, 10], [10, 13], [10, 14], [10, 19],
 			[11, 0], [11, 11], [11, 16], [11, 17], [11, 19],
 			[12, 0], [12, 2], [12, 3], [12, 7], [12, 10], [12, 11], [12, 13], [12, 14], [12, 16], [12, 19],
 			[13, 0], [13, 2], [13, 5], [13, 7], [13, 8], [13, 14], [13, 16], [13, 19],
@@ -100,6 +100,16 @@
 
 		//Coordenadas de los picos del modo de juego principal
 		var mainModeSpikes = [[1, 14], [2, 14], [3, 2], [4, 7], [4, 17], [5, 11], [6, 15], [7, 2], [8, 14], [10, 8], [11, 13], [13, 3], [14, 6], [14, 16], [15, 1], [15, 9]];
+
+		//Coordenadas de las paredes aplastantes del modo de juego principal
+		var mainModeCrushingWalls = [
+			[1, 2], [1, 11], [1, 18],
+			[3, 4],
+			[7, 18],
+			[9, 5], [9, 18],
+			[10, 3], [10, 12],
+			[13, 1],
+			[16, 4], [16, 13]];
 
 		//Coordenadas de los señuelos del modo de juego principal
 		var mainModeMannequins = [[5, 2], [8, 12]];
@@ -225,7 +235,8 @@
 		// y detectar si el "rayo" colisiona con un objeto en esa direccion
 		var rayCaster;
 		var collisionObjects = [];
-		var collisionTraps = [];
+		var collisionTrapsSpikes = [];
+		var collisionTrapsWalls = [];
 		var winCollision = [];
 		var collisionItems = [];
 		var isWorldReady = [false, false];
@@ -240,12 +251,14 @@
 			$("#VictoryScreen").hide();
 			$("#DeathScreen").hide();
 
+			//GENERADOR DE NUMERO ENTERO ALEATORIO DADO UN RANGO
 			function getRandomInt(min, max) {
 				min = Math.ceil(min);
 				max = Math.floor(max);
 				return Math.floor(Math.random() * (max - min + 1)) + min;
 			}
 
+			//FUNCION PARA SABER SI UNA POSICION EN EL LABERINTO ESTA OCUPADA DADO UN ARREGLO
 			function positionExists(position, list) {
 				//var exists = false;
 
@@ -258,8 +271,11 @@
 				return false;
 			}
 
+			//FUNCION DE ACOMODO DE ORIENTACION PARA LOS ASSETS
 			function rotateObjects(objects, walls) {
+				//Recorremos el arreglo de assets dado como parametro
 				objects.forEach(function (asset) {
+					//Creamos un arreglo con todas las poisciones alrededor del asset
 					var surrounding = [
 						[asset.coordZ - 1, asset.coordX - 1],
 						[asset.coordZ - 1, asset.coordX],
@@ -271,16 +287,40 @@
 						[asset.coordZ + 1, asset.coordX + 1]
 					];
 
+					//Verificamos si las posiciones estan ocupadas y
+					//vaciamos los resultados en un arreglo booleano
 					var surroundingExists = [];
 					surrounding.forEach(function (obj) {
 						surroundingExists.push(positionExists(obj, walls));
 					});
 
-					var front = 4;
+					var front = 4; //Hacia que objeto esta mirando el asset
 					var frontP;
-					var rotations = 1;
-					var randomNumber = getRandomInt(0, 3);
+					var rotations = 1;//Cuantas veces ha sido rotado el objeto 90°
+					var randomNumber = getRandomInt(0, 3);//Numero aleatorio entre 0-3
 
+					//Dependiendo del numero, se decidira a hacía cual posicion esta viendo
+					/*
+					---------------------------------
+					---------------------------------
+					---       ---       ---       ---
+					---   0   ---   1   ---   2   ---
+					---       ---       ---       ---
+					---------------------------------
+					---       ---       ---       ---
+					---   3   --- asset ---   4   ---
+					---       ---       ---       ---
+					---------------------------------
+					---       ---       ---       ---
+					---   5   ---   6   ---   7   ---
+					---       ---       ---       ---
+					---------------------------------
+					---------------------------------
+					
+					Inicialmente, todos las decoraciones miran hacia la posicion 4,
+					es decir, hacía la derecha
+					
+					*/
 					switch (randomNumber) {
 						case 1:
 							front = 6;
@@ -292,7 +332,7 @@
 
 						case 3:
 							front = 1;
-							break;						
+							break;
 
 						default:
 							front = 4;
@@ -301,9 +341,11 @@
 
 					frontP = front;
 
+					//Se rota el asset un numero de veces igual al numero aleatorio
 					asset.model.rotation.y -= THREE.Math.degToRad(90) * randomNumber;
 
-
+					//Si el asset en cuestion se encuentra con un obstaculo frente a él, este
+					//se girara 90° en el sentido de las manecillas del reloj, hasta que no haya nada en frente suyo
 					while (surroundingExists[front]) {
 						asset.model.rotation.y -= THREE.Math.degToRad(90);
 						rotations++;
@@ -390,6 +432,7 @@
 			function positionObject(object, mesh = new THREE.Mesh(geometriaCubo, materialCubo), positions) {
 
 				var asset;
+				var asset2;
 
 				//POSICIONAMIENTO DE ASSETS DE PRUEBA - CUBOS DE COLOR SOLIDO
 				if (object == "testbox") {
@@ -510,8 +553,9 @@
 					});
 				}
 
-
-				//POSICIONAMIENTO DE TRAMPAS
+				//////////////////////////////////
+				//POSICIONAMIENTO DE TRAMPAS//////
+				//////////////////////////////////
 				//PICOS
 				if (object == "trap_spike") {
 					positions.forEach(function (element) {
@@ -543,6 +587,83 @@
 						objects.spikes.push(assetColl);
 					});
 				}
+
+				//POSICIONAMIENTO DE PAREDES APLASTANTES
+				if (object == "crushWall") {
+					positions.forEach(function (element) {
+						asset = mesh.clone(); //PARED 1
+						asset2 = mesh.clone(); //PARED 2
+						var assetColl = new THREE.Mesh(geometriaPrismaRectangular, materialCuboInv);//COLISION
+
+						//Poscionamos los assets en el origen
+						asset.position.z = asset2.position.z = assetColl.position.z = -40;
+						asset.position.x = asset2.position.x = assetColl.position.x = -44;
+						asset.position.y = asset2.position.y = -0.1;
+						assetColl.position.y = 5;
+
+						//Coordenadas de las cajas de arriba, abajo, izquierda y derecha
+						var surrounding = [
+							[element[0] - 1, element[1]],
+							[element[0], element[1] - 1],
+							[element[0], element[1] + 1],
+							[element[0] + 1, element[1]]
+						];
+
+						//Verificamos si hay una pared en esas cuatro posiciones
+						var surroundingExists = [];
+						surrounding.forEach(function (obj) {
+							surroundingExists.push(positionExists(obj, mainModeWalls));
+						});
+
+						assetColl.coordZ = element[0];
+						assetColl.coordX = element[1];
+
+						//Existen paredes arriba y abajo
+						if (surroundingExists[0]) {
+							asset.coordZ = element[0] - 1;
+							asset.coordX = element[1];
+						}
+
+						if (surroundingExists[3]) {
+							asset2.coordZ = element[0] + 1;
+							asset2.coordX = element[1];
+						}
+
+						//Existen paredes a la izquierda y derecha
+						if (surroundingExists[1]) {
+							asset.coordZ = element[0];
+							asset.coordX = element[1] - 1;
+						}
+
+						if (surroundingExists[2]) {
+							asset2.coordZ = element[0];
+							asset2.coordX = element[1] + 1;
+						}
+
+						//Posicionamos las 2 paredes y la colision en sus lugares
+						asset.position.x += asset.coordX * 10;
+						asset.position.z += asset.coordZ * 10;
+
+						asset2.position.x += asset2.coordX * 10;
+						asset2.position.z += asset2.coordZ * 10;
+
+						assetColl.position.x += assetColl.coordX * 10;
+						assetColl.position.z += assetColl.coordZ * 10;
+
+						//Definimos que la trampa no esta activada y 
+						//linkeamos las paredes a la colision
+						assetColl.activated = false;
+						assetColl.wall_1 = asset;
+						assetColl.wall_2 = asset2;
+
+
+						assetColl.itemType = "crushWall";
+						objects.crushWalls.push(assetColl);
+
+
+					});
+				}
+
 
 
 				//POSICIONAMIENTO DE SALIDA DEL LABERINTO				
@@ -606,14 +727,16 @@
 				}
 			}
 
-			//CARGA DE LAS PAREDES - SUELO - SALIDAS DEL LABERINTO
+			//CARGA DE LAS PAREDES - SUELO - SALIDAS DEL LABERINTO - PAREDES APLASTANTES
 			loadOBJWithMTL(modelPaths.escenario[sceneIndex].path, modelPaths.escenario[sceneIndex].obj, modelPaths.escenario[sceneIndex].mtl, (object) => {
 
 				positionObject("wallblock", object, mainModeWalls);//PAREDES REGULARES
 
 				positionObject("fakebox", object, mainModeFakeWalls);//PAREDES ATRAVESABLES
 
-				positionObject("winCond", object, mainModeWin);//PAREDES ATRAVESABLES
+				positionObject("crushWall", object, mainModeCrushingWalls);//PAREDES ATRAVESABLES
+
+				positionObject("winCond", object, mainModeWin);//SALIDA DEL LABERINTO
 
 				objects.boxes.forEach(function (block) { //AÑADIR CADA ELEMENTO A LAS ESCENA Y AL ARREGLO DE OBJETOS CON COLISION
 					scene.add(block);
@@ -623,6 +746,16 @@
 				//AÑADIR PAREDES ATRAVESABLES A LA ESCENA SIN COLISION
 				objects.fakeBoxes.forEach(function (block) {
 					scene.add(block);
+				});
+
+				//AÑADIR PAREDES APLASTANTES A LA ESCENA
+				objects.crushWalls.forEach(function (block) {
+					scene.add(block);
+					scene.add(block.wall_1);
+					scene.add(block.wall_2);
+					collisionTrapsWalls.push(block);
+					collisionObjects.push(block.wall_1);
+					collisionObjects.push(block.wall_2);
 				});
 
 				//AÑADIR SALIDAS DEL LABERINTO - CONDICIONES DE VICTORIA
@@ -696,7 +829,7 @@
 					scene.add(block);
 					scene.add(block.model);
 					//collisionObjects.push(block);
-					collisionTraps.push(block);
+					collisionTrapsSpikes.push(block);
 				});
 
 			});
@@ -911,7 +1044,8 @@
 						// El segundo parametro es para indicar que aparte de verificar
 						// si existe colision con estos objetos tambien verifique colision con los hijos de estos objetos
 						var collision = rayCaster.intersectObjects(collisionObjects, true);
-						var collisionT = rayCaster.intersectObjects(collisionTraps, true);
+						var collisionTS = rayCaster.intersectObjects(collisionTrapsSpikes, true);
+						var collisionTW = rayCaster.intersectObjects(collisionTrapsWalls, true);
 						var collisionW = rayCaster.intersectObjects(winCollision, true);
 						var collisionIt = rayCaster.intersectObjects(collisionItems, true);
 
@@ -941,9 +1075,9 @@
 							}
 						})
 
-						if (collisionT.length > 0 && collisionT[0].distance < 1) {
-							if (!collisionT[0].object.activated)
-								collisionT[0].object.activated = true;
+						if (collisionTS.length > 0 && collisionTS[0].distance < 1) {
+							if (!collisionTS[0].object.activated)
+								collisionTS[0].object.activated = true;
 
 
 							console.log("Picos activados");
@@ -962,6 +1096,59 @@
 
 						}
 
+						/////////////////////////////////
+						/////COLISIONES CON PAREDES APLASTANTES://///
+						/////////////////////////////////
+						objects.crushWalls.forEach(function (crushWall) {
+							if (crushWall.activated) {
+
+								
+								if (crushWall.wall_1.position.z < crushWall.position.z - 0.005)
+									crushWall.wall_1.position.z += 10 * deltaTime;
+								else if (crushWall.wall_1.position.z  > crushWall.position.z + 0.005)
+									crushWall.wall_1.position.z -= 10 * deltaTime;
+
+								if (crushWall.wall_2.position.z < crushWall.position.z - 0.005)
+									crushWall.wall_2.position.z += 10 * deltaTime;
+								else if (crushWall.wall_2.position.z > crushWall.position.z + 0.005)
+									crushWall.wall_2.position.z -= 10 * deltaTime;
+
+								if (crushWall.wall_1.position.x < crushWall.position.x - 0.005)
+									crushWall.wall_1.position.x += 10 * deltaTime;
+								else if (crushWall.wall_1.position.x > crushWall.position.x + 0.005)
+									crushWall.wall_1.position.x -= 10 * deltaTime;
+
+								if (crushWall.wall_2.position.x < crushWall.position.x - 0.005)
+									crushWall.wall_2.position.x += 10 * deltaTime;
+								else if (crushWall.wall_2.position.x > crushWall.position.x + 0.005 )
+									crushWall.wall_2.position.x -= 10 * deltaTime;
+								
+							}
+						})
+
+						if (collisionTW.length > 0 && collisionTW[0].distance < 1) {
+							if (!collisionTW[0].object.activated)
+								collisionTW[0].object.activated = true;
+
+
+							console.log("Paredes activadas");
+							player.translateZ(-(forward * 0.90 * deltaTime));
+
+
+							if (timer.getElapsedTime() > 0.6) {
+								player.position.z = -40 + 100; //SE POSICIONA EL ASSET
+								player.position.x = -44 + 100;
+								player.rotation.y = 0.0;
+								player.lives -= 1;
+								console.log("Vidas: " + player.lives);
+
+								timer.stop();
+							}
+
+						}
+
+
+						
 						/////////////////////////////////
 						/////COLISIONES CON ITEMS/////
 						/////////////////////////////////

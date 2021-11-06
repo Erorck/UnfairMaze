@@ -226,7 +226,7 @@
 		var sceneIndex = 0;
 
 		var clock;
-		var timer = new THREE.Clock(true);
+		var timer = new THREE.Clock(true); //TIMER TRAMPAS
 		var timer2 = new THREE.Clock(true);//TIMER ENEMIGOS
 		var deltaTime;
 		var slowerEnemies = false;
@@ -932,6 +932,7 @@
 
 				personaje.name = "player";
 				personaje.lives = 3;
+				personaje.score = 3000;
 
 				scene.add(personaje);
 				isWorldReady[1] = true;
@@ -972,6 +973,7 @@
 			deltaTime2 = deltaTime * enemySpeed;
 
 			player = scene.getObjectByName("player");
+			
 			var yaw = 0;
 			var forward = 0;
 			moving = false;
@@ -1019,13 +1021,15 @@
 
 				}
 
-				////////////////////////////////
-				////COLISIONES//////////////////
-				////////////////////////////////
+				//////////////////////////////////////////////////
+				////UNA VEZ CARGADOS TODOS LOS MODELOS////////////
+				//////////////////////////////////////////////////
 				if (isWorldReady[0] && isWorldReady[1]) {
 
 					//MOVIMIENTO DEL JUGADOR
 
+					$("#playerScore").html("Puntuacion: " + player.score);
+					$("#playerLives").html("Vidas restantes: " + player.lives);
 					player.rotation.y += yaw * deltaTime;
 					player.translateZ(forward * deltaTime);
 
@@ -1089,14 +1093,14 @@
 							console.log("Picos activados");
 							player.translateZ(-(forward * 0.90 * deltaTime));
 
-							if(!timer.running)
+							if (!timer.running)
 								timer.start();
 
 						}
 
-						/////////////////////////////////
-						/////COLISIONES CON PAREDES APLASTANTES://///
-						/////////////////////////////////
+						////////////////////////////////////////////
+						/////COLISIONES CON PAREDES APLASTANTES:////
+						////////////////////////////////////////////
 						objects.crushWalls.forEach(function (crushWall) {
 							if (crushWall.activated) {
 
@@ -1132,19 +1136,23 @@
 							console.log("Paredes activadas");
 							player.translateZ(-(forward * 0.90 * deltaTime));
 
-							if(!timer.running)
+							if (!timer.running)
 								timer.start();
 
 						}
 
-						if(timer.running) {
+						//////////////////////////////////////////////////////
+						/////DELAY ANTES DE REGRESAR AL JUGADOR AL ORIGEN/////
+						//////////////////////////////////////////////////////
+						if (timer.running) {
 							if (timer.getElapsedTime() > 0.6) {
 								player.position.z = -40 + 100; //SE POSICIONA EL ASSET
 								player.position.x = -44 + 100;
 								player.rotation.y = 0.0;
 								player.lives -= 1;
+								player.score -= 1000;
 								console.log("Vidas: " + player.lives);
-	
+
 								timer.stop();
 							}
 						}
@@ -1176,16 +1184,19 @@
 								if (collisionIt[0].object.itemType == "heart") {
 									console.log("Vida extra");
 									player.lives += 1;
+									player.score += 1000;
 								}
 
 								if (collisionIt[0].object.itemType == "gift") {
 									console.log("Vida perdida");
 									player.lives -= 1;
+									player.score -= 1000;
 								}
 
 								if (collisionIt[0].object.itemType == "clock") {
 									console.log("Enemigos ralentizados");
 									slowerEnemies = true;
+									player.score += 500;
 									timer2.start();
 								}
 							}
@@ -1206,6 +1217,12 @@
 						/////COLISIONES CON SALIDA DEL LABERINTO://///
 						/////////////////////////////////
 						if (collisionW.length > 0 && collisionW[0].distance < 1) {
+
+							var winTimeS = Math.round(clock.getElapsedTime());
+							var finalScore = player.score + 10000 - (winTimeS * 50);
+							var winTimeD = new Date(winTimeS * 1000).toISOString().substr(14, 5)
+
+							$("#playerResults").html("Tiempo: " + winTimeD  + " Puntuacion final: " + finalScore);
 							estaPausado = true;
 							$("#VictoryScreen").show();
 						}
@@ -1228,8 +1245,9 @@
 
 		function setupScene() {
 			var visibleSize = { width: window.innerWidth, height: window.innerHeight };
-			clock = new THREE.Clock();
+			clock = new THREE.Clock(true);
 			scene = new THREE.Scene();
+
 			//camera = new THREE.PerspectiveCamera(100, visibleSize.width / visibleSize.height, 0.1, 120);
 
 			var aspect = window.innerWidth / window.innerHeight;
@@ -1266,6 +1284,7 @@
 			//scene.add(grid);
 
 			$("#scene-section").append(renderer.domElement);
+			$("#playerName").html("Jugador: player 1");
 		}
 
 
@@ -1283,9 +1302,11 @@
 	<!-- Modal -->
 
 	<div class="nameplay" id="playNombre" style="position: absolute; top:10%; left:80%; color:beige;">
-		<label for="">Nombre del jugador: </label>
+		<label for="playerName" id="playerName"></label>
 		<br>
-		<label for="">Puntuacion:: </label>
+		<label id="playerScore" for=""></label>
+		<br>
+		<label id="playerLives" for=""></label>
 	</div>
 
 	<div class="modal-dialog" id="menuPausa" style="position: absolute; top:20%; left:40%;">
@@ -1318,10 +1339,10 @@
 
 			<div class="modal-header">
 				<h5 class="modal-title" id="exampleModalLabel">¡GANASTE!</h5>
-
+				<br>
+				<h5 class="modal-title" id="playerResults"> Hola</h5>				
 			</div>
 			<div class="modal-body">
-
 				<br>
 				<button type="button" class="btn btn-dark border border-warning">
 					<a class="btnSave" style=" top:20%; right:90%;" href="../index.html">Volver al menú principal</a>

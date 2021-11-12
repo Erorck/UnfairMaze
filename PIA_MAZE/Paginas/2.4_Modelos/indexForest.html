@@ -1350,7 +1350,8 @@
 				</button>
 				<input type="text" placeholder="Nombre" id="username">
 				<button id="btnSendSesion" >Guardar</button>
-
+				<br><br>
+				<button onclick="shareFB()">Compartir en Facebook</button>
 				<br>
 				<br>
 				<button type="button" class="btn btn-dark border border-warning">
@@ -1442,6 +1443,13 @@
 
 </script>
 
+	
+
+<script type="text/javascript" src="../js/mifacebook.js"></script>
+<script>function shareFB() {
+	var score = $("#puntos").val();
+	shareScore(score);
+}</script>
 </body>
 
 </html>

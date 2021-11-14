@@ -127,7 +127,8 @@
         ///-----GET ALL DATA------
 
         function SelectAllData(){
-            firebase.database().ref('Players').once('value',function(AllRecords){
+            firebase.database().ref('Players').once('value',
+            function(AllRecords){
                 AllRecords.forEach(
                    function(CurrentRecord){
                        var name=CurrentRecord.val().user;

@@ -23,10 +23,8 @@
 		var controls;
 		var estaPausado = false;
 
-		// TODO: Modelo con animacion.
 		var mixersP = [];
 		var mixersE = [];
-		// TODO: End Modelo Animacion.
 
 		//Coordenadas de las paredes del modo de juego principal
 		var mainModeWalls = [
@@ -109,7 +107,8 @@
 			[9, 5], [9, 18],
 			[10, 3], [10, 12],
 			[13, 1],
-			[16, 4], [16, 13]];
+			[16, 4], [16, 13]
+		];
 
 		//Coordenadas de los señuelos del modo de juego principal
 		var mainModeMannequins = [[5, 2], [8, 12]];
@@ -235,6 +234,7 @@
 		var keys = {};
 		var players = [];
 		var playerAlive = true;
+		var numPlayers = 2;
 
 		// Clase que nos permite "lanzar" un rayo hacia diferentes direcciones
 		// y detectar si el "rayo" colisiona con un objeto en esa direccion
@@ -244,7 +244,7 @@
 		var collisionTrapsWalls = [];
 		var winCollision = [];
 		var collisionItems = [];
-		var isWorldReady = [false, false];
+		var isWorldReady = [false, false, false];
 
 
 		$(document).ready(function () {
@@ -933,6 +933,7 @@
 				personaje.position.z = -2 + 115; //SE POSICIONA EL ASSET
 				personaje.position.x = -2 + 138;
 
+
 				personaje.name = "player1";
 				personaje.lives = 3;
 				personaje.alive = true;
@@ -942,6 +943,9 @@
 
 				scene.add(personaje);
 				players.push(personaje);
+
+				isWorldReady[1] = true;
+
 			});
 
 			//Carga del otro jugador (apartado)
@@ -953,8 +957,11 @@
 				action.play();
 
 
-				personaje.position.z = -18 - 14; //SE POSICIONA EL ASSET
-				personaje.position.x = -18 - 14;
+				personaje.position.z = -2 + 115; //SE POSICIONA EL ASSET
+				personaje.position.x = -2 + 138;
+
+				// personaje.position.z = -18 - 14; //SE POSICIONA EL ASSET
+				// personaje.position.x = -18 - 14;
 
 				personaje.name = "player2";
 				personaje.lives = 3;
@@ -974,10 +981,11 @@
 					$(id).show();
 				}
 
-				isWorldReady[1] = true;
+				isWorldReady[2] = true;
+
 			});
 
-			
+
 			render();
 		});
 
@@ -1018,37 +1026,39 @@
 			var forward = [0, 0];
 			var moving = [false, false];
 
+			if (players[0].alive) {
+				if (keys["A"]) {
+					yaw[0] = 5;
+					moving[0] = true;
+				} else if (keys["D"]) {
+					yaw[0] = -5;
+					moving[0] = true;
+				}
+				if (keys["W"]) {
+					forward[0] = 20;
+					moving[0] = true;
+				} else if (keys["S"]) {
+					forward[0] = -20;
+					moving[0] = true;
+				}
+			}
+			if (players[1].alive) {
 
-			if (keys["A"]) {
-				yaw[0] = 5;
-				moving[0] = true;
-			} else if (keys["D"]) {
-				yaw[0] = -5;
-				moving[0] = true;
+				if (keys["J"]) {
+					yaw[1] = 5;
+					moving[1] = true;
+				} else if (keys["L"]) {
+					yaw[1] = -5;
+					moving[1] = true;
+				}
+				if (keys["I"]) {
+					forward[1] = 20;
+					moving[1] = true;
+				} else if (keys["K"]) {
+					forward[1] = -20;
+					moving[1] = true;
+				}
 			}
-			if (keys["W"]) {
-				forward[0] = 20;
-				moving[0] = true;
-			} else if (keys["S"]) {
-				forward[0] = -20;
-				moving[0] = true;
-			}
-
-			if (keys["J"]) {
-				yaw[1] = 5;
-				moving[1] = true;
-			} else if (keys["L"]) {
-				yaw[1] = -5;
-				moving[1] = true;
-			}
-			if (keys["I"]) {
-				forward[1] = 20;
-				moving[1] = true;
-			} else if (keys["K"]) {
-				forward[1] = -20;
-				moving[1] = true;
-			}
-
 			if (keys["V"]) {
 				estaPausado = true;
 				$("#VictoryScreen").show();
@@ -1070,7 +1080,7 @@
 
 
 				//// LOGICA DE COLISIONES
-				if (isWorldReady[0] && isWorldReady[1]) {
+				if (isWorldReady[0] && isWorldReady[1] && isWorldReady[2]) {
 
 
 					for (let index = 0; index < players.length; index++) {
@@ -1084,18 +1094,30 @@
 						if (players[index].lives <= 0) {
 							players[index].alive = false;
 							playerAlive = false;
-	
+
+							if (players[index].scale.x > 0) {
+								players[index].scale.x -= 1 * deltaTime;
+								players[index].scale.y -= 1 * deltaTime;
+								players[index].scale.z -= 1 * deltaTime;
+								players[index].rotation.y += THREE.Math.degToRad(150) * deltaTime;
+							}
+							else {
+								scene.remove(players[index]);
+							}
+
+
+
 							for (let j = 0; j < players.length; j++) {
 								const element = players[j];
-								if(element.alive){
+								if (element.alive) {
 									playerAlive = true;
 									break;
 								}
-							}						
-	
-							if(!playerAlive){
+							}
+
+							if (!playerAlive) {
 								estaPausado = true;
-								$("#DeathScreen").show();							
+								$("#DeathScreen").show();
 							}
 						}
 					}
@@ -1155,7 +1177,7 @@
 								players[index].translateZ(-(forward[index] * 0.90 * deltaTime));
 
 								if (!timer[index].running);
-									timer[index].start();
+								timer[index].start();
 
 							}
 
@@ -1207,10 +1229,12 @@
 							//////////////////////////////////////////////////////
 							if (timer[index].running) {
 								if (timer[index].getElapsedTime() > 0.6) {
+									players[index].lives -= 1;
+
 									players[index].position.z = -40 + 100; //SE POSICIONA EL ASSET
 									players[index].position.x = -44 + 100;
 									players[index].rotation.y = 0.0;
-									players[index].lives -= 1;
+
 									players[index].score -= 1000;
 									console.log("Vidas: " + players[index].lives);
 
@@ -1289,6 +1313,7 @@
 							}
 
 						}
+
 					}
 
 
@@ -1309,13 +1334,13 @@
 			var visibleSize = { width: window.innerWidth, height: window.innerHeight };
 			clock = new THREE.Clock();
 			scene = new THREE.Scene();
-			
+
 			//camera = new THREE.PerspectiveCamera(100, visibleSize.width / visibleSize.height, 0.1, 120);
 
 			var aspect = window.innerWidth / window.innerHeight;
 			var d = 90;
 			camera = new THREE.OrthographicCamera(- d * aspect, d * aspect, d, - d, 1, 1000);
-			camera.position.set(50, 56, 70); // all components equal
+			camera.position.set(50, 60, 85); // all components equal
 			//camera.lookAt(0, 0, 0); // or the origin
 
 			//camera.rotation.y = THREE.Math.degToRad(-5);
@@ -1361,7 +1386,7 @@
 			<div class="modal-header">
 				<h5 class="modal-title" id="exampleModalLabel">¡GANASTE!</h5>
 				<br>
-				<h5 class="modal-title" id="playerResults"> Hola</h5>				
+				<h5 class="modal-title" id="playerResults"> Hola</h5>
 			</div>
 			<div class="modal-body">
 				<br>
@@ -1371,12 +1396,12 @@
 				<br>
 				<br>
 				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" href="indexForest.html">Volver a jugar</a>
+					<a class="btnSave" href="indexMulti.html">Volver a jugar</a>
 				</button>
 				<br>
 				<br>
 				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" href="../elegirEscenario.html">Seleccionar otro nivel</a>
+					<a class="btnSave" href="../elegirEsceMulti.html">Seleccionar otro nivel</a>
 				</button>
 			</div>
 
@@ -1399,12 +1424,12 @@
 				<br>
 				<br>
 				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" href="indexForest.html">Volver a intentar</a>
+					<a class="btnSave" href="indexMulti.html">Volver a intentar</a>
 				</button>
 				<br>
 				<br>
 				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" href="../elegirEscenario.html">Seleccionar otro nivel</a>
+					<a class="btnSave" href="../elegirEsceMulti.html">Seleccionar otro nivel</a>
 				</button>
 			</div>
 

@@ -26,7 +26,6 @@
 		//variables globales para la funcion
 		var contador = 0;
 		var posInicial = -4; //posicion para el primer fantasma
-		var posInicial2 = 4; //posicion para el segundo fantasma
 		var distancia = 8;
 
 		// TODO: Modelo con animacion.
@@ -120,7 +119,7 @@
 
 		//Coordenadas de los señuelos del modo de juego principal
 		var mainModeMannequins = [[5, 2]];
-		var mainModeMannequins2 = [[8, 12]];
+		var mainModeEnemies = [[8, 12]];
 
 		//Coordenadas de las decoraciones del modo de juego principal
 		var mainModeDecorators = [
@@ -142,6 +141,7 @@
 			items: "items",
 			spikes: "spikes",
 			mannequins: "mannequins",
+			enemies: "enemies",
 			decorators: "decorators"
 		};
 
@@ -192,6 +192,9 @@
 			color: new THREE.Color(0, 0.6, 0.7), opacity: 0.0,
 			transparent: true
 		});
+		var materialCuboTransp = new THREE.MeshLambertMaterial({
+			color: new THREE.Color(0, 0.6, 0.7), opacity: 0.2, transparent: true
+		});
 
 
 		//Objecto maestro de todos los assets en la escena
@@ -204,7 +207,7 @@
 			spikes: "spikes",
 			crushWalls: "crushWalls",
 			mannequins: "mannequins",
-			mannequins2: "mannequins2",
+			enemies: "enemies",
 			items: "items"
 		};
 
@@ -216,7 +219,7 @@
 		objects.decorators = [];
 		objects.crushWalls = [];
 		objects.mannequins = [];
-		objects.mannequins2 = [];
+		objects.enemies = [];
 		objects.spikes = [];
 		objects.items = {
 			hearts: "hearts",
@@ -250,12 +253,12 @@
 		// y detectar si el "rayo" colisiona con un objeto en esa direccion
 		var rayCaster = [];
 		var collisionObjects = [];
+		var collisionEnemies = [];
 		var collisionTrapsSpikes = [];
 		var collisionTrapsWalls = [];
 		var winCollision = [];
 		var collisionItems = [];
 		var isWorldReady = [false, false, false];
-
 
 
 		$(document).ready(function () {
@@ -704,7 +707,7 @@
 
 
 				// POSICIONAMIENTO DE MANIQUIS
-				if (object == "mannequins") {
+				/*if (object == "mannequins") {
 					positions.forEach(function (element) {
 						asset = mesh.clone();
 
@@ -716,7 +719,7 @@
 					});
 				}
 
-				if (object == "mannequins2") {
+				if (object == "enemies") {
 					positions.forEach(function (element) {
 						asset = mesh.clone();
 
@@ -724,7 +727,35 @@
 						asset.coordX = element[1];
 						asset.position.x += asset.coordX * 10;
 						asset.position.z += asset.coordZ * 10;
-						objects.mannequins2.push(asset);
+						objects.enemies.push(asset);
+					});
+				}
+				*/
+
+				if (object == "enemies" || object == "mannequins") {
+					positions.forEach(function (element) {
+
+						asset = mesh.clone();
+						var assetColl = new THREE.Mesh(geometriaPrismaRectangular, materialCuboTransp);
+
+						asset.position.z = -40;
+						asset.position.x = -44;
+						asset.position.y = 0;
+						assetColl.position.y = 5;
+
+						asset.coordZ = assetColl.coordZ = element[0];
+						asset.coordX = assetColl.coordX = element[1];
+						asset.position.x += asset.coordX * 10;
+						asset.position.z += asset.coordZ * 10;
+
+						assetColl.model = asset;
+						asset.add(assetColl);
+
+						if (object == "enemies")
+							objects.enemies.push(assetColl);
+
+						if (object == "mannequins")
+							objects.mannequins.push(assetColl);
 					});
 				}
 
@@ -861,45 +892,47 @@
 			});
 
 			//CARGA DE LOS SEÑUELOS DE ENEMIGOS
+			// loadOBJWithMTL(modelPaths.mannequins[sceneIndex].path, modelPaths.mannequins[sceneIndex].obj, modelPaths.mannequins[sceneIndex].mtl, (object) => {
+
+			// 	object.position.z = -40;
+			// 	object.position.x = -44;
+
+			// 	object.rotation.z = THREE.Math.degToRad(-60);
+			// 	object.rotation.y = THREE.Math.degToRad(90);
+			// 	if (sceneIndex == 1) {
+			// 		object.position.y = 5;
+			// 	}
+			// 	else {
+			// 		object.position.y = 0;
+			// 	}
+
+			// 	positionObject("mannequins", object, mainModeMannequins);
+
+			// 	objects.mannequins.forEach(function (block) {
+			// 		scene.add(block);
+			// 		collisionObjects.push(block);
+			// 	});
+
+			// });
+
+			//CARGA DE ENEMIGOS Y SEÑUELOS
 			loadOBJWithMTL(modelPaths.mannequins[sceneIndex].path, modelPaths.mannequins[sceneIndex].obj, modelPaths.mannequins[sceneIndex].mtl, (object) => {
 
-				object.position.z = -40;
-				object.position.x = -44;
-
-				object.rotation.z = THREE.Math.degToRad(-60);
-				object.rotation.y = THREE.Math.degToRad(90);
-				if (sceneIndex == 1) {
-					object.position.y = 5;
-				}
-				else {
-					object.position.y = 0;
-				}
+				object.rotation.y += THREE.Math.degToRad(90);
 
 				positionObject("mannequins", object, mainModeMannequins);
+				rotateObjects(objects.mannequins, mainModeWalls);
+
+				positionObject("enemies", object, mainModeEnemies);
+				rotateObjects(objects.enemies, mainModeWalls);
 
 				objects.mannequins.forEach(function (block) {
-					scene.add(block);
-					collisionObjects.push(block);
+					scene.add(block.model);
 				});
 
-			});
-
-			loadOBJWithMTL(modelPaths.mannequins[sceneIndex].path, modelPaths.mannequins[sceneIndex].obj, modelPaths.mannequins[sceneIndex].mtl, (object) => {
-
-				object.position.z = -70;
-				object.position.x = -44;
-				if (sceneIndex == 1) {
-					object.position.y = 5;
-				}
-				else {
-					object.position.y = 0;
-				}
-
-				positionObject("mannequins2", object, mainModeMannequins2);
-
-				objects.mannequins2.forEach(function (block) {
-					scene.add(block);
-					collisionObjects.push(block);
+				objects.enemies.forEach(function (block) {
+					scene.add(block.model);
+					collisionEnemies.push(block);
 				});
 
 			});
@@ -943,6 +976,7 @@
 				personaje.position.z = -2 + 115; //SE POSICIONA EL ASSET
 				personaje.position.x = -2 + 138;
 
+
 				personaje.name = "player1";
 				personaje.lives = 3;
 				personaje.alive = true;
@@ -979,7 +1013,6 @@
 				scene.add(personaje);
 				players.push(personaje);
 
-				
 				for (let index = 0; index < players.length; index++) {
 					var top = (index + 1) * 10;
 					var esteticId = index + 1;
@@ -987,13 +1020,12 @@
 					var id = "#playName" + index;
 					$(id).show();
 				}
-				
+
 				isWorldReady[2] = true;
+
 			});
 
-
 			render();
-
 		});
 
 		function loadOBJWithMTL(path, objFile, mtlFile, onLoadCallback) {
@@ -1029,35 +1061,38 @@
 			var forward = [0, 0];
 			var moving = [false, false];
 
+			if (players[0].alive) {
+				if (keys["A"]) {
+					yaw[0] = 5;
+					moving[0] = true;
+				} else if (keys["D"]) {
+					yaw[0] = -5;
+					moving[0] = true;
+				}
+				if (keys["W"]) {
+					forward[0] = 20;
+					moving[0] = true;
+				} else if (keys["S"]) {
+					forward[0] = -20;
+					moving[0] = true;
+				}
+			}
 
-			if (keys["A"]) {
-				yaw[0] = 5;
-				moving[0] = true;
-			} else if (keys["D"]) {
-				yaw[0] = -5;
-				moving[0] = true;
-			}
-			if (keys["W"]) {
-				forward[0] = 20;
-				moving[0] = true;
-			} else if (keys["S"]) {
-				forward[0] = -20;
-				moving[0] = true;
-			}
-
-			if (keys["J"]) {
-				yaw[1] = 5;
-				moving[1] = true;
-			} else if (keys["L"]) {
-				yaw[1] = -5;
-				moving[1] = true;
-			}
-			if (keys["I"]) {
-				forward[1] = 20;
-				moving[1] = true;
-			} else if (keys["K"]) {
-				forward[1] = -20;
-				moving[1] = true;
+			if (players[1].alive) {
+				if (keys["J"]) {
+					yaw[1] = 5;
+					moving[1] = true;
+				} else if (keys["L"]) {
+					yaw[1] = -5;
+					moving[1] = true;
+				}
+				if (keys["I"]) {
+					forward[1] = 20;
+					moving[1] = true;
+				} else if (keys["K"]) {
+					forward[1] = -20;
+					moving[1] = true;
+				}
 			}
 
 			if (estaPausado == false) {
@@ -1114,15 +1149,14 @@
 					for (var i = 0; i < camera.rays.length; i++) {
 
 						for (let index = 0; index < rayCaster.length; index++) {
-
 							rayCaster[index].set(players[index].position, camera.rays[i]);
-
 						}
-						
+
 						for (let index = 0; index < players.length; index++) {
 
 							var esteticId = index + 1;
 							var collision = rayCaster[index].intersectObjects(collisionObjects, true);
+							var collisionE = rayCaster[index].intersectObjects(collisionEnemies, true);
 							var collisionTS = rayCaster[index].intersectObjects(collisionTrapsSpikes, true);
 							var collisionTW = rayCaster[index].intersectObjects(collisionTrapsWalls, true);
 							var collisionW = rayCaster[index].intersectObjects(winCollision, true);
@@ -1201,6 +1235,19 @@
 
 							}
 
+							////////////////////////////////////////////
+							/////COLISIONES CON ENEMIGOS////////////////
+							////////////////////////////////////////////
+							if (collisionE.length > 0 && collisionE[0].distance < 1) {
+
+								console.log("Colision con enemigo");
+								players[index].translateZ(-(forward[index] * 0.95 * deltaTime));
+
+								if (!timer[index].running)
+									timer[index].start();
+
+							}
+
 							//////////////////////////////////////////////////////
 							/////DELAY ANTES DE REGRESAR AL JUGADOR AL ORIGEN/////
 							//////////////////////////////////////////////////////
@@ -1211,7 +1258,7 @@
 									players[index].position.z = -40 + 100; //SE POSICIONA EL ASSET
 									players[index].position.x = -44 + 100;
 									players[index].rotation.y = 0.0;
-									
+
 									players[index].score -= 1000;
 									console.log("Vidas: " + players[index].lives);
 
@@ -1293,22 +1340,19 @@
 
 					}
 
-
 					Object.keys(objects.items).forEach(function (key) {
 						objects.items[key].forEach(function (item) {
 							item.model.rotation.y += THREE.Math.degToRad(50) * deltaTime;
 						});
-					})
-
-
-					objects.mannequins.forEach(function (enemy) {
-						//enemy.position.x= (Math.sin(contador)+1)/2*distancia+posInicial;
-						enemy.position.y = (Math.sin(contador) + 1) / 2 * distancia + posInicial;
-						contador += 0.1;
 					});
-					objects.mannequins2.forEach(function (enemy2) {
-						enemy2.position.z = -(Math.sin(contador) + 1) / 2 * distancia + posInicial2;
-						//contador+=0.01;
+
+
+					objects.mannequins.forEach(function (mannequin) {
+						mannequin.model.translateY(((Math.sin(clock.getElapsedTime()) + 1) / 2 * distancia + posInicial) * deltaTime2);					
+					});
+
+					objects.enemies.forEach(function (enemy) {
+						enemy.model.translateY(((Math.sin(clock.getElapsedTime()) + 1) / 2 * distancia + posInicial) * deltaTime2);
 					});
 
 					renderer.render(scene, camera);
@@ -1316,7 +1360,6 @@
 
 
 			}
-
 		}
 
 		function setupScene() {

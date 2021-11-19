@@ -11,7 +11,6 @@
 	<script type="text/javascript" src="js/libs/three/MTLLoader.js"></script>
 	<script type="text/javascript" src="js/libs/three/FBXLoader.js"></script>
 	<script type="text/javascript" src="js/libs/three/OBJLoader.js"></script>
-
 	<script type="text/javascript" src="js/libs/three/inflate.min.js"></script>
 
 
@@ -111,7 +110,10 @@
 		];
 
 		//Coordenadas de los señuelos del modo de juego principal
-		var mainModeMannequins = [[5, 2], [8, 12]];
+		var mainModeMannequins = [[5, 2]];
+
+		//Coordenadas de los señuelos del modo de juego principal
+		var mainModeEnemies = [[8, 12]];
 
 		//Coordenadas de las decoraciones del modo de juego principal
 		var mainModeDecorators = [
@@ -126,7 +128,6 @@
 			[14, 11],
 			[15, 2], [15, 11], [15, 16],
 		];
-
 
 		//Direcciones de los assets
 		modelPaths = {
@@ -196,6 +197,7 @@
 			spikes: "spikes",
 			crushWalls: "crushWalls",
 			mannequins: "mannequins",
+			enemies: "enemies",
 			items: "items"
 		};
 
@@ -207,6 +209,7 @@
 		objects.decorators = [];
 		objects.crushWalls = [];
 		objects.mannequins = [];
+		objects.enemies = [];
 		objects.spikes = [];
 		objects.items = {
 			hearts: "hearts",
@@ -240,6 +243,7 @@
 		// y detectar si el "rayo" colisiona con un objeto en esa direccion
 		var rayCaster = [];
 		var collisionObjects = [];
+		var collisionEnemies = [];
 		var collisionTrapsSpikes = [];
 		var collisionTrapsWalls = [];
 		var winCollision = [];
@@ -707,6 +711,45 @@
 				// 	});
 				// }
 
+				// POSICIONAMIENTO DE ENEMIGOS - MANIQUIES
+				if (object == "enemies" || object == "mannequins") {
+
+					positions.forEach(function (element) {
+
+						asset = mesh;
+
+						var assetColl = new THREE.Mesh(geometriaPrismaRectangular, materialCuboInv);
+
+						asset.mixer = new THREE.AnimationMixer(asset);
+						mixersE.push(asset.mixer);
+						var action = asset.mixer.clipAction(asset.animations[0]);
+						action.play();
+
+						asset.position.z = assetColl.position.z = -40;
+						asset.position.x = assetColl.position.x = -44;
+						asset.position.y = 3;
+						assetColl.position.y = 5;
+
+						asset.coordZ = assetColl.coordZ = element[0];
+						asset.coordX = assetColl.coordX = element[1];
+						asset.position.x += asset.coordX * 10;
+						asset.position.z += asset.coordZ * 10;
+						assetColl.position.x = asset.position.x;
+						assetColl.position.z = asset.position.z;
+
+						assetColl.model = asset;
+						asset.parent = assetColl;
+
+						if (object == "enemies")
+							objects.enemies.push(assetColl);
+
+						if (object == "mannequins")
+							objects.mannequins.push(assetColl);
+
+
+					});
+				}
+
 				//POSICIONAMIENTO DE DECORACIONES
 				if (object == "decorators") {
 					positions.forEach(function (element) {
@@ -731,8 +774,7 @@
 				}
 			}
 
-
-			//CARGA DE LAS PAREDES
+			//CARGA DE LAS PAREDES - SUELO - SALIDAS DEL LABERINTO - PAREDES APLASTANTES
 			loadOBJWithMTL(modelPaths.escenario[sceneIndex].path, modelPaths.escenario[sceneIndex].obj, modelPaths.escenario[sceneIndex].mtl, (object) => {
 
 				positionObject("wallblock", object, mainModeWalls);//PAREDES REGULARES
@@ -840,27 +882,6 @@
 
 			});
 
-			//CARGA DE LOS SEÑUELOS DE ENEMIGOS
-			loadOBJWithMTL(modelPaths.mannequins[sceneIndex].path, modelPaths.mannequins[sceneIndex].obj, modelPaths.mannequins[sceneIndex].mtl, (object) => {
-
-				object.position.z = -40;
-				object.position.x = -44;
-				if (sceneIndex == 1) {
-					object.position.y = 5;
-				}
-				else {
-					object.position.y = 0;
-				}
-
-				positionObject("mannequins", object, mainModeMannequins);
-
-				objects.mannequins.forEach(function (block) {
-					scene.add(block);
-					collisionObjects.push(block);
-				});
-
-			});
-
 			//CARGA DE LAS DECORACIONES
 			loadOBJWithMTL(modelPaths.decorators[sceneIndex].path, modelPaths.decorators[sceneIndex].obj, modelPaths.decorators[sceneIndex].mtl, (object) => {
 
@@ -888,36 +909,42 @@
 
 			var loader = new THREE.FBXLoader();
 
-			/////Carga del minotauro			
-			loader.load('assets/Minotauro.fbx', function (minotauros) {
-				minotauros.mixer = new THREE.AnimationMixer(minotauros);
-				mixersE.push(minotauros.mixer);
-				var action =
-					minotauros.mixer.clipAction(minotauros.animations[0]);
-				action.play();
 
+			/////CARGA DE LOS MANIQUIES			
+			loader.load('assets/Minotauro.fbx', function (object) {
+				object.position.z = -40;
+				object.position.x = -44;
+				object.position.y = 0;
 
-				minotauros.position.z = -65 + 100; //SE POSICIONA EL ASSET
-				minotauros.position.x = -24 + 100;
+				object.rotation.y += THREE.Math.degToRad(90);
 
-				scene.add(minotauros);
+				positionObject("mannequins", object, mainModeMannequins);
+
+				rotateObjects(objects.mannequins, mainModeWalls);
+
+				objects.mannequins.forEach(function (block) {
+					scene.add(block);
+					scene.add(block.model);
+				});
 			});
 
-			/////Carga del minotauro2			
-			loader.load('assets/Minotauro.fbx', function (minotauros1) {
-				minotauros1.mixer = new THREE.AnimationMixer(minotauros1);
-				mixersE.push(minotauros1.mixer);
-				var action =
-					minotauros1.mixer.clipAction(minotauros1.animations[0]);
-				action.play();
+			/////CARGA DE LOS ENEMIGOS			
+			loader.load('assets/Minotauro.fbx', function (object) {
+				object.position.z = -40;
+				object.position.x = -44;
+				object.position.y = 0;
 
-				minotauros1.rotation.y += THREE.Math.degToRad(90);
-				minotauros1.position.z = -92 + 100; //SE POSICIONA EL ASSET
-				minotauros1.position.x = -120 + 100;
+				object.rotation.y += THREE.Math.degToRad(90);
 
+				positionObject("enemies", object, mainModeEnemies);
 
+				rotateObjects(objects.enemies, mainModeWalls);
 
-				scene.add(minotauros1);
+				objects.enemies.forEach(function (block) {
+					scene.add(block);
+					scene.add(block.model);
+					collisionEnemies.push(block);
+				});
 			});
 
 
@@ -987,6 +1014,7 @@
 
 
 			render();
+
 		});
 
 		function loadOBJWithMTL(path, objFile, mtlFile, onLoadCallback) {
@@ -1015,12 +1043,8 @@
 		function render() {
 			requestAnimationFrame(render);
 
-			//$("#playNombre2").show();
 			deltaTime = clock.getDelta();
 			deltaTime2 = deltaTime * enemySpeed;
-
-			//player_1 = scene.getObjectByName("player1");
-			//player_2 = scene.getObjectByName("player2");
 
 			var yaw = [0, 0];
 			var forward = [0, 0];
@@ -1146,6 +1170,7 @@
 
 							var esteticId = index + 1;
 							var collision = rayCaster[index].intersectObjects(collisionObjects, true);
+							var collisionE = rayCaster[index].intersectObjects(collisionEnemies, true);
 							var collisionTS = rayCaster[index].intersectObjects(collisionTrapsSpikes, true);
 							var collisionTW = rayCaster[index].intersectObjects(collisionTrapsWalls, true);
 							var collisionW = rayCaster[index].intersectObjects(winCollision, true);
@@ -1218,6 +1243,19 @@
 
 								console.log("Paredes activadas por el jugador " + esteticId);
 								players[index].translateZ(-(forward[index] * 0.90 * deltaTime));
+
+								if (!timer[index].running)
+									timer[index].start();
+
+							}
+
+							////////////////////////////////////////////
+							/////COLISIONES CON ENEMIGOS////////////////
+							////////////////////////////////////////////
+							if (collisionE.length > 0 && collisionE[0].distance < 1) {
+
+								console.log("Colision con enemigo");
+								players[index].translateZ(-(forward[index] * 0.95 * deltaTime));
 
 								if (!timer[index].running)
 									timer[index].start();

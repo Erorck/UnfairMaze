@@ -22,10 +22,9 @@
 		var controls;
 		var estaPausado = false;
 
-
 		// TODO: Modelo con animacion.
-		var mixers = [];
-		var mixers_2 = [];
+		var mixersP = [];
+		var mixersE = [];
 		// TODO: End Modelo Animacion.
 
 		//Coordenadas de las paredes del modo de juego principal
@@ -109,10 +108,14 @@
 			[9, 5], [9, 18],
 			[10, 3], [10, 12],
 			[13, 1],
-			[16, 4], [16, 13]];
+			[16, 4], [16, 13]
+		];
 
 		//Coordenadas de los señuelos del modo de juego principal
-		var mainModeMannequins = [[5, 2], [8, 12]];
+		var mainModeMannequins = [[5, 2]];
+
+		//Coordenadas de los señuelos del modo de juego principal
+		var mainModeEnemies = [[8, 12]];
 
 		//Coordenadas de las decoraciones del modo de juego principal
 		var mainModeDecorators = [
@@ -196,6 +199,7 @@
 			spikes: "spikes",
 			crushWalls: "crushWalls",
 			mannequins: "mannequins",
+			enemies: "enemies",
 			items: "items"
 		};
 
@@ -207,6 +211,7 @@
 		objects.decorators = [];
 		objects.crushWalls = [];
 		objects.mannequins = [];
+		objects.enemies = [];
 		objects.spikes = [];
 		objects.items = {
 			hearts: "hearts",
@@ -238,6 +243,7 @@
 		// y detectar si el "rayo" colisiona con un objeto en esa direccion
 		var rayCaster;
 		var collisionObjects = [];
+		var collisionEnemies = [];
 		var collisionTrapsSpikes = [];
 		var collisionTrapsWalls = [];
 		var winCollision = [];
@@ -668,7 +674,6 @@
 				}
 
 
-
 				//POSICIONAMIENTO DE SALIDA DEL LABERINTO				
 				if (object == "winCond") {
 					positions.forEach(function (element) {
@@ -693,18 +698,44 @@
 				}
 
 
-				// POSICIONAMIENTO DE MANIQUIS
-				// if (object == "mannequins") {
-				// 	positions.forEach(function (element) {
-				// 		asset = mesh.clone();
+				// POSICIONAMIENTO DE ENEMIGOS - MANIQUIES
+				if (object == "enemies" || object == "mannequins") {
 
-				// 		asset.coordZ = element[0];
-				// 		asset.coordX = element[1];
-				// 		asset.position.x += asset.coordX * 10;
-				// 		asset.position.z += asset.coordZ * 10;
-				// 		objects.mannequins.push(asset);
-				// 	});
-				// }
+					positions.forEach(function (element) {
+
+						asset = mesh;
+
+						var assetColl = new THREE.Mesh(geometriaPrismaRectangular, materialCuboInv);
+
+						asset.mixer = new THREE.AnimationMixer(asset);
+						mixersE.push(asset.mixer);
+						var action = asset.mixer.clipAction(asset.animations[0]);
+						action.play();
+
+						asset.position.z = assetColl.position.z = -40;
+						asset.position.x = assetColl.position.x = -44;
+						asset.position.y = 3;
+						assetColl.position.y = 5;
+
+						asset.coordZ = assetColl.coordZ = element[0];
+						asset.coordX = assetColl.coordX = element[1];
+						asset.position.x += asset.coordX * 10;
+						asset.position.z += asset.coordZ * 10;
+						assetColl.position.x = asset.position.x;
+						assetColl.position.z = asset.position.z;
+
+						assetColl.model = asset;
+						asset.parent = assetColl;
+						
+						if (object == "enemies")
+							objects.enemies.push(assetColl);
+
+						if (object == "mannequins")
+							objects.mannequins.push(assetColl);
+
+
+					});
+				}
 
 				//POSICIONAMIENTO DE DECORACIONES
 				if (object == "decorators") {
@@ -827,36 +858,33 @@
 				positionObject("trap_spike", object, mainModeSpikes);
 
 				objects.spikes.forEach(function (block) {
-					// scene.add(block["mesh"]);
-					// collisionObjects.push(block["mesh"]);
 					scene.add(block);
 					scene.add(block.model);
-					//collisionObjects.push(block);
 					collisionTrapsSpikes.push(block);
 				});
 
 			});
 
 			//CARGA DE LOS SEÑUELOS DE ENEMIGOS
-			loadOBJWithMTL(modelPaths.mannequins[sceneIndex].path, modelPaths.mannequins[sceneIndex].obj, modelPaths.mannequins[sceneIndex].mtl, (object) => {
+			// loadOBJWithMTL(modelPaths.mannequins[sceneIndex].path, modelPaths.mannequins[sceneIndex].obj, modelPaths.mannequins[sceneIndex].mtl, (object) => {
 
-				object.position.z = -40;
-				object.position.x = -44;
-				if (sceneIndex == 1) {
-					object.position.y = 5;
-				}
-				else {
-					object.position.y = 0;
-				}
+			// 	object.position.z = -40;
+			// 	object.position.x = -44;
+			// 	if (sceneIndex == 1) {
+			// 		object.position.y = 5;
+			// 	}
+			// 	else {
+			// 		object.position.y = 0;
+			// 	}
 
-				positionObject("mannequins", object, mainModeMannequins);
+			// 	positionObject("mannequins", object, mainModeMannequins);
 
-				objects.mannequins.forEach(function (block) {
-					scene.add(block);
-					collisionObjects.push(block);
-				});
+			// 	objects.mannequins.forEach(function (block) {
+			// 		scene.add(block);
+			// 		collisionObjects.push(block);
+			// 	});
 
-			});
+			// });
 
 			//CARGA DE LAS DECORACIONES
 			loadOBJWithMTL(modelPaths.decorators[sceneIndex].path, modelPaths.decorators[sceneIndex].obj, modelPaths.decorators[sceneIndex].mtl, (object) => {
@@ -879,47 +907,73 @@
 
 			});
 
+			
 			document.addEventListener('keydown', onKeyDown);
 			document.addEventListener('keyup', onKeyUp);
 
 			var loader = new THREE.FBXLoader();
 
-			/////Carga del minotauro			
-			loader.load('assets/Minotauro.fbx', function (minotauros) {
-				minotauros.mixer = new THREE.AnimationMixer(minotauros);
-				mixers.push(minotauros.mixer);
-				var action =
-					minotauros.mixer.clipAction(minotauros.animations[0]);
-				action.play();
+			/////CARGA DE LOS MANIQUIES			
+			loader.load('assets/Minotauro.fbx', function (object) {
+				object.position.z = -40;
+				object.position.x = -44;
+				object.position.y = 0;
 
+				object.rotation.y += THREE.Math.degToRad(90);
 
-				minotauros.position.z = -65 + 100; //SE POSICIONA EL ASSET
-				minotauros.position.x = -24 + 100;
+				positionObject("mannequins", object, mainModeMannequins);
 
-				scene.add(minotauros);
+				rotateObjects(objects.mannequins, mainModeWalls);
+
+				objects.mannequins.forEach(function (block) {
+					scene.add(block);
+					scene.add(block.model);
+				});
 			});
 
-			/////Carga del minotauro2			
-			loader.load('assets/Minotauro.fbx', function (minotauros1) {
-				minotauros1.mixer = new THREE.AnimationMixer(minotauros1);
-				mixers.push(minotauros1.mixer);
-				var action =
-					minotauros1.mixer.clipAction(minotauros1.animations[0]);
-				action.play();
+			// /////Carga de los enemigos			
+			//  loader.load('assets/Minotauro.fbx', function (minotauros1) {
+			// 	minotauros1.mixer = new THREE.AnimationMixer(minotauros1);
+			// 	mixers.push(minotauros1.mixer);
+			// 	var action =
+			// 		minotauros1.mixer.clipAction(minotauros1.animations[0]);
+			// 	action.play();
 
-				minotauros1.rotation.y += THREE.Math.degToRad(90);
-				minotauros1.position.z = -92 + 100; //SE POSICIONA EL ASSET
-				minotauros1.position.x = -120 + 100;
+			// 	minotauros1.rotation.y += THREE.Math.degToRad(90);
+			// 	minotauros1.position.z = -92 + 100; //SE POSICIONA EL ASSET
+			// 	minotauros1.position.x = -120 + 100;
 
 
 
-				scene.add(minotauros1);
+			// 	scene.add(minotauros1);
+			// });
+
+
+			/////CARGA DE LOS ENEMIGOS			
+			loader.load('assets/Minotauro.fbx', function (object) {
+				object.position.z = -40;
+				object.position.x = -44;
+				object.position.y = 0;
+
+				object.rotation.y += THREE.Math.degToRad(90);
+
+				positionObject("enemies", object, mainModeEnemies);
+
+				rotateObjects(objects.enemies, mainModeWalls);
+
+				objects.enemies.forEach(function (block) {
+					scene.add(block);
+					scene.add(block.model);
+					collisionEnemies.push(block);
+				});
 			});
+
+
 
 			//Carga del personaje principal
 			loader.load('assets/Animacion.fbx', function (personaje) {
 				personaje.mixer = new THREE.AnimationMixer(personaje);
-				mixers.push(personaje.mixer);
+				mixersP.push(personaje.mixer);
 				var action =
 					personaje.mixer.clipAction(personaje.animations[0]);
 				action.play();
@@ -973,7 +1027,7 @@
 			deltaTime2 = deltaTime * enemySpeed;
 
 			player = scene.getObjectByName("player");
-			
+
 			var yaw = 0;
 			var forward = 0;
 			moving = false;
@@ -1010,21 +1064,21 @@
 
 			if (estaPausado == false) {
 
-				////CON ESTO SE ACTIVA LA ANIMACION
-				if (mixers.length > 0) {
-					mixers[0].update(deltaTime2);
-					mixers[1].update(deltaTime2);
 
-					if (moving) {
-						mixers[2].update(deltaTime);
-					}
-
-				}
 
 				//////////////////////////////////////////////////
 				////UNA VEZ CARGADOS TODOS LOS MODELOS////////////
 				//////////////////////////////////////////////////
 				if (isWorldReady[0] && isWorldReady[1]) {
+
+					for (let index = 0; index < mixersP.length; index++) {
+						if (moving)
+							mixersP[index].update(deltaTime);
+					}
+
+					for (let index = 0; index < mixersE.length; index++) {
+						mixersE[index].update(deltaTime2);
+					}
 
 					//MOVIMIENTO DEL JUGADOR
 
@@ -1054,6 +1108,7 @@
 						// El segundo parametro es para indicar que aparte de verificar
 						// si existe colision con estos objetos tambien verifique colision con los hijos de estos objetos
 						var collision = rayCaster.intersectObjects(collisionObjects, true);
+						var collisionE = rayCaster.intersectObjects(collisionEnemies, true);
 						var collisionTS = rayCaster.intersectObjects(collisionTrapsSpikes, true);
 						var collisionTW = rayCaster.intersectObjects(collisionTrapsWalls, true);
 						var collisionW = rayCaster.intersectObjects(winCollision, true);
@@ -1141,6 +1196,19 @@
 
 						}
 
+						////////////////////////////////////////////
+						/////COLISIONES CON ENEMIGOS////////////////
+						////////////////////////////////////////////
+						if (collisionE.length > 0 && collisionE[0].distance < 1) {
+
+							console.log("Colision con enemigo");
+							player.translateZ(-(forward * 0.95 * deltaTime));
+
+							if (!timer.running)
+								timer.start();
+
+						}
+
 						//////////////////////////////////////////////////////
 						/////DELAY ANTES DE REGRESAR AL JUGADOR AL ORIGEN/////
 						//////////////////////////////////////////////////////
@@ -1222,7 +1290,7 @@
 							var finalScore = player.score + 10000 - (winTimeS * 50);
 							var winTimeD = new Date(winTimeS * 1000).toISOString().substr(14, 5)
 
-							$("#playerResults").html("Tiempo: " + winTimeD  + " Puntuacion final: " + finalScore);
+							$("#playerResults").html("Tiempo: " + winTimeD + " Puntuacion final: " + finalScore);
 							$("#puntos").val(finalScore);
 							estaPausado = true;
 							$("#VictoryScreen").show();
@@ -1254,7 +1322,7 @@
 			var aspect = window.innerWidth / window.innerHeight;
 			var d = 70;
 			camera = new THREE.OrthographicCamera(- d * aspect, d * aspect, d, - d, 1, 1000);
-			camera.position.set(50, 60, 70); // all components equal
+			camera.position.set(50, 100, 70); // all components equal
 			//camera.position.set(0, 60, 0); // all components equal
 			//camera.lookAt(0, 0, 0); // or the origin
 
@@ -1337,11 +1405,11 @@
 
 	<div class="modal-dialog" id="VictoryScreen" style="position: absolute; top:20%; left:40%;">
 		<div class="modal-content">
-				<input id="puntos" hidden="true">
+			<input id="puntos" hidden="true">
 			<div class="modal-header">
 				<h5 class="modal-title" id="exampleModalLabel">¡GANASTE!</h5>
 				<br>
-				<h5 class="modal-title" id="playerResults"> Hola</h5>				
+				<h5 class="modal-title" id="playerResults"> Hola</h5>
 			</div>
 			<div class="modal-body">
 				<br>
@@ -1349,7 +1417,7 @@
 					<a class="btnSave" style=" top:20%; right:90%;" href="../index.html">Volver al menú principal</a>
 				</button>
 				<input type="text" placeholder="Nombre" id="username">
-				<button id="btnSendSesion" >Guardar</button>
+				<button id="btnSendSesion">Guardar</button>
 				<br><br>
 				<button onclick="shareFB()">Compartir en Facebook</button>
 				<br>
@@ -1398,58 +1466,58 @@
 
 	<script src="../js/jugar.js"></script>
 
-	
-<script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
 
-<script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-database.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
 
-<script>
-    
-     
-	//tiempo que va a tardar(1.5s)
-	const firebaseConfig = {
-		databaseUR:"https://test-504ea-default-rtdb.firebaseio.com/",
-		apiKey: "AIzaSyB0dQZT1wSPWVTHk8sVTAW-I9DbzUEpZtE",
-		 authDomain: "test-504ea.firebaseapp.com",
-		 projectId: "test-504ea",
-		 storageBucket: "test-504ea.appspot.com",
-		 messagingSenderId: "252023945673",
-		 appId: "1:252023945673:web:15f98626a906ff679b9018"
-	};
-	// Initialize Firebase
+	<script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-database.js"></script>
+
+	<script>
+
+
+		//tiempo que va a tardar(1.5s)
+		const firebaseConfig = {
+			databaseUR: "https://test-504ea-default-rtdb.firebaseio.com/",
+			apiKey: "AIzaSyB0dQZT1wSPWVTHk8sVTAW-I9DbzUEpZtE",
+			authDomain: "test-504ea.firebaseapp.com",
+			projectId: "test-504ea",
+			storageBucket: "test-504ea.appspot.com",
+			messagingSenderId: "252023945673",
+			appId: "1:252023945673:web:15f98626a906ff679b9018"
+		};
+		// Initialize Firebase
 		firebase.initializeApp(firebaseConfig);
-	
-   // const db = getDatabase();
-	var boton = document.getElementById("btnSendSesion");
-   // var username = document.getElementById("username");
-   
-   
-		var dbRefPlayers =  firebase.database().ref("Players");
-  document.querySelector('#btnSendSesion').addEventListener('click',()=>{
-	 	   const user=document.getElementById('username').value;
-	 	   const puntos=document.getElementById('puntos').value;
+
+		// const db = getDatabase();
+		var boton = document.getElementById("btnSendSesion");
+		// var username = document.getElementById("username");
+
+
+		var dbRefPlayers = firebase.database().ref("Players");
+		document.querySelector('#btnSendSesion').addEventListener('click', () => {
+			const user = document.getElementById('username').value;
+			const puntos = document.getElementById('puntos').value;
 			var newPlayer = dbRefPlayers.push();
-		newPlayer.set({
-		user,
-		puntos
+			newPlayer.set({
+				user,
+				puntos
+			});
+			// 	   dbRefPlayers.push(user);
+			// 	   dbRefPlayers.push(puntos);
+
 		});
-	// 	   dbRefPlayers.push(user);
-	// 	   dbRefPlayers.push(puntos);
-		 
-	});
-	
-	  
-	   
 
-</script>
 
-	
 
-<script type="text/javascript" src="../js/mifacebook.js"></script>
-<script>function shareFB() {
-	var score = $("#puntos").val();
-	shareScore(score);
-}</script>
+
+	</script>
+
+
+
+	<script type="text/javascript" src="../js/mifacebook.js"></script>
+	<script>function shareFB() {
+			var score = $("#puntos").val();
+			shareScore(score);
+		}</script>
 </body>
 
 </html>

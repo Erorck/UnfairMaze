@@ -100,7 +100,8 @@
 		var mainModeClocks = [[6, 9], [9, 14], [11, 9]];
 
 		//Coordenadas de los regalos del modo de juego principal
-		var mainModeGifts = [[3, 10], [13, 12], [2, 18]];
+		//var mainModeGifts = [[3, 10], [13, 12], [2, 18]];
+		var mainModeGifts = [];
 
 		//Coordenadas de las paredes atravesables del modo de juego principal
 		var mainModeFakeWalls = [[6, 3], [11, 15], [8, 17]];
@@ -996,6 +997,9 @@
 				timer.push(new THREE.Clock(true));
 
 				scene.add(personaje);
+				var spot1 = scene.getObjectByName("spot1");
+				spot1.target = personaje;
+				personaje.spot = spot1;
 				players.push(personaje);
 
 				isWorldReady[1] = true;
@@ -1027,6 +1031,9 @@
 				timer.push(new THREE.Clock(true));
 
 				scene.add(personaje);
+				var spot2 = scene.getObjectByName("spot2");
+				spot2.target = personaje;
+				personaje.spot = spot2;
 				players.push(personaje);
 
 				for (let index = 0; index < players.length; index++) {
@@ -1079,10 +1086,10 @@
 
 			if (players[0] != null && players[0].alive) {
 				if (keys["A"]) {
-					yaw[0] = 5;
+					yaw[0] = 6;
 					moving[0] = true;
 				} else if (keys["D"]) {
-					yaw[0] = -5;
+					yaw[0] = -6;
 					moving[0] = true;
 				}
 				if (keys["W"]) {
@@ -1096,10 +1103,10 @@
 
 			if (players[1] != null && players[1].alive) {
 				if (keys["J"]) {
-					yaw[1] = 5;
+					yaw[1] = 6;
 					moving[1] = true;
 				} else if (keys["L"]) {
-					yaw[1] = -5;
+					yaw[1] = -6;
 					moving[1] = true;
 				}
 				if (keys["I"]) {
@@ -1133,6 +1140,7 @@
 
 						players[index].rotation.y += yaw[index] * deltaTime;
 						players[index].translateZ(forward[index] * deltaTime);
+						players[index].spot.position.set(players[index].position.x, players[index].position.y + 5, players[index].position.z);
 
 						if (players[index].lives <= 0) {
 							players[index].alive = false;
@@ -1145,6 +1153,7 @@
 								players[index].rotation.y += THREE.Math.degToRad(150) * deltaTime;
 							}
 							else {
+								scene.remove(players[index].spot);
 								scene.remove(players[index]);
 							}
 
@@ -1357,6 +1366,7 @@
 
 					}
 
+					
 					Object.keys(objects.items).forEach(function (key) {
 						objects.items[key].forEach(function (item) {
 							item.model.rotation.y += THREE.Math.degToRad(50) * deltaTime;
@@ -1410,9 +1420,47 @@
 			var ambientLight = new THREE.AmbientLight(new THREE.Color(1, 1, 1), 1.0);
 			scene.add(ambientLight);
 
-			var directionalLight = new THREE.DirectionalLight(new THREE.Color(1, 1, 0), 0.4);
-			directionalLight.position.set(0, 0, 1);
+			var directionalLight = new THREE.DirectionalLight(new THREE.Color(0.7, 0.7, 1), 0.4);
+			directionalLight.position.set(-44, 25, -45);
+			directionalLight.target.position.set(5, 5, -5);
 			scene.add(directionalLight);
+			scene.add(directionalLight.target);
+
+			var dLight1 = directionalLight.clone();
+			dLight1.position.set(40, 25, -45);
+			dLight1.target.position.set(0, 5, -5);
+			scene.add(dLight1);
+			scene.add(dLight1.target);
+
+			var dLight2 = directionalLight.clone();
+			dLight2.position.set(0, 25, 35);
+			dLight2.target.position.set(0, 5, -15);
+			scene.add(dLight2);
+			scene.add(dLight2.target);
+
+			const spotLight = new THREE.SpotLight(new THREE.Color(0.7, 0.7, 1), 0.6);
+			spotLight.position.set(10, 10, 10);
+
+			spotLight.castShadow = true;
+			spotLight.distance = 25;
+
+			spotLight.shadow.mapSize.width = 1024;
+			spotLight.shadow.mapSize.height = 1024;
+
+			spotLight.shadow.camera.near = 500;
+			spotLight.shadow.camera.far = 4000;
+			spotLight.shadow.camera.fov = 30;
+
+			
+			var SL1 = spotLight.clone();
+			SL1.name = "spot1"
+			scene.add(SL1);
+
+
+			var SL2 = spotLight.clone();
+			SL2.name = "spot2"
+			scene.add(SL2);
+
 
 			var grid = new THREE.GridHelper(200, 50, 0xffffff, 0xffffff);
 			grid.position.y = -1;

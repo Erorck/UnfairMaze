@@ -11,6 +11,7 @@
 	<script type="text/javascript" src="js/libs/three/MTLLoader.js"></script>
 	<script type="text/javascript" src="js/libs/three/FBXLoader.js"></script>
 	<script type="text/javascript" src="js/libs/three/OBJLoader.js"></script>
+
 	<script type="text/javascript" src="js/libs/three/inflate.min.js"></script>
 
 
@@ -22,120 +23,144 @@
 		var controls;
 		var estaPausado = false;
 
+		//variables globales para la funcion
+		var contador = 0;
+		var posInicial = -4; //posicion para el primer fantasma
+		var posInicial2 = 4; //posicion para el segundo fantasma
+		var distancia = 8;
+
 		var mixersP = [];
 		var mixersE = [];
 
 		//Coordenadas del jugador del modo de juego principal
-		var mainModePlayer = [[16,18]];
-		
+		var mainModePlayer = [[14, 17]];
+
 		//Coordenadas de las paredes del modo de juego principal
 		var mainModeWalls = [
-			[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7], [0, 9], [0, 10], [0, 11], [0, 12], [0, 13], [0, 14], [0, 15], [0, 16], [0, 17], [0, 18], [0, 19],
+			[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7], [0, 8], [0, 9], [0, 10], [0, 11], [0, 12], [0, 13], [0, 14], [0, 15], [0, 16], [0, 17], [0, 18], [0, 19],
 			[1, 0], [1, 19],
-			[2, 0], [2, 2], [2, 3], [2, 4], [2, 8], [2, 11], [2, 19],
-			[3, 0], [3, 8], [3, 11], [3, 14], [3, 15], [3, 16], [3, 19],
-			[4, 0], [4, 4], [4, 5], [4, 6], [4, 8], [4, 11], [4, 13], [4, 19],
-			[5, 0], [5, 8], [5, 16], [5, 17], [5, 19],
-			[6, 0], [6, 2], [6, 4], [6, 8], [6, 10], [6, 11], [6, 12], [6, 14], [6, 19],
-			[7, 0], [7, 17], [7, 19],
-			[8, 0], [8, 2], [8, 4], [8, 5], [8, 9], [8, 11], [8, 13], [8, 19],
-			[9, 0], [9, 7], [9, 13], [9, 17], [9, 19],
-			[10, 0], [10, 2], [10, 4], [10, 5], [10, 6], [10, 7], [10, 9], [0, 10], [10, 13], [10, 14], [10, 19],
-			[11, 0], [11, 11], [11, 16], [11, 17], [11, 19],
-			[12, 0], [12, 2], [12, 3], [12, 7], [12, 10], [12, 11], [12, 13], [12, 14], [12, 16], [12, 19],
-			[13, 0], [13, 2], [13, 7], [13, 8], [13, 14], [13, 16], [13, 19],
-			[14, 0], [14, 4], [14, 5], [14, 10], [14, 19],
-			[15, 0], [15, 4], [15, 5], [15, 7], [15, 8], [15, 10], [15, 13], [15, 14], [15, 17], [15, 19],
+			[2, 0], [2, 2], [2, 5], [2, 13], [2, 14], [2, 16], [2, 17], [2, 19],
+			[3, 0], [3, 5], [3, 19],
+			[4, 0], [4, 5], [4, 7], [4, 8], [4, 9], [4, 11], [4, 12], [4, 14], [4, 17], [4, 19],
+			[5, 0], [5, 2], [5, 3], [5, 19],
+			[6, 0], [6, 6], [6, 8], [6, 10], [6, 13], [6, 14], [6, 16], [6, 19],
+			[7, 0], [7, 2], [7, 3], [7, 4], [7, 8], [7, 19],
+			[8, 0], [8, 6], [8, 8], [8, 9], [8, 10], [8, 14], [8, 16], [8, 19],
+			[9, 0], [9, 2], [9, 14], [9, 16],
+			[10, 0], [10, 7], [10, 9], [10, 11], [10, 19],
+			[11, 0], [11, 2], [11, 4], [11, 7], [11, 9], [11, 11], [11, 13], [11, 15], [11, 16], [11, 17], [11, 19],
+			[12, 0], [12, 2], [12, 4], [12, 19],
+			[13, 0], [13, 4], [13, 7], [13, 8], [13, 10], [13, 11], [13, 15], [13, 17], [13, 19],
+			[14, 0], [14, 2], [14, 14], [14, 15], [14, 19],
+			[15, 0], [15, 2], [15, 14], [15, 15], [15, 19],
 			[16, 0], [16, 19],
-			[17, 0], [17, 1], [17, 2], [17, 3], [17, 4], [17, 5], [17, 6], [17, 7], [17, 8], [17, 9], [17, 10], [17, 11], [17, 12], [17, 13], [17, 14], [17, 15], [17, 16], [17, 18], [17, 19],
-			[18, 0], [18, 1], [18, 2], [18, 3], [18, 4], [18, 5], [18, 6], [18, 7], [18, 8], [18, 9], [18, 10], [18, 11], [18, 12], [18, 13], [18, 14], [18, 18], [18, 19],
-			[19, 0], [19, 1], [19, 2], [19, 3], [19, 4], [19, 5], [19, 6], [19, 7], [19, 8], [19, 9], [19, 10], [19, 11], [19, 12], [19, 13], [19, 14], [19, 15], [19, 16], [19, 17], [19, 18], [19, 19]
+			[17, 0], [17, 1], [17, 2], [17, 3], [17, 4], [17, 5], [17, 6], [17, 7], [17, 8], [17, 9], [17, 10], [17, 11], [17, 12], [17, 13], [17, 14], [17, 15], [17, 16], [17, 17], [17, 18], [17, 19]
 		];
 
 		//Coordenadas de los cubos del piso del modo de juego principal
 		var mainModeFloor = [
-			[0, 8],
-			[2, 6], [2, 10], [2, 12],
-			[3, 17],
-			[4, 2], [4, 9], [4, 14],
-			[6, 1], [6, 6],
-			[8, 7], [8, 10], [8, 15],
-			[9, 3],
-			[10, 11],
-			[12, 5], [12, 8],
-			[13, 13], [13, 18],
+			[2, 3], [2, 7], [2, 9], [2, 11],
+			[3, 2],
+			[4, 16],
+			[6, 17],
+			[7, 6],
+			[8, 13],
+			[9, 3], [9, 17],
+			[11, 5],
+			[12, 13],
+			[13, 5],
 			[14, 11],
-			[15, 2], [15, 11], [15, 16],
+			[15, 6], [15, 9], [15, 17],
+			[16, 12],
 			[1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [1, 7], [1, 8], [1, 9], [1, 10], [1, 11], [1, 12], [1, 13], [1, 14], [1, 15], [1, 16], [1, 17], [1, 18],
-			[2, 1], [2, 5], [2, 7], [2, 9], [2, 13], [2, 14], [2, 15], [2, 16], [2, 17], [2, 18],
-			[3, 1], [3, 2], [3, 3], [3, 4], [3, 5], [3, 6], [3, 7], [3, 9], [3, 10], [3, 12], [3, 13], [3, 18],
-			[4, 1], [4, 3], [4, 7], [4, 10], [4, 12], [4, 15], [4, 16], [4, 17], [4, 18],
-			[5, 1], [5, 2], [5, 3], [5, 4], [5, 5], [5, 6], [5, 7], [5, 9], [5, 10], [5, 11], [5, 12], [5, 13], [5, 14], [5, 15], [5, 18],
-			[6, 7], [6, 3], [6, 5], [6, 9], [6, 13], [6, 15], [6, 16], [6, 17], [6, 18],
-			[7, 1], [7, 2], [7, 3], [7, 4], [7, 5], [7, 6], [7, 7], [7, 8], [7, 9], [7, 10], [7, 11], [7, 12], [7, 13], [7, 14], [7, 15], [7, 16], [7, 18],
-			[8, 1], [8, 3], [8, 6], [8, 8], [8, 12], [8, 14], [8, 16], [8, 17], [8, 18],
-			[9, 1], [9, 2], [9, 4], [9, 5], [9, 6], [9, 7], [9, 8], [9, 9], [9, 10], [9, 11], [9, 12], [9, 14], [9, 15], [9, 16], [9, 18],
-			[10, 1], [10, 3], [10, 8], [10, 10], [10, 12], [10, 15], [10, 16], [10, 17], [10, 18],
-			[11, 1], [11, 2], [11, 3], [11, 4], [11, 5], [11, 6], [11, 7], [11, 8], [11, 9], [11, 10], [11, 12], [11, 13], [11, 14], [11, 15], [11, 18],
-			[12, 1], [12, 4], [12, 6], [12, 9], [12, 12], [12, 15], [12, 17], [12, 18],
-			[13, 1], [13, 3], [13, 4], [13, 5], [13, 6], [13, 9], [13, 10], [13, 11], [13, 12], [13, 15], [13, 17],
-			[14, 1], [14, 2], [14, 3], [14, 6], [14, 7], [14, 8], [14, 9], [14, 12], [14, 13], [14, 14], [14, 15], [14, 16], [14, 17], [14, 18],
-			[15, 1], [15, 3], [15, 6], [15, 9], [15, 12], [15, 15], [15, 18],
-			[16, 1], [16, 2], [16, 3], [16, 4], [16, 5], [16, 6], [16, 7], [16, 8], [16, 9], [16, 10], [16, 11], [16, 12], [16, 13], [16, 14], [16, 15], [16, 16], [16, 17], [16, 18],
-			[17, 15],
-			[18, 15]
+			[2, 1], [2, 4], [2, 6], [2, 8], [2, 10], [2, 12], [2, 15], [2, 16], [2, 17], [2, 18],
+			[3, 1], [3, 3], [3, 4], [3, 6], [3, 7], [3, 8], [3, 9], [3, 10], [3, 11], [3, 12], [3, 13], [3, 14], [3, 15], [3, 16], [3, 17], [3, 18],
+			[4, 1], [4, 2], [4, 3], [4, 4], [4, 6], [4, 10], [4, 13], [4, 15], [4, 18],
+			[5, 1], [5, 4], [5, 5], [5, 6], [5, 7], [5, 8], [5, 9], [5, 10], [5, 11], [5, 12], [5, 13], [5, 14], [5, 15], [5, 16], [5, 17], [5, 18],
+			[6, 1], [6, 2], [6, 3], [6, 4], [6, 5], [6, 7], [6, 9], [6, 11], [6, 12], [6, 13], [6, 15], [6, 18],
+			[7, 1], [7, 5], [7, 7], [7, 9], [7, 10], [7, 11], [7, 12], [7, 13], [7, 14], [7, 15], [7, 16], [7, 17], [7, 18],
+			[8, 1], [8, 2], [8, 3], [8, 4], [8, 5], [8, 7], [8, 11], [8, 12], [8, 17], [8, 18],
+			[9, 1], [9, 4], [9, 5], [9, 6], [9, 7], [9, 8], [9, 9], [9, 10], [9, 11], [9, 12], [9, 13], [9, 18], [9, 19],
+			[10, 1], [10, 2], [10, 3], [10, 4], [10, 5], [10, 6], [10, 7], [10, 8], [10, 10], [10, 12], [10, 13], [10, 14], [10, 15], [10, 16], [10, 17], [10, 18],
+			[11, 1], [11, 3], [11, 6], [11, 8], [11, 10], [11, 12], [11, 14], [11, 18],
+			[12, 1], [12, 3], [12, 4], [12, 5], [12, 6], [12, 7], [12, 8], [12, 9], [12, 10], [12, 11], [12, 12], [12, 14], [12, 15], [12, 16], [12, 17], [12, 18],
+			[13, 1], [13, 2], [13, 3], [13, 6], [13, 9], [13, 12], [13, 13], [13, 14], [13, 16], [13, 18],
+			[14, 1], [14, 3], [14, 4], [14, 5], [14, 6], [14, 7], [14, 8], [14, 9], [14, 10], [14, 12], [14, 13], [14, 16], [14, 17], [14, 18],
+			[15, 1], [15, 3], [15, 4], [15, 5], [15, 7], [15, 8], [15, 10], [15, 11], [15, 12], [15, 13], [15, 16], [15, 18],
+			[16, 1], [16, 2], [16, 3], [16, 4], [16, 5], [16, 6], [16, 7], [16, 8], [16, 9], [16, 10], [16, 11], [16, 12], [16, 13], [16, 14], [16, 15], [16, 16], [16, 17], [16, 18]
 		];
 
-		var mainModeWin = [[1, 0]];
+		var mainModeWin = [[9, 19]];
 
 		//Coordenadas de los corazones del modo de juego principal
-		var mainModeHearts = [[8, 1], [9, 6], [18, 15]];
+		var mainModeHearts = [[1, 13], [7, 9], [12, 18]];
 
 		//Coordenadas de los relojes del modo de juego principal
-		//var mainModeClocks = [[14, 2], [1, 3], [10, 17]];
+		//var mainModeClocks = [[1, 5], [5, 9], [14, 3]];
 		var mainModeClocks = [];
 
 		//Coordenadas de los regalos del modo de juego principal
 		//var mainModeGifts = [[3, 10], [13, 12], [2, 18]];
-		var mainModeGifts = [];
+		var mainModeGifts = [[1, 9], [13, 2], [16, 9]];
 
 		//Coordenadas de las paredes atravesables del modo de juego principal
-		var mainModeFakeWalls = [[1, 6], [8, 6], [9, 2], [11, 2], [17, 17], [18, 17], [18, 16]];
+		var mainModeFakeWalls = [
+			[1, 11],
+			[5, 14],
+			[6, 9],
+			[7, 10],
+			[8, 15],
+			[9, 1], [9, 15],
+			[11, 8], [11, 18],
+			[12, 4], [12, 11], [12, 17],
+			[14, 4]];
 
 		//Coordenadas de los picos del modo de juego principal
-		var mainModeSpikes = [[1, 14], [2, 14], [3, 3], [3, 12], [4, 7], [4, 17], [5, 11], [6, 15], [7, 2], [7, 11], [9, 16], [10, 8], [12, 16], [13, 5], [14, 6], [14, 13], [15, 1], [15, 9]];
+		var mainModeSpikes = [
+			[2, 12], [2, 15],
+			[3, 16],
+			[4, 2],
+			[5, 4],
+			[8, 11],
+			[9, 5], [9, 6], [9, 13],
+			[11, 12],
+			[12, 15],
+			[14, 10], [14, 12],
+			[15, 7], [15, 8],
+			[16, 11]];
 
 		//Coordenadas de las paredes aplastantes del modo de juego principal
 		var mainModeCrushingWalls = [
-			[1, 2], [1, 18],
-			[2, 7], [2, 16],
-			[3, 4],
-			[6, 3], [6, 5],
-			[7, 18],
-			[9, 5],
-			[10, 3], [10, 12],
-			[13, 1],
-			[16, 4], [16, 13]
-		];
+			[3, 9], [3, 12],
+			[4, 10],
+			[6, 7], [6, 15],
+			[8, 2], [8, 17],
+			[10, 10], [10, 13], [10, 18],
+			[11, 14],
+			[12, 3],
+			[13, 9], [13, 18],
+			[15, 1]
+			];
 
 		//Coordenadas de los señuelos del modo de juego principal
-		var mainModeMannequins = [[2, 9], [5, 2]];
-
-		//Coordenadas de los señuelos del modo de juego principal
-		var mainModeEnemies = [[8, 12]];
+		var mainModeMannequins = [];
+		var mainModeEnemies = [[2, 4], [2, 7], [6, 11], [15, 4], [16, 17]];
 
 		//Coordenadas de las decoraciones del modo de juego principal
 		var mainModeDecorators = [
-			[2, 6], [2, 10], [2, 12],
-			[3, 17],
-			[4, 2], [4, 9], [4, 14],
-			[6, 1], [6, 6],
-			[8, 7], [8, 10], [8, 15],
-			[10, 11],
-			[12, 5], [12, 8],
-			[13, 13], [13, 18],
+			[2, 3], [2, 7], [2, 9], [2, 11],
+			[3, 2],
+			[4, 16],
+			[6, 17],
+			[7, 6],
+			[8, 13],
+			[9, 3], [9, 17],
+			[11, 5],
+			[12, 13],
+			[13, 5],
 			[14, 11],
-			[15, 2], [15, 11], [15, 16],
+			[15, 6], [15, 9], [15, 17],
+			[16, 12],
 		];
 
 		//Direcciones de los assets
@@ -144,6 +169,7 @@
 			items: "items",
 			spikes: "spikes",
 			mannequins: "mannequins",
+			enemies: "enemies",
 			decorators: "decorators"
 		};
 
@@ -194,6 +220,9 @@
 			color: new THREE.Color(0, 0.6, 0.7), opacity: 0.0,
 			transparent: true
 		});
+		var materialCuboTransp = new THREE.MeshLambertMaterial({
+			color: new THREE.Color(0, 0.6, 0.7), opacity: 0.2, transparent: true
+		});
 
 
 		//Objecto maestro de todos los assets en la escena
@@ -235,7 +264,7 @@
 		// [0] -> Bosque
 		// [1] -> Medieval
 		// [2] -> Futurista
-		var sceneIndex = 0;
+		var sceneIndex = 1;
 
 		var clock;
 		var timer = []; //TIMERS TRAMPAS
@@ -263,7 +292,6 @@
 		$(document).ready(function () {
 
 			setupScene();
-
 			$("#VictoryScreen").hide();
 			$("#DeathScreen").hide();
 
@@ -443,7 +471,6 @@
 
 				})
 			}
-
 
 			//FUNCION DE POSICIONAMIENTO EN X,Z parametros(String tipo de mesh, asset, arreglo de posiciones)
 			function positionObject(object, mesh = new THREE.Mesh(geometriaCubo, materialCubo), positions) {
@@ -706,47 +733,47 @@
 					});
 				}
 
-
 				// POSICIONAMIENTO DE MANIQUIS
-				// if (object == "mannequins") {
-				// 	positions.forEach(function (element) {
-				// 		asset = mesh.clone();
+				/*if (object == "mannequins") {
+									positions.forEach(function (element) {
+										asset = mesh.clone();
+				
+										asset.coordZ = element[0];
+										asset.coordX = element[1];
+										asset.position.x += asset.coordX * 10;
+										asset.position.z += asset.coordZ * 10;
+										objects.mannequins.push(asset);
+									});
+								}
+				
+								if (object == "enemies") {
+									positions.forEach(function (element) {
+										asset = mesh.clone();
+				
+										asset.coordZ = element[0];
+										asset.coordX = element[1];
+										asset.position.x += asset.coordX * 10;
+										asset.position.z += asset.coordZ * 10;
+										objects.enemies.push(asset);
+									});
+					}
+				*/
 
-				// 		asset.coordZ = element[0];
-				// 		asset.coordX = element[1];
-				// 		asset.position.x += asset.coordX * 10;
-				// 		asset.position.z += asset.coordZ * 10;
-				// 		objects.mannequins.push(asset);
-				// 	});
-				// }
-
-				// POSICIONAMIENTO DE ENEMIGOS - MANIQUIES
 				if (object == "enemies" || object == "mannequins") {
-
 					positions.forEach(function (element) {
 
-						asset = mesh;
-						//asset.animations = mesh.animations;
+						asset = mesh.clone();
+						var assetColl = new THREE.Mesh(geometriaPrismaRectangular, materialCuboTransp);
 
-						var assetColl = new THREE.Mesh(geometriaPrismaRectangular, materialCuboInv);
-
-						asset.mixer = new THREE.AnimationMixer(asset);
-						mixersE.push(asset.mixer);
-
-						var action = asset.mixer.clipAction(asset.animations[0]);
-						action.play();
-
-						asset.position.z = assetColl.position.z = -40;
-						asset.position.x = assetColl.position.x = -44;
-						asset.position.y = 3;
+						asset.position.z = -40;
+						asset.position.x = -44;
+						asset.position.y = 0;
 						assetColl.position.y = 5;
 
 						asset.coordZ = assetColl.coordZ = element[0];
 						asset.coordX = assetColl.coordX = element[1];
 						asset.position.x += asset.coordX * 10;
 						asset.position.z += asset.coordZ * 10;
-						assetColl.position.x = asset.position.x;
-						assetColl.position.z = asset.position.z;
 
 						assetColl.model = asset;
 						asset.add(assetColl);
@@ -756,10 +783,9 @@
 
 						if (object == "mannequins")
 							objects.mannequins.push(assetColl);
-
-
 					});
 				}
+
 
 				//POSICIONAMIENTO DE DECORACIONES
 				if (object == "decorators") {
@@ -785,7 +811,8 @@
 				}
 			}
 
-			//CARGA DE LAS PAREDES - SUELO - SALIDAS DEL LABERINTO - PAREDES APLASTANTES
+
+			//CARGA DE LAS PAREDES
 			loadOBJWithMTL(modelPaths.escenario[sceneIndex].path, modelPaths.escenario[sceneIndex].obj, modelPaths.escenario[sceneIndex].mtl, (object) => {
 
 				positionObject("wallblock", object, mainModeWalls);//PAREDES REGULARES
@@ -836,12 +863,10 @@
 
 			});
 
-
 			//CARGA DE LOS CORAZONES
 			loadOBJWithMTL(modelPaths.items[0].path, modelPaths.items[0].obj, modelPaths.items[0].mtl, (object) => {
 
 				positionObject("hearts", object, mainModeHearts);
-				//positionObject("testboxThin", object, mainModeHearts);
 
 				objects.items.hearts.forEach(function (block) {
 					scene.add(block);
@@ -893,6 +918,67 @@
 
 			});
 
+			// //CARGA DE LOS SEÑUELOS DE ENEMIGOS
+			// loadOBJWithMTL(modelPaths.mannequins[sceneIndex].path, modelPaths.mannequins[sceneIndex].obj, modelPaths.mannequins[sceneIndex].mtl, (object) => {
+
+			// 	object.position.z = -40;
+			// 	object.position.x = -44;
+			// 	if (sceneIndex == 1) {
+			// 		object.position.y = 5;
+			// 	}
+			// 	else {
+			// 		object.position.y = 0;
+			// 	}
+
+			// 	positionObject("mannequins", object, mainModeMannequins);
+
+			// 	objects.mannequins.forEach(function (block) {
+			// 		scene.add(block);
+			// 		collisionObjects.push(block);
+			// 	});
+
+			// });
+
+			// //CARGA DE LOS SEÑUELOS DE ENEMIGOS
+			// loadOBJWithMTL(modelPaths.mannequins[sceneIndex].path, modelPaths.mannequins[sceneIndex].obj, modelPaths.mannequins[sceneIndex].mtl, (object) => {
+
+			// 	object.position.z = -70;
+			// 	object.position.x = -44;
+			// 	if (sceneIndex == 1) {
+			// 		object.position.y = 5;
+			// 	}
+			// 	else {
+			// 		object.position.y = 0;
+			// 	}
+			// 	positionObject("enemies", object, mainModeEnemies);
+			// 	objects.enemies.forEach(function (block) {
+			// 		scene.add(block);
+			// 		collisionObjects.push(block);
+			// 	});
+
+			// });
+
+			//CARGA DE ENEMIGOS Y SEÑUELOS
+			loadOBJWithMTL(modelPaths.mannequins[sceneIndex].path, modelPaths.mannequins[sceneIndex].obj, modelPaths.mannequins[sceneIndex].mtl, (object) => {
+
+
+				positionObject("mannequins", object, mainModeMannequins);
+				rotateObjects(objects.mannequins, mainModeWalls);
+
+				positionObject("enemies", object, mainModeEnemies);
+				rotateObjects(objects.enemies, mainModeWalls);
+
+				objects.mannequins.forEach(function (block) {
+					scene.add(block.model);
+				});
+
+				objects.enemies.forEach(function (block) {
+					scene.add(block.model);
+					collisionEnemies.push(block);
+				});
+
+			});
+
 			//CARGA DE LAS DECORACIONES
 			loadOBJWithMTL(modelPaths.decorators[sceneIndex].path, modelPaths.decorators[sceneIndex].obj, modelPaths.decorators[sceneIndex].mtl, (object) => {
 
@@ -920,45 +1006,6 @@
 
 			var loader = new THREE.FBXLoader();
 
-
-			/////CARGA DE LOS MANIQUIES			
-			loader.load('assets/Minotauro.fbx', function (object) {
-				object.position.z = -40;
-				object.position.x = -44;
-				object.position.y = 0;
-
-				object.rotation.y += THREE.Math.degToRad(90);
-
-				positionObject("mannequins", object, mainModeMannequins);
-
-				rotateObjects(objects.mannequins, mainModeWalls);
-
-				objects.mannequins.forEach(function (block) {
-					//scene.add(block);
-					scene.add(block.model);
-				});
-			});
-
-			/////CARGA DE LOS ENEMIGOS			
-			loader.load('assets/Minotauro.fbx', function (object) {
-				object.position.z = -40;
-				object.position.x = -44;
-				object.position.y = 0;
-
-				object.rotation.y += THREE.Math.degToRad(90);
-
-				positionObject("enemies", object, mainModeEnemies);
-
-				rotateObjects(objects.enemies, mainModeWalls);
-
-				objects.enemies.forEach(function (block) {
-					//scene.add(block);
-					scene.add(block.model);
-					collisionEnemies.push(block);
-				});
-			});
-
-
 			//Carga del personaje principal
 			loader.load('assets/Animacion.fbx', function (personaje) {
 				personaje.mixer = new THREE.AnimationMixer(personaje);
@@ -975,7 +1022,6 @@
 				personaje.coordX = mainModePlayer[0][1];
 				personaje.position.x += personaje.coordX * 10;
 				personaje.position.z += personaje.coordZ * 10;
-
 
 				personaje.name = "player1";
 				personaje.lives = 3;
@@ -1117,10 +1163,6 @@
 
 				}
 
-				for (let index = 0; index < mixersE.length; index++) {
-					mixersE[index].update(deltaTime2);
-				}
-
 
 				//// LOGICA DE COLISIONES
 				if (isWorldReady[0] && isWorldReady[1] && isWorldReady[2]) {
@@ -1164,9 +1206,8 @@
 						}
 					}
 
-
 					// Collision
-
+					// Recorremos los "rayos" a lanzar para detectar las colisiones
 					for (var i = 0; i < camera.rays.length; i++) {
 
 						for (let index = 0; index < rayCaster.length; index++) {
@@ -1361,12 +1402,19 @@
 
 					}
 
-
 					Object.keys(objects.items).forEach(function (key) {
 						objects.items[key].forEach(function (item) {
 							item.model.rotation.y += THREE.Math.degToRad(50) * deltaTime;
 						});
-					})
+					});
+
+					objects.mannequins.forEach(function (mannequin) {
+						mannequin.model.translateX(((Math.sin(clock.getElapsedTime()) + 1) / 2 * distancia + posInicial) * deltaTime2);
+					});
+
+					objects.enemies.forEach(function (enemy) {
+						enemy.model.translateX(((Math.sin(clock.getElapsedTime()) + 1) / 2 * distancia + posInicial) * deltaTime2);
+					});
 
 					renderer.render(scene, camera);
 				}
@@ -1406,9 +1454,9 @@
 			var ambientLight = new THREE.AmbientLight(new THREE.Color(1, 1, 1), 1.0);
 			scene.add(ambientLight);
 
-			var directionalLight = new THREE.DirectionalLight(new THREE.Color(0.8, 0.8, 0.2), 0.5);
+			var directionalLight = new THREE.DirectionalLight(new THREE.Color(0.3, 0.1, 1), 0.3);
 			directionalLight.position.set(-44, 15, -45);
-			directionalLight.target.position.set(5, 0, -5);
+			directionalLight.target.position.set(5, 5, -5);
 			scene.add(directionalLight);
 			scene.add(directionalLight.target);
 
@@ -1424,11 +1472,11 @@
 			scene.add(dLight2);
 			scene.add(dLight2.target);
 
-			const spotLight = new THREE.SpotLight(new THREE.Color(0.1, 0.7, 0.4), 1);
+			const spotLight = new THREE.SpotLight(0xffffff);
 			spotLight.position.set(10, 10, 10);
 
 			spotLight.castShadow = true;
-			spotLight.distance = 25;
+			spotLight.distance = 20;
 
 			spotLight.shadow.mapSize.width = 1024;
 			spotLight.shadow.mapSize.height = 1024;
@@ -1446,7 +1494,7 @@
 			var SL2 = spotLight.clone();
 			SL2.name = "spot2"
 			scene.add(SL2);
-
+			
 
 			var grid = new THREE.GridHelper(200, 50, 0xffffff, 0xffffff);
 			grid.position.y = -1;
@@ -1479,7 +1527,7 @@
 				<br>
 				<br>
 				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" href="indexMulti.html">Volver a jugar</a>
+					<a class="btnSave" href="indexMultiMediev.html">Volver a jugar</a>
 				</button>
 				<br>
 				<br>
@@ -1507,7 +1555,7 @@
 				<br>
 				<br>
 				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" href="indexMulti.html">Volver a intentar</a>
+					<a class="btnSave" href="indexMultiMediev.html">Volver a intentar</a>
 				</button>
 				<br>
 				<br>

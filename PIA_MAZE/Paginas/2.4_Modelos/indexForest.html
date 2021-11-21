@@ -1480,7 +1480,7 @@
 
 	<script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-database.js"></script>
 
-	<script>
+	<!-- <script>
 
 
 		//tiempo que va a tardar(1.5s)
@@ -1518,6 +1518,19 @@
 
 
 
+	</script> -->
+
+	<script type="text/javascript">
+
+document.querySelector('#btnSendSesion').addEventListener('click', () => {
+			const user = document.getElementById('username').value;
+			const puntos = document.getElementById('puntos').value;
+			var newPlayer = dbRefPlayers.push();
+			newPlayer.set({
+				user,
+				puntos
+			});
+
 	</script>
 
 
@@ -1527,6 +1540,7 @@
 			var score = $("#puntos").val();
 			shareScore(score);
 		}</script>
+		
 </body>
 
 </html>

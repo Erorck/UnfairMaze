@@ -1267,6 +1267,7 @@
 							var winTimeD = new Date(winTimeS * 1000).toISOString().substr(14, 5)
 
 							$("#playerResults").html("Tiempo: " + winTimeD + " Puntuacion final: " + finalScore);
+							$("#puntos").val(finalScore);
 							estaPausado = true;
 							$("#VictoryScreen").show();
 						}
@@ -1389,7 +1390,7 @@
 
 	<div class="modal-dialog" id="VictoryScreen" style="position: absolute; top:20%; left:40%;">
 		<div class="modal-content">
-			<input id="puntos" hidden="true">
+			
 			<div class="modal-header">
 				<h5 class="modal-title" id="exampleModalLabel">¡GANASTE!</h5>
 				<br>
@@ -1400,8 +1401,27 @@
 				<button type="button" class="btn btn-dark border border-warning">
 					<a class="btnSave" style=" top:20%; right:90%;" href="../index.html">Volver al menú principal</a>
 				</button>
-				<input type="text" placeholder="Nombre" id="username">
-				<button id="btnSendSesion">Guardar</button>
+
+                <form method="post">
+				<input type="text" placeholder="Nombre" id="username" name="name">
+                <input id="puntos" name="puntos" hidden="true">
+				<button id="" type="submit">Guardar</button>
+                </form>
+
+                <?php
+                
+                include("php/guardardatos.php");
+
+                
+                
+                
+            
+                
+                ?> 
+
+
+                
+
 				<br><br>
 				<button onclick="shareFB()">Compartir en Facebook</button>
 				<br>
@@ -1418,6 +1438,7 @@
 
 		</div>
 	</div>
+
 
 	<div class="modal-dialog" id="DeathScreen" style="position: absolute; top:20%; left:40%;">
 		<div class="modal-content">
@@ -1454,7 +1475,7 @@
 
 	<script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-database.js"></script>
 
-	<script>
+	<!-- <script>
 
 
 		//tiempo que va a tardar(1.5s)
@@ -1488,7 +1509,7 @@
 			// 	   dbRefPlayers.push(puntos);
 
 		});
-		</script>
+		</script> -->
 
 <script type="text/javascript" src="../js/mifacebook.js"></script>
 <script>function shareFB() {

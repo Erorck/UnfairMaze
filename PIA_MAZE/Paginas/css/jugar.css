@@ -1,5 +1,7 @@
 body{
-	background: url('../img/fondo.png');
+	background: url('/img/medieval.jpg');
+	background-repeat: no-repeat;
+	background-size: cover;
 }
 
 .navbar{

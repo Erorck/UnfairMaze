@@ -24,114 +24,132 @@
 
 		//variables globales para la funcion
 		var contador = 0;
-		var posInicial = -4; //posicion para el primer alien
+		var posInicial = -4; //posicion para el primer fantasma
 		var distancia = 8;
 
+		// TODO: Modelo con animacion.
 		var mixers = [];
-		
+		var mixers_2 = [];
+		// TODO: End Modelo Animacion.
+
 		//Coordenadas del jugador del modo de juego principal
-		var mainModePlayer = [[16,9]];
+		var mainModePlayer = [[1,2]];
 
 		//Coordenadas de las paredes del modo de juego principal
 		var mainModeWalls = [
-			[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7], [0, 8], [0, 10], [0, 11], [0, 12], [0, 13], [0, 14], [0, 15], [0, 16], [0, 17], [0, 18],
-			[1, 0], [1, 5], [1, 13], [1, 18],
-			[2, 0], [2, 2], [2, 3], [2, 9], [2, 15], [2, 16], [2, 18],
-			[3, 0], [3, 6], [3, 7], [3, 9], [3, 11], [3, 12], [3, 18],
-			[4, 0], [4, 18],
-			[5, 0], [5, 4], [5, 6], [5, 12], [5, 14], [5, 18],
-			[6, 0], [6, 4], [6, 6], [6, 7], [6, 11], [6, 12], [6, 14], [6, 15], [6, 18],
-			[7, 0], [7, 9], [7, 18],
-			[8, 0], [8, 2], [8, 3], [8, 5], [8, 13], [8, 15], [8, 16], [8, 17], [8, 18],
-			[9, 0], [9, 2], [9, 3], [9, 5], [9, 13], [9, 15], [9, 16], [9, 18],
-			[10, 0], [10, 9], [10, 18],
-			[11, 0], [11, 4], [11, 6], [11, 7], [11, 11], [11, 12], [11, 14], [11, 15], [11, 18],
-			[12, 0], [12, 4], [12, 6], [12, 12], [12, 14], [12, 18],
-			[13, 0], [13, 18],
-			[14, 0], [14, 6], [14, 7], [14, 9], [14, 11], [14, 12], [14, 18],
-			[15, 0], [15, 2], [15, 3], [15, 9], [15, 15], [15, 16], [15, 18],
-			[16, 0], [16, 5], [16, 13], [16, 18],
-			[17, 0], [17, 1], [17, 2], [17, 3], [17, 4], [17, 5], [17, 6], [17, 7], [17, 8], [17, 9], [17, 10], [17, 11], [17, 12], [17, 13], [17, 14], [17, 15], [17, 16], [17, 17], [17, 18], [17, 18],
+			[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7], [0, 8], [0, 9], [0, 10], [0, 11], [0, 12], [0, 13], [0, 14], [0, 15], [0, 16], [0, 17], [0, 18], [0, 19],
+			[1, 0], [1, 19],
+			[2, 0], [2, 2], [2, 5], [2, 13], [2, 14], [2, 16], [2, 17], [2, 19],
+			[3, 0], [3, 5], [3, 19],
+			[4, 0], [4, 5], [4, 7], [4, 8], [4, 9], [4, 11], [4, 12], [4, 14], [4, 17], [4, 19],
+			[5, 0], [5, 2], [5, 3], [5, 19],
+			[6, 0], [6, 6], [6, 8], [6, 9], [6, 10], [6, 13], [6, 14], [6, 16], [6, 19],
+			[7, 0], [7, 2], [7, 3], [7, 4], [7, 8], [7, 10], [7, 19],
+			[8, 0], [8, 6], [8, 8], [8, 10], [8, 14], [8, 16], [8, 19],
+			[9, 0], [9, 2], [9, 14], [9, 16],
+			[10, 0], [10, 7], [10, 9], [10, 11], [10, 19],
+			[11, 0], [11, 2], [11, 4], [11, 7], [11, 9], [11, 11], [11, 13], [11, 15], [11, 16], [11, 17], [11, 19],
+			[12, 0], [12, 2], [12, 19],
+			[13, 0], [13, 4], [13, 7], [13, 8], [13, 10], [13, 11], [13, 15], [13, 17], [13, 19],
+			[14, 0], [14, 2], [14, 4], [14, 14], [14, 15], [14, 19],
+			[15, 0], [15, 2], [15, 14], [15, 15], [15, 19],
+			[16, 0], [16, 19],
+			[17, 0], [17, 1], [17, 2], [17, 3], [17, 4], [17, 5], [17, 6], [17, 7], [17, 8], [17, 9], [17, 10], [17, 11], [17, 12], [17, 13], [17, 14], [17, 15], [17, 16], [17, 17], [17, 18], [17, 19]
 		];
 
 		//Coordenadas de los cubos del piso del modo de juego principal
 		var mainModeFloor = [
-			[0, 9],
-			[2, 7], [2, 11],
-			[3, 4], [3, 14],
-			[4, 2], [4, 16],
-			[5, 9],			
-			[6, 2],	[6, 16], 			
-			[8, 7], [8, 11],
-			[9, 7], [9, 11],
-			[11, 2], [11, 16],
-			[12, 9],
-			[13, 2], [13, 16],
-			[14, 4], [14, 14],
-			[15, 7], [15, 11],				
-			[1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [1, 7], [1, 8], [1, 9], [1, 10], [1, 11], [1, 12], [1, 14], [1, 15], [1, 16], [1, 17],
-			[2, 1], [2, 4], [2, 5], [2, 6], [2, 8], [2, 10], [2, 12], [2, 13], [2, 14], [2, 17],
-			[3, 1], [3, 2], [3, 3], [3, 5], [3, 8], [3, 10], [3, 13], [3, 15], [3, 16], [3, 17],
-			[4, 1], [4, 3], [4, 4], [4, 5], [4, 6], [4, 7], [4, 8], [4, 9], [4, 10], [4, 11], [4, 12], [4, 13], [4, 14], [4, 15], [4, 17], 
-			[5, 1], [5, 2], [5, 3], [5, 5], [5, 7], [5, 8], [5, 10], [5, 11], [5, 13], [5, 15], [5, 16], [5, 17],
-			[6, 1], [6, 3], [6, 5], [6, 8], [6, 9], [6, 10], [6, 13], [6, 17], 
-			[7, 1], [7, 2], [7, 3], [7, 4], [7, 5], [7, 6], [7, 7], [7, 8], [7, 10], [7, 11], [7, 12], [7, 13], [7, 14], [7, 15], [7, 16], [7, 17],
-			[8, 1], [8, 4], [8, 6], [8, 8], [8, 9], [8, 10], [8, 12], [8, 14],
-			[9, 1], [9, 4], [9, 6], [9, 8], [9, 9], [9, 10], [9, 12], [9, 14], [9, 17],
-			[10, 1], [10, 2], [10, 3], [10, 4], [10, 5], [10, 6], [10, 7], [10, 8], [10, 10], [10, 11], [10, 12], [10, 13], [10, 14], [10, 15], [10, 16], [10, 17], 
-			[11, 1], [11, 3], [11, 5], [11, 8], [11, 9], [11, 10], [11, 13], [11, 17],
-			[12, 1], [12, 2], [12, 3], [12, 5], [12, 7],  [12, 8], [12, 10], [12, 11], [12, 13], [12, 15], [12, 16], [12, 17], 
-			[13, 1], [13, 3], [13, 4], [13, 5], [13, 6], [13, 7], [13, 8], [13, 9], [13, 10], [13, 11], [13, 12], [13, 13], [13, 14], [13, 15], [13, 17],
-			[14, 1], [14, 2], [14, 3], [14, 5], [14, 8], [14, 10], [14, 13], [14, 15], [14, 16], [14, 17],
-			[15, 1], [15, 4], [15, 5], [15, 6], [15, 8], [15, 10], [15, 12], [15, 13], [15, 14], [15, 17],
-			[16, 1], [16, 2], [16, 3], [16, 4], [16, 6], [16, 7], [16, 8], [16, 9], [16, 10], [16, 11], [16, 12], [16, 14], [16, 15], [16, 16], [16, 17]
+			[2, 3], [2, 7], [2, 9], [2, 11],
+			[3, 2],
+			[4, 16],
+			[6, 17],
+			[7, 6],
+			[8, 13],
+			[9, 3], [9, 17],
+			[11, 5],
+			[12, 13],
+			[13, 5],
+			[14, 11],
+			[15, 6], [15, 9], [15, 17],
+			[16, 12],
+			[1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [1, 7], [1, 8], [1, 9], [1, 10], [1, 11], [1, 12], [1, 13], [1, 14], [1, 15], [1, 16], [1, 17], [1, 18],
+			[2, 1], [2, 4], [2, 6], [2, 8], [2, 10], [2, 12], [2, 15], [2, 16], [2, 17], [2, 18],
+			[3, 1], [3, 3], [3, 4], [3, 6], [3, 7], [3, 8], [3, 9], [3, 10], [3, 11], [3, 12], [3, 13], [3, 14], [3, 15], [3, 16], [3, 17], [3, 18],
+			[4, 1], [4, 2], [4, 3], [4, 4], [4, 6], [4, 10], [4, 13], [4, 15], [4, 18],
+			[5, 1], [5, 4], [5, 5], [5, 6], [5, 7], [5, 8], [5, 9], [5, 10], [5, 11], [5, 12], [5, 13], [5, 14], [5, 15], [5, 16], [5, 17], [5, 18],
+			[6, 1], [6, 2], [6, 3], [6, 4], [6, 5], [6, 7], [6, 11], [6, 12], [6, 13], [6, 15], [6, 18],
+			[7, 1], [7, 5], [7, 7], [7, 9],  [7, 11], [7, 12], [7, 13], [7, 14], [7, 15], [7, 16], [7, 17], [7, 18],
+			[8, 1], [8, 2], [8, 3], [8, 4], [8, 5], [8, 7], [8, 11], [8, 12], [8, 17], [8, 18],
+			[9, 1], [9, 4], [9, 5], [9, 6], [9, 7], [9, 8], [9, 9], [9, 10], [9, 11], [9, 12], [9, 13], [9, 18], [9, 19],
+			[10, 1], [10, 2], [10, 3], [10, 4], [10, 5], [10, 6], [10, 7], [10, 8], [10, 10], [10, 12], [10, 13], [10, 14], [10, 15], [10, 16], [10, 17], [10, 18],
+			[11, 1], [11, 3], [11, 6], [11, 8], [11, 10], [11, 12], [11, 14], [11, 18],
+			[12, 1], [12, 3], [12, 4], [12, 5], [12, 6], [12, 7], [12, 8], [12, 9], [12, 10], [12, 11], [12, 12], [12, 14], [12, 15], [12, 16], [12, 17], [12, 18],
+			[13, 1], [13, 2], [13, 3], [13, 6], [13, 9], [13, 12], [13, 13], [13, 14], [13, 16], [13, 18],
+			[14, 1], [14, 3], [14, 5], [14, 6], [14, 7], [14, 8], [14, 9], [14, 10], [14, 12], [14, 13], [14, 16], [14, 17], [14, 18],
+			[15, 1], [15, 3], [15, 4], [15, 5], [15, 7], [15, 8], [15, 10], [15, 11], [15, 12], [15, 13], [15, 16], [15, 18],
+			[16, 1], [16, 2], [16, 3], [16, 4], [16, 5], [16, 6], [16, 7], [16, 8], [16, 9], [16, 10], [16, 11], [16, 12], [16, 13], [16, 14], [16, 15], [16, 16], [16, 17], [16, 18]
 		];
 
-		var mainModeWin = [[0, 9]];
+		var mainModeWin = [[9, 19]];
 
 		//Coordenadas de los corazones del modo de juego principal
-		var mainModeHearts = [[8, 1], [8, 9], [9, 17]];
+		var mainModeHearts = [[1, 12], [7, 9], [12, 18]];
 
 		//Coordenadas de los relojes del modo de juego principal
-		var mainModeClocks = [[6, 9], [9, 14], [11, 9]];
+		var mainModeClocks = [[1, 5], [5, 9], [14, 3]];
 
 		//Coordenadas de los regalos del modo de juego principal
 		var mainModeGifts = [[3, 10], [13, 12], [2, 18]];
 
 		//Coordenadas de las paredes atravesables del modo de juego principal
-		var mainModeFakeWalls = [[6, 3], [9, 1], [11, 15]];
+		var mainModeFakeWalls = [
+			[1, 11], 
+			[5, 14], 
+			[8, 9], [8, 15], 
+			[9, 1], [9, 15],
+			[11, 8], [11, 18],
+			[12, 4], [12, 11], [12, 17]];
 
 		//Coordenadas de los picos del modo de juego principal
-		var mainModeSpikes = [[1, 7], [2, 14], [5, 2], [5, 7], [7, 2], [8, 12], [9, 6], [10, 1], [10, 16], [12, 11], [12, 16], [15, 4], [16, 11]];
+		var mainModeSpikes = [
+			[1, 3], [1, 14],
+			[3, 3], [3, 16],
+			[7, 11],
+			[8, 17],
+			[9, 5],
+			[10, 16], 
+			[11, 12], 
+			[14, 12],
+			[15, 7], 
+			[16, 9]];
 
 		//Coordenadas de las paredes aplastantes del modo de juego principal
 		var mainModeCrushingWalls = [
-			[1, 2],
-			[4, 6], [4, 12], [4, 14],
-			[10, 11], 
-			[12, 5], 
-			[13, 4], [13, 6],
-			[16, 16]
-		];
+			[1, 17],
+			[4, 6], [4, 10],
+			[6, 2], [6, 15],
+			[13, 9], [13, 16], [13, 18],
+			[15, 1]];
 
 		//Coordenadas de los señuelos del modo de juego principal
-		var mainModeMannequins = [[3, 8], [6, 5], [7, 10], [9, 8]];
-		var mainModeEnemies = [[7, 8], [9, 10], [9, 14]];
+		var mainModeMannequins = [[2, 6], [2, 8],];
+		var mainModeEnemies = [[6, 11], [15, 4]];
 
 		//Coordenadas de las decoraciones del modo de juego principal
 		var mainModeDecorators = [
-			[2, 7], [2, 11],
-			[3, 4], [3, 14],
-			[4, 2], [4, 16],
-			[5, 9],			
-			[5, 9],	[6, 16], 			
-			[8, 7], [8, 11],
-			[9, 7], [9, 11],
-			[11, 2], [11, 16],
-			[12, 9],
-			[13, 2], [13, 16],
-			[14, 4], [14, 14],
-			[15, 7], [15, 11]
+			[2, 3], [2, 7], [2, 9], [2, 11],
+			[3, 2],
+			[4, 16],
+			[6, 17],
+			[7, 6],
+			[8, 13],
+			[9, 3], [9, 17],
+			[11, 5],
+			[12, 13],
+			[13, 5],
+			[14, 11],
+			[15, 6], [15, 9], [15, 17],
+			[16, 12],
 		];
 
 		//Direcciones de los assets
@@ -235,7 +253,7 @@
 		// [0] -> Bosque
 		// [1] -> Medieval
 		// [2] -> Futurista
-		var sceneIndex = 2;
+		var sceneIndex = 1;
 
 		var clock;
 		var timer = new THREE.Clock(true); //TIMER TRAMPAS
@@ -681,7 +699,6 @@
 				}
 
 
-
 				//POSICIONAMIENTO DE SALIDA DEL LABERINTO				
 				if (object == "winCond") {
 					positions.forEach(function (element) {
@@ -730,7 +747,7 @@
 
 						asset.position.z = -40;
 						asset.position.x = -44;
-						asset.position.y = 0;
+						asset.position.y = 5;
 						assetColl.position.y = 0;
 
 						asset.coordZ = assetColl.coordZ = element[0];
@@ -905,10 +922,10 @@
 
 			// });
 
-			//CARGA DE ENEMIGOS Y SEÑUELOS
+			//CARGA DE  SEÑUELOS Y ENEMIGOS
 			loadOBJWithMTL(modelPaths.mannequins[sceneIndex].path, modelPaths.mannequins[sceneIndex].obj, modelPaths.mannequins[sceneIndex].mtl, (object) => {
 
-				object.rotation.y += THREE.Math.degToRad(90);
+				//object.rotation.y += THREE.Math.degToRad(180);
 
 				positionObject("mannequins", object, mainModeMannequins);
 				rotateObjects(objects.mannequins, mainModeWalls);
@@ -918,10 +935,12 @@
 
 				objects.mannequins.forEach(function (block) {
 					scene.add(block.model);
+					//scene.add(block.model);
 				});
 
 				objects.enemies.forEach(function (block) {
 					scene.add(block.model);
+					//scene.add(block.model);
 					collisionEnemies.push(block);
 				});
 
@@ -952,6 +971,7 @@
 			document.addEventListener('keyup', onKeyUp);
 
 			var loader = new THREE.FBXLoader();
+
 
 			//Carga del personaje principal
 			loader.load('assets/Animacion.fbx', function (personaje) {
@@ -1267,6 +1287,7 @@
 							var winTimeD = new Date(winTimeS * 1000).toISOString().substr(14, 5)
 
 							$("#playerResults").html("Tiempo: " + winTimeD + " Puntuacion final: " + finalScore);
+							$("#puntos").val(finalScore);
 							estaPausado = true;
 							$("#VictoryScreen").show();
 						}
@@ -1280,11 +1301,11 @@
 					})
 
 					objects.mannequins.forEach(function (mannequin) {
-						mannequin.model.translateY(((Math.sin(clock.getElapsedTime()) + 1) / 2 * distancia + posInicial) * deltaTime2);
+						mannequin.model.translateX(((Math.sin(clock.getElapsedTime()) + 1) / 2 * distancia + posInicial) * deltaTime2);
 					});
 
 					objects.enemies.forEach(function (enemy) {
-						enemy.model.translateY(((Math.sin(clock.getElapsedTime()) + 1) / 2 * distancia + posInicial) * deltaTime2);
+						enemy.model.translateX(((Math.sin(clock.getElapsedTime()) + 1) / 2 * distancia + posInicial) * deltaTime2);
 					});
 
 					contador += 0.01;
@@ -1386,10 +1407,9 @@
 
 		</div>
 	</div>
-
-	<div class="modal-dialog" id="VictoryScreen" style="position: absolute; top:20%; left:40%;">
+    <div class="modal-dialog" id="VictoryScreen" style="position: absolute; top:20%; left:40%;">
 		<div class="modal-content">
-			<input id="puntos" hidden="true">
+			
 			<div class="modal-header">
 				<h5 class="modal-title" id="exampleModalLabel">¡GANASTE!</h5>
 				<br>
@@ -1400,8 +1420,27 @@
 				<button type="button" class="btn btn-dark border border-warning">
 					<a class="btnSave" style=" top:20%; right:90%;" href="../index.html">Volver al menú principal</a>
 				</button>
-				<input type="text" placeholder="Nombre" id="username">
-				<button id="btnSendSesion">Guardar</button>
+
+                <form method="post">
+				<input type="text" placeholder="Nombre"  name="name">
+                <input id="puntos" name="puntos" hidden="true">
+				<button id="" type="submit">Guardar</button>
+                </form>
+
+                <?php
+                
+                include("php/guardardatos.php");
+
+                
+                
+                
+            
+                
+                ?> 
+
+
+                
+
 				<br><br>
 				<button onclick="shareFB()">Compartir en Facebook</button>
 				<br>
@@ -1435,7 +1474,7 @@
 				<br>
 				<br>
 				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" href="indexFuture.html">Volver a intentar</a>
+					<a class="btnSave" href="indexMediev.html">Volver a intentar</a>
 				</button>
 				<br>
 				<br>
@@ -1454,7 +1493,7 @@
 
 	<script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-database.js"></script>
 
-	<script>
+	<!-- <script>
 
 
 		//tiempo que va a tardar(1.5s)
@@ -1488,13 +1527,14 @@
 			// 	   dbRefPlayers.push(puntos);
 
 		});
-		</script>
+		</script> -->
 
 <script type="text/javascript" src="../js/mifacebook.js"></script>
 <script>function shareFB() {
 		var score = $("#puntos").val();
 		shareScore(score);
 	}</script>
+
 </body>
 
 </html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&display=swap" rel="stylesheet">
+    <title>Puntajes</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+   <!----> <link rel="stylesheet" href="css/puntajes.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
+        <div class="container-fluid">
+            <a href="index.html" class="navbar-brand">Unfair Maze</a>
+
+            <!-- boton para el menu movil-->
+            <button 
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#menu"
+                    aria-controls="menu"
+                    aria-expanded="false"
+                    aria-label="Mostrar/Ocultar Menu"
+            >
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+            <!--Agregar menu de navegacion-->
+            <div class="collapse navbar-collapse" id="menu">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    
+
+                    <!--Dropdown-->
+                    <li class="nav-item dropdown">
+                        <a href="#" 
+                            class="nav-link dropdown-toggle"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-epanded="false"
+                            id="dropdown-menu"
+                    >
+                        Cuenta
+                    </a>
+
+                    <ul class="dropdown-menu" aria-labelledby="dropdown-menu">
+                        <li><a href="login.html" class="dropdown-item">Iniciar sesion</a></li>
+                        <li><a href="registro.html" class="dropdown-item">Registrarse</a></li>
+                    </ul>
+
+                    </li>
+                    <li class="nav-item"><a href="comoJugar.html" class="nav-link">Como jugar</a></li>
+                </ul>
+
+
+            </div>
+        </div>
+    </nav>
+
+<header>
+        <h1 class="titulo2">Puntuaciones</h1>
+    </header>
+  
+    <div class="container tableScore">
+        <table>
+            <thead>
+            
+            <th>Usuario</th>
+            <th>Puntos</th>
+       
+            </thead>
+            <?php
+            
+            include("2.4_Modelos/php/conect.php");
+            $con=conectar();
+            $sql = 'SELECT*FROM Usuarios order by puntuacion DESC';
+            $result = mysqli_query($con, $sql);
+            if($result != null){
+                while ($mostrar = mysqli_fetch_array($result)) {
+        
+                ?>
+                <thead>
+                  
+                        <th><?php echo $mostrar['usuario'] ?></th>
+                        <th><?php echo $mostrar['puntuacion'] ?></th>
+
+        
+                            
+                
+                   
+                </thead>
+                    <?php
+                }
+            }
+
+            
+            
+            ?>
+
+         
+
+            <tbody id="tbody1"></tbody>
+
+        <!-- <tr>
+            <td>Israel</td>
+            <td>40</td>
+        </tr>
+
+        <tr>
+            <td>Galilea</td>
+            <td>21</td>
+        </tr>
+
+        <tr>
+            <td>Meli</td>
+            <td>17</td>
+        </tr>
+
+        <tr>
+            <td>Cesar</td>
+            <td>12</td>
+        </tr> -->
+    </table>
+    </div>
+
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+	
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-database.js"></script>
+    <script>
+
+         //tiempo que va a tardar(1.5s)
+	const firebaseConfig = {
+		databaseUR:"https://test-504ea-default-rtdb.firebaseio.com/",
+		apiKey: "AIzaSyB0dQZT1wSPWVTHk8sVTAW-I9DbzUEpZtE",
+		 authDomain: "test-504ea.firebaseapp.com",
+		 projectId: "test-504ea",
+		 storageBucket: "test-504ea.appspot.com",
+		 messagingSenderId: "252023945673",
+		 appId: "1:252023945673:web:15f98626a906ff679b9018"
+	};
+
+
+	// Initialize Firebase
+		firebase.initializeApp(firebaseConfig);
+
+
+
+        // ///-----GET ALL DATA------
+
+        // function SelectAllData(){
+        //     firebase.database().ref('Players').once('value',
+        //     function(AllRecords){
+        //         AllRecords.forEach(
+        //            function(CurrentRecord){
+        //             var name=CurrentRecord.val().user;
+        //             var puntaje=CurrentRecord.val().puntos;
+                       
+        //             AddItemsToTable(name,puntaje);
+        //            } 
+        //         );
+
+        //     });
+        // }
+
+        //  window.onload=SelectAllData;
+
+        //  //--------FILLING THE TABLE----------
+     
+        //  function AddItemsToTable(name,puntaje){
+        //      var tbody=document.getElementById('tbody1');
+        //      var trow=document.createElement('tr');
+        //      var td1=document.createElement('td');
+        //      var td2=document.createElement('td');
+            
+             
+        //     td1.innerHTML=++name;
+        //     td2.innerHTML=++puntaje;
+          
+            
+
+        //      trow.appendChild(td1);
+        //      trow.appendChild(td2); 
+             
+
+        //  }
+       
+        
+    </script>
+</body>
+</html>

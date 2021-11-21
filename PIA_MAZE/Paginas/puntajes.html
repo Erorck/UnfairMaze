@@ -72,8 +72,10 @@
             
             <th>Usuario</th>
             <th>Puntos</th>
-        
+       
             </thead>
+
+         
 
             <tbody id="tbody1"></tbody>
 
@@ -124,43 +126,44 @@
 
 
 
-        ///-----GET ALL DATA------
+        // ///-----GET ALL DATA------
 
-        function SelectAllData(){
-            firebase.database().ref('Players').once('value',
-            function(AllRecords){
-                AllRecords.forEach(
-                   function(CurrentRecord){
-                       var name=CurrentRecord.val().user;
-                       var puntaje=CurrentRecord.val().puntos;
-                    AddItemsToTable(name,puntaje);
-                   } 
-                );
+        // function SelectAllData(){
+        //     firebase.database().ref('Players').once('value',
+        //     function(AllRecords){
+        //         AllRecords.forEach(
+        //            function(CurrentRecord){
+        //             var name=CurrentRecord.val().user;
+        //             var puntaje=CurrentRecord.val().puntos;
+                       
+        //             AddItemsToTable(name,puntaje);
+        //            } 
+        //         );
 
-            });
-        }
+        //     });
+        // }
 
-         window.onload=SelectAllData;
+        //  window.onload=SelectAllData;
 
-         //--------FILLING THE TABLE----------
+        //  //--------FILLING THE TABLE----------
      
-         function AddItemsToTable(name,puntaje){
-             var tbody=document.getElementById('tbody1');
-             var trow=document.createElement('tr');
-             var td1=document.createElement('td');
-             var td2=document.createElement('td');
+        //  function AddItemsToTable(name,puntaje){
+        //      var tbody=document.getElementById('tbody1');
+        //      var trow=document.createElement('tr');
+        //      var td1=document.createElement('td');
+        //      var td2=document.createElement('td');
             
              
-            td1.innerHTML=++name;
-            td2.innerHTML=++puntaje;
+        //     td1.innerHTML=++name;
+        //     td2.innerHTML=++puntaje;
           
             
 
-             trow.appendChild(td1);
-             trow.appendChild(td2); 
+        //      trow.appendChild(td1);
+        //      trow.appendChild(td2); 
              
 
-         }
+        //  }
        
         
     </script>

@@ -11,6 +11,7 @@
 	<script type="text/javascript" src="js/libs/three/MTLLoader.js"></script>
 	<script type="text/javascript" src="js/libs/three/FBXLoader.js"></script>
 	<script type="text/javascript" src="js/libs/three/OBJLoader.js"></script>
+
 	<script type="text/javascript" src="js/libs/three/inflate.min.js"></script>
 
 
@@ -25,12 +26,11 @@
 		//variables globales para la funcion
 		var contador = 0;
 		var posInicial = -4; //posicion para el primer fantasma
+		var posInicial2 = 4; //posicion para el segundo fantasma
 		var distancia = 8;
 
-		// TODO: Modelo con animacion.
-		var mixers = [];
-		var mixers_2 = [];
-		// TODO: End Modelo Animacion.
+		var mixersP = [];
+		var mixersE = [];
 
 		//Coordenadas del jugador del modo de juego principal
 		var mainModePlayer = [[1,2]];
@@ -43,15 +43,15 @@
 			[3, 0], [3, 5], [3, 19],
 			[4, 0], [4, 5], [4, 7], [4, 8], [4, 9], [4, 11], [4, 12], [4, 14], [4, 17], [4, 19],
 			[5, 0], [5, 2], [5, 3], [5, 19],
-			[6, 0], [6, 6], [6, 8], [6, 9], [6, 10], [6, 13], [6, 14], [6, 16], [6, 19],
-			[7, 0], [7, 2], [7, 3], [7, 4], [7, 8], [7, 10], [7, 19],
-			[8, 0], [8, 6], [8, 8], [8, 10], [8, 14], [8, 16], [8, 19],
+			[6, 0], [6, 6], [6, 8], [6, 10], [6, 13], [6, 14], [6, 16], [6, 19],
+			[7, 0], [7, 2], [7, 3], [7, 4], [7, 8], [7, 19],
+			[8, 0], [8, 6], [8, 8], [8, 9], [8, 10], [8, 14], [8, 16], [8, 19],
 			[9, 0], [9, 2], [9, 14], [9, 16],
 			[10, 0], [10, 7], [10, 9], [10, 11], [10, 19],
 			[11, 0], [11, 2], [11, 4], [11, 7], [11, 9], [11, 11], [11, 13], [11, 15], [11, 16], [11, 17], [11, 19],
-			[12, 0], [12, 2], [12, 19],
+			[12, 0], [12, 2], [12, 4], [12, 19],
 			[13, 0], [13, 4], [13, 7], [13, 8], [13, 10], [13, 11], [13, 15], [13, 17], [13, 19],
-			[14, 0], [14, 2], [14, 4], [14, 14], [14, 15], [14, 19],
+			[14, 0], [14, 2], [14, 14], [14, 15], [14, 19],
 			[15, 0], [15, 2], [15, 14], [15, 15], [15, 19],
 			[16, 0], [16, 19],
 			[17, 0], [17, 1], [17, 2], [17, 3], [17, 4], [17, 5], [17, 6], [17, 7], [17, 8], [17, 9], [17, 10], [17, 11], [17, 12], [17, 13], [17, 14], [17, 15], [17, 16], [17, 17], [17, 18], [17, 19]
@@ -77,15 +77,15 @@
 			[3, 1], [3, 3], [3, 4], [3, 6], [3, 7], [3, 8], [3, 9], [3, 10], [3, 11], [3, 12], [3, 13], [3, 14], [3, 15], [3, 16], [3, 17], [3, 18],
 			[4, 1], [4, 2], [4, 3], [4, 4], [4, 6], [4, 10], [4, 13], [4, 15], [4, 18],
 			[5, 1], [5, 4], [5, 5], [5, 6], [5, 7], [5, 8], [5, 9], [5, 10], [5, 11], [5, 12], [5, 13], [5, 14], [5, 15], [5, 16], [5, 17], [5, 18],
-			[6, 1], [6, 2], [6, 3], [6, 4], [6, 5], [6, 7], [6, 11], [6, 12], [6, 13], [6, 15], [6, 18],
-			[7, 1], [7, 5], [7, 7], [7, 9],  [7, 11], [7, 12], [7, 13], [7, 14], [7, 15], [7, 16], [7, 17], [7, 18],
+			[6, 1], [6, 2], [6, 3], [6, 4], [6, 5], [6, 7], [6, 9], [6, 11], [6, 12], [6, 13], [6, 15], [6, 18],
+			[7, 1], [7, 5], [7, 7], [7, 9], [7, 10], [7, 11], [7, 12], [7, 13], [7, 14], [7, 15], [7, 16], [7, 17], [7, 18],
 			[8, 1], [8, 2], [8, 3], [8, 4], [8, 5], [8, 7], [8, 11], [8, 12], [8, 17], [8, 18],
 			[9, 1], [9, 4], [9, 5], [9, 6], [9, 7], [9, 8], [9, 9], [9, 10], [9, 11], [9, 12], [9, 13], [9, 18], [9, 19],
 			[10, 1], [10, 2], [10, 3], [10, 4], [10, 5], [10, 6], [10, 7], [10, 8], [10, 10], [10, 12], [10, 13], [10, 14], [10, 15], [10, 16], [10, 17], [10, 18],
 			[11, 1], [11, 3], [11, 6], [11, 8], [11, 10], [11, 12], [11, 14], [11, 18],
 			[12, 1], [12, 3], [12, 4], [12, 5], [12, 6], [12, 7], [12, 8], [12, 9], [12, 10], [12, 11], [12, 12], [12, 14], [12, 15], [12, 16], [12, 17], [12, 18],
 			[13, 1], [13, 2], [13, 3], [13, 6], [13, 9], [13, 12], [13, 13], [13, 14], [13, 16], [13, 18],
-			[14, 1], [14, 3], [14, 5], [14, 6], [14, 7], [14, 8], [14, 9], [14, 10], [14, 12], [14, 13], [14, 16], [14, 17], [14, 18],
+			[14, 1], [14, 3], [14, 4], [14, 5], [14, 6], [14, 7], [14, 8], [14, 9], [14, 10], [14, 12], [14, 13], [14, 16], [14, 17], [14, 18],
 			[15, 1], [15, 3], [15, 4], [15, 5], [15, 7], [15, 8], [15, 10], [15, 11], [15, 12], [15, 13], [15, 16], [15, 18],
 			[16, 1], [16, 2], [16, 3], [16, 4], [16, 5], [16, 6], [16, 7], [16, 8], [16, 9], [16, 10], [16, 11], [16, 12], [16, 13], [16, 14], [16, 15], [16, 16], [16, 17], [16, 18]
 		];
@@ -104,36 +104,44 @@
 		//Coordenadas de las paredes atravesables del modo de juego principal
 		var mainModeFakeWalls = [
 			[1, 11], 
-			[5, 14], 
-			[8, 9], [8, 15], 
+			[5, 14],
+			[6, 9],
+			[7, 10],
+			[8, 15], 
 			[9, 1], [9, 15],
 			[11, 8], [11, 18],
-			[12, 4], [12, 11], [12, 17]];
+			[12, 4], [12, 11], [12, 17],
+			[14, 4]];
 
 		//Coordenadas de los picos del modo de juego principal
 		var mainModeSpikes = [
-			[1, 3], [1, 14],
+			[2, 12], [2, 15],
 			[3, 3], [3, 16],
-			[7, 11],
-			[8, 17],
-			[9, 5],
-			[10, 16], 
+			[5, 11],
+			[5, 11],
+			[6, 3],
+			[8, 12],
+			[9, 5], [9, 13],
 			[11, 12], 
 			[14, 12],
-			[15, 7], 
-			[16, 9]];
+			[15, 7], [15, 16], 
+			[16, 9], [16, 11]];
 
 		//Coordenadas de las paredes aplastantes del modo de juego principal
 		var mainModeCrushingWalls = [
 			[1, 17],
-			[4, 6], [4, 10],
-			[6, 2], [6, 15],
-			[13, 9], [13, 16], [13, 18],
-			[15, 1]];
+			[4, 10],
+			[6, 7], [6, 15],
+			[8, 2],
+			[10, 10], [10, 7],
+			[12, 3],
+			[13, 9], [13, 18],
+			[15, 1],
+			[16, 6]];
 
 		//Coordenadas de los señuelos del modo de juego principal
-		var mainModeMannequins = [[2, 6], [2, 8],];
-		var mainModeEnemies = [[6, 11], [15, 4]];
+		var mainModeMannequins = [[2, 4], [2, 8],];
+		var mainModeEnemies = [[6, 11], [15, 4], [16, 17]];
 
 		//Coordenadas de las decoraciones del modo de juego principal
 		var mainModeDecorators = [
@@ -256,32 +264,31 @@
 		var sceneIndex = 1;
 
 		var clock;
-		var timer = new THREE.Clock(true); //TIMER TRAMPAS
+		var timer = []; //TIMERS TRAMPAS
 		var timer2 = new THREE.Clock(true);//TIMER ENEMIGOS
 		var deltaTime;
 		var slowerEnemies = false;
 		var enemySpeed = 1;
 		var keys = {};
-		var player;
+		var players = [];
+		var playerAlive = true;
+		var numPlayers = 2;
 
 		// Clase que nos permite "lanzar" un rayo hacia diferentes direcciones
 		// y detectar si el "rayo" colisiona con un objeto en esa direccion
-		var rayCaster;
+		var rayCaster = [];
 		var collisionObjects = [];
 		var collisionEnemies = [];
 		var collisionTrapsSpikes = [];
 		var collisionTrapsWalls = [];
 		var winCollision = [];
 		var collisionItems = [];
-		var isWorldReady = [false, false];
+		var isWorldReady = [false, false, false];
 
 
 		$(document).ready(function () {
 
 			setupScene();
-			rayCaster = new THREE.Raycaster();
-
-			$("#menuPausa").hide();
 			$("#VictoryScreen").hide();
 			$("#DeathScreen").hide();
 
@@ -464,7 +471,7 @@
 
 			//FUNCION DE POSICIONAMIENTO EN X,Z parametros(String tipo de mesh, asset, arreglo de posiciones)
 			function positionObject(object, mesh = new THREE.Mesh(geometriaCubo, materialCubo), positions) {
-
+				
 				var asset;
 				var asset2;
 
@@ -699,6 +706,7 @@
 				}
 
 
+
 				//POSICIONAMIENTO DE SALIDA DEL LABERINTO				
 				if (object == "winCond") {
 					positions.forEach(function (element) {
@@ -722,39 +730,47 @@
 					});
 				}
 
+				// POSICIONAMIENTO DE MANIQUIS
+				/*if (object == "mannequins") {
+									positions.forEach(function (element) {
+										asset = mesh.clone();
+				
+										asset.coordZ = element[0];
+										asset.coordX = element[1];
+										asset.position.x += asset.coordX * 10;
+										asset.position.z += asset.coordZ * 10;
+										objects.mannequins.push(asset);
+									});
+								}
+				
+								if (object == "enemies") {
+									positions.forEach(function (element) {
+										asset = mesh.clone();
+				
+										asset.coordZ = element[0];
+										asset.coordX = element[1];
+										asset.position.x += asset.coordX * 10;
+										asset.position.z += asset.coordZ * 10;
+										objects.enemies.push(asset);
+									});
+					}
+				*/
 
-				// // POSICIONAMIENTO DE MANIQUIS
-				// if (object == "mannequins") {
-				// 	positions.forEach(function (element) {
-				// 		asset = mesh.clone();
-
-				// 		asset.coordZ = element[0];
-				// 		asset.coordX = element[1];
-				// 		asset.position.x += asset.coordX * 10;
-				// 		asset.position.z += asset.coordZ * 10;
-				// 		objects.mannequins.push(asset);
-				// 	});
-				// }
-
-				// POSICIONAMIENTO DE ENEMIGOS - MANIQUIES
 				if (object == "enemies" || object == "mannequins") {
-
 					positions.forEach(function (element) {
 
 						asset = mesh.clone();
-
 						var assetColl = new THREE.Mesh(geometriaPrismaRectangular, materialCuboTransp);
 
 						asset.position.z = -40;
 						asset.position.x = -44;
-						asset.position.y = 5;
-						assetColl.position.y = 0;
+						asset.position.y = 0;
+						assetColl.position.y = 5;
 
 						asset.coordZ = assetColl.coordZ = element[0];
 						asset.coordX = assetColl.coordX = element[1];
 						asset.position.x += asset.coordX * 10;
 						asset.position.z += asset.coordZ * 10;
-
 
 						assetColl.model = asset;
 						asset.add(assetColl);
@@ -764,8 +780,6 @@
 
 						if (object == "mannequins")
 							objects.mannequins.push(assetColl);
-
-
 					});
 				}
 
@@ -794,7 +808,8 @@
 				}
 			}
 
-			//CARGA DE LAS PAREDES - SUELO - SALIDAS DEL LABERINTO - PAREDES APLASTANTES
+
+			//CARGA DE LAS PAREDES
 			loadOBJWithMTL(modelPaths.escenario[sceneIndex].path, modelPaths.escenario[sceneIndex].obj, modelPaths.escenario[sceneIndex].mtl, (object) => {
 
 				positionObject("wallblock", object, mainModeWalls);//PAREDES REGULARES
@@ -849,7 +864,6 @@
 			loadOBJWithMTL(modelPaths.items[0].path, modelPaths.items[0].obj, modelPaths.items[0].mtl, (object) => {
 
 				positionObject("hearts", object, mainModeHearts);
-				//positionObject("testboxThin", object, mainModeHearts);
 
 				objects.items.hearts.forEach(function (block) {
 					scene.add(block);
@@ -901,7 +915,7 @@
 
 			});
 
-			//CARGA DE LOS SEÑUELOS DE ENEMIGOS
+			// //CARGA DE LOS SEÑUELOS DE ENEMIGOS
 			// loadOBJWithMTL(modelPaths.mannequins[sceneIndex].path, modelPaths.mannequins[sceneIndex].obj, modelPaths.mannequins[sceneIndex].mtl, (object) => {
 
 			// 	object.position.z = -40;
@@ -922,10 +936,28 @@
 
 			// });
 
-			//CARGA DE  SEÑUELOS Y ENEMIGOS
+			// //CARGA DE LOS SEÑUELOS DE ENEMIGOS
+			// loadOBJWithMTL(modelPaths.mannequins[sceneIndex].path, modelPaths.mannequins[sceneIndex].obj, modelPaths.mannequins[sceneIndex].mtl, (object) => {
+
+			// 	object.position.z = -70;
+			// 	object.position.x = -44;
+			// 	if (sceneIndex == 1) {
+			// 		object.position.y = 5;
+			// 	}
+			// 	else {
+			// 		object.position.y = 0;
+			// 	}
+			// 	positionObject("enemies", object, mainModeEnemies);
+			// 	objects.enemies.forEach(function (block) {
+			// 		scene.add(block);
+			// 		collisionObjects.push(block);
+			// 	});
+
+			// });
+
+			//CARGA DE ENEMIGOS Y SEÑUELOS
 			loadOBJWithMTL(modelPaths.mannequins[sceneIndex].path, modelPaths.mannequins[sceneIndex].obj, modelPaths.mannequins[sceneIndex].mtl, (object) => {
 
-				//object.rotation.y += THREE.Math.degToRad(180);
 
 				positionObject("mannequins", object, mainModeMannequins);
 				rotateObjects(objects.mannequins, mainModeWalls);
@@ -935,12 +967,10 @@
 
 				objects.mannequins.forEach(function (block) {
 					scene.add(block.model);
-					//scene.add(block.model);
 				});
 
 				objects.enemies.forEach(function (block) {
 					scene.add(block.model);
-					//scene.add(block.model);
 					collisionEnemies.push(block);
 				});
 
@@ -967,19 +997,20 @@
 
 			});
 
+
 			document.addEventListener('keydown', onKeyDown);
 			document.addEventListener('keyup', onKeyUp);
 
 			var loader = new THREE.FBXLoader();
 
-
 			//Carga del personaje principal
 			loader.load('assets/Animacion.fbx', function (personaje) {
 				personaje.mixer = new THREE.AnimationMixer(personaje);
-				mixers.push(personaje.mixer);
+				mixersP.push(personaje.mixer);
 				var action =
 					personaje.mixer.clipAction(personaje.animations[0]);
 				action.play();
+
 
 				personaje.position.z = -40; //SE POSICIONA EL ASSET EN EL ORIGEN
 				personaje.position.x = -44;
@@ -989,20 +1020,60 @@
 				personaje.position.x += personaje.coordX * 10;
 				personaje.position.z += personaje.coordZ * 10;
 
-
-				personaje.rotation.y = -0.0;
-
-				personaje.name = "player";
+				personaje.name = "player1";
 				personaje.lives = 3;
+				personaje.alive = true;
 				personaje.score = 3000;
+				rayCaster.push(new THREE.Raycaster());
+				timer.push(new THREE.Clock(true));
 
 				scene.add(personaje);
+				players.push(personaje);
+
 				isWorldReady[1] = true;
+
 			});
 
+			//Carga del otro jugador (apartado)
+			loader.load('assets/Animacion2.fbx', function (personaje) {
+				personaje.mixer = new THREE.AnimationMixer(personaje);
+				mixersP.push(personaje.mixer);
+				var action =
+					personaje.mixer.clipAction(personaje.animations[0]);
+				action.play();
+
+
+				personaje.position.z = -40; //SE POSICIONA EL ASSET EN EL ORIGEN
+				personaje.position.x = -44;
+
+				personaje.coordZ = mainModePlayer[0][0];
+				personaje.coordX = mainModePlayer[0][1];
+				personaje.position.x += personaje.coordX * 10;
+				personaje.position.z += personaje.coordZ * 10;
+
+				personaje.name = "player2";
+				personaje.lives = 3;
+				personaje.alive = true;
+				personaje.score = 3000;
+				rayCaster.push(new THREE.Raycaster());
+				timer.push(new THREE.Clock(true));
+
+				scene.add(personaje);
+				players.push(personaje);
+
+				for (let index = 0; index < players.length; index++) {
+					var top = (index + 1) * 10;
+					var esteticId = index + 1;
+					$("body").append("<div class='nameplay' id='" + "playNombre" + index + "'style='position: absolute; top:" + top + "%; left:80%; color:beige;'><label for='playerName' id='" + "playerName" + index + "'>" + "Jugador: " + esteticId + "</label><br><label id='" + "playerScore" + index + "' for=''></label><br><label id='" + "playerLives" + index + "' for=''></label></div>")
+					var id = "#playName" + index;
+					$(id).show();
+				}
+
+				isWorldReady[2] = true;
+
+			});
 
 			render();
-
 		});
 
 		function loadOBJWithMTL(path, objFile, mtlFile, onLoadCallback) {
@@ -1030,266 +1101,293 @@
 
 		function render() {
 			requestAnimationFrame(render);
-			$("#playNombre").show();
+
 			deltaTime = clock.getDelta();
 			deltaTime2 = deltaTime * enemySpeed;
 
-			player = scene.getObjectByName("player");
+			var yaw = [0, 0];
+			var forward = [0, 0];
+			var moving = [false, false];
 
-			var yaw = 0;
-			var forward = 0;
-			moving = false;
-
-			if (keys["A"]) {
-				yaw = 5;
-				moving = true;
-			} else if (keys["D"]) {
-				yaw = -5;
-				moving = true;
+			if (players[0] != null && players[0].alive) {
+				if (keys["A"]) {
+					yaw[0] = 5;
+					moving[0] = true;
+				} else if (keys["D"]) {
+					yaw[0] = -5;
+					moving[0] = true;
+				}
+				if (keys["W"]) {
+					forward[0] = 20;
+					moving[0] = true;
+				} else if (keys["S"]) {
+					forward[0] = -20;
+					moving[0] = true;
+				}
 			}
 
-			if (keys["W"]) {
-				moving = true;
-				forward = 20;
-			} else if (keys["S"]) {
-				moving = true;
-				forward = -20;
+			if (players[1] != null && players[1].alive) {
+				if (keys["J"]) {
+					yaw[1] = 5;
+					moving[1] = true;
+				} else if (keys["L"]) {
+					yaw[1] = -5;
+					moving[1] = true;
+				}
+				if (keys["I"]) {
+					forward[1] = 20;
+					moving[1] = true;
+				} else if (keys["K"]) {
+					forward[1] = -20;
+					moving[1] = true;
+				}
 			}
 
-			if (keys["G"]) {
-				estaPausado = true;
-				$("#menuPausa").show();
-			}
-			else if (keys["N"]) {
-				estaPausado = false;
-				$("#menuPausa").hide();
-			}
-
-			if (keys["V"]) {
-				estaPausado = true;
-				$("#VictoryScreen").show();
-			}
 
 			if (estaPausado == false) {
 
-				////CON ESTO SE ACTIVA LA ANIMACION
-				if (mixers.length > 0) {
-					mixers.forEach(function (mixer) {
-						if (moving) {
-							mixer.update(deltaTime);
-						}
-					})
-
+				////ANIMACIONES
+				for (let index = 0; index < mixersP.length; index++) {
+					if (moving[index]) {
+						mixersP[index].update(deltaTime);
+					}
 
 				}
 
-				//////////////////////////////////////////////////
-				////UNA VEZ CARGADOS TODOS LOS MODELOS////////////
-				//////////////////////////////////////////////////
-				if (isWorldReady[0] && isWorldReady[1]) {
 
-					//MOVIMIENTO DEL JUGADOR
+				//// LOGICA DE COLISIONES
+				if (isWorldReady[0] && isWorldReady[1] && isWorldReady[2]) {
 
-					$("#playerScore").html("Puntuacion: " + player.score);
-					$("#playerLives").html("Vidas restantes: " + player.lives);
-					player.rotation.y += yaw * deltaTime;
-					player.translateZ(forward * deltaTime);
+					for (let index = 0; index < players.length; index++) {
 
-					camera.position.x = player.position.x;
-					camera.position.z = player.position.z + 30;
+						$("#playerScore" + index).html("Puntuacion: " + players[index].score);
+						$("#playerLives" + index).html("Vidas restantes: " + players[index].lives);
 
-					if (player.lives <= 0) {
-						estaPausado = true;
-						$("#DeathScreen").show();
+						players[index].rotation.y += yaw[index] * deltaTime;
+						players[index].translateZ(forward[index] * deltaTime);
+
+						if (players[index].lives <= 0) {
+							players[index].alive = false;
+							playerAlive = false;
+
+							if (players[index].scale.x > 0) {
+								players[index].scale.x -= 1 * deltaTime;
+								players[index].scale.y -= 1 * deltaTime;
+								players[index].scale.z -= 1 * deltaTime;
+								players[index].rotation.y += THREE.Math.degToRad(150) * deltaTime;
+							}
+							else {
+								scene.remove(players[index]);
+							}
+
+							for (let j = 0; j < players.length; j++) {
+								const element = players[j];
+								if (element.alive) {
+									playerAlive = true;
+									break;
+								}
+							}
+
+							if (!playerAlive) {
+								estaPausado = true;
+								$("#DeathScreen").show();
+							}
+						}
 					}
 
 					// Collision
 					// Recorremos los "rayos" a lanzar para detectar las colisiones
 					for (var i = 0; i < camera.rays.length; i++) {
 
-						rayCaster.set(player.position, camera.rays[i]);
-
-						var collision = rayCaster.intersectObjects(collisionObjects, true);
-						var collisionE = rayCaster.intersectObjects(collisionEnemies, true);
-						var collisionTS = rayCaster.intersectObjects(collisionTrapsSpikes, true);
-						var collisionTW = rayCaster.intersectObjects(collisionTrapsWalls, true);
-						var collisionW = rayCaster.intersectObjects(winCollision, true);
-						var collisionIt = rayCaster.intersectObjects(collisionItems, true);
-
-
-						/////////////////////////////////
-						/////COLISIONES CON PAREDES://///
-						/////////////////////////////////
-						if (collision.length > 0 && collision[0].distance < 1) {
-							console.log("colisionando");
-							//Profe, esta fue la solución que encontré después de 4 horas, solo son 2 líneas de código evita que atravieses las cajas y te hace retroceder si quieres pasar a través de ellas
-							player.translateZ(-(forward * deltaTime));
-
+						for (let index = 0; index < rayCaster.length; index++) {
+							rayCaster[index].set(players[index].position, camera.rays[i]);
 						}
 
-						/////////////////////////////////
-						/////COLISIONES CON PICOS://///
-						/////////////////////////////////
-						objects.spikes.forEach(function (spike) {
-							if (spike.activated && spike.model.position.y < 0) {
-								spike.model.position.y += 10 * deltaTime;
-							}
-						})
+						for (let index = 0; index < players.length; index++) {
 
-						if (collisionTS.length > 0 && collisionTS[0].distance < 1) {
-							if (!collisionTS[0].object.activated)
-								collisionTS[0].object.activated = true;
+							var esteticId = index + 1;
+							var collision = rayCaster[index].intersectObjects(collisionObjects, true);
+							var collisionE = rayCaster[index].intersectObjects(collisionEnemies, true);
+							var collisionTS = rayCaster[index].intersectObjects(collisionTrapsSpikes, true);
+							var collisionTW = rayCaster[index].intersectObjects(collisionTrapsWalls, true);
+							var collisionW = rayCaster[index].intersectObjects(winCollision, true);
+							var collisionIt = rayCaster[index].intersectObjects(collisionItems, true);
 
 
-							console.log("Picos activados");
-							player.translateZ(-(forward * 0.90 * deltaTime));
-
-							if (!timer.running)
-								timer.start();
-
-						}
-
-						////////////////////////////////////////////
-						/////COLISIONES CON PAREDES APLASTANTES:////
-						////////////////////////////////////////////
-						objects.crushWalls.forEach(function (crushWall) {
-							if (crushWall.activated) {
-
-
-								if (crushWall.wall_1.position.z < crushWall.position.z - 0.005)
-									crushWall.wall_1.position.z += 10 * deltaTime;
-								else if (crushWall.wall_1.position.z > crushWall.position.z + 0.005)
-									crushWall.wall_1.position.z -= 10 * deltaTime;
-
-								if (crushWall.wall_2.position.z < crushWall.position.z - 0.005)
-									crushWall.wall_2.position.z += 10 * deltaTime;
-								else if (crushWall.wall_2.position.z > crushWall.position.z + 0.005)
-									crushWall.wall_2.position.z -= 10 * deltaTime;
-
-								if (crushWall.wall_1.position.x < crushWall.position.x - 0.005)
-									crushWall.wall_1.position.x += 10 * deltaTime;
-								else if (crushWall.wall_1.position.x > crushWall.position.x + 0.005)
-									crushWall.wall_1.position.x -= 10 * deltaTime;
-
-								if (crushWall.wall_2.position.x < crushWall.position.x - 0.005)
-									crushWall.wall_2.position.x += 10 * deltaTime;
-								else if (crushWall.wall_2.position.x > crushWall.position.x + 0.005)
-									crushWall.wall_2.position.x -= 10 * deltaTime;
+							if (collision.length > 0 && collision[0].distance < 1) {
+								console.log("colisionando jugador " + esteticId);
+								players[index].translateZ(-(forward[index] * deltaTime));
 
 							}
-						})
-
-						if (collisionTW.length > 0 && collisionTW[0].distance < 1) {
-							if (!collisionTW[0].object.activated)
-								collisionTW[0].object.activated = true;
 
 
-							console.log("Paredes activadas");
-							player.translateZ(-(forward * 0.90 * deltaTime));
-
-							if (!timer.running)
-								timer.start();
-
-						}
-
-						////////////////////////////////////////////
-						/////COLISIONES CON ENEMIGOS////////////////
-						////////////////////////////////////////////
-						if (collisionE.length > 0 && collisionE[0].distance < 1) {
-
-							console.log("Colision con enemigo");
-							player.translateZ(-(forward * 0.95 * deltaTime));
-
-							if (!timer.running)
-								timer.start();
-
-						}
-
-						//////////////////////////////////////////////////////
-						/////DELAY ANTES DE REGRESAR AL JUGADOR AL ORIGEN/////
-						//////////////////////////////////////////////////////
-						if (timer.running) {
-							if (timer.getElapsedTime() > 0.6) {
-								player.position.z = -40 + player.coordZ * 10; //SE POSICIONA EL ASSET
-								player.position.x = -44 + player.coordX * 10;
-								player.rotation.y = 0.0;
-								player.lives -= 1;
-								player.score -= 1000;
-								console.log("Vidas: " + player.lives);
-
-								timer.stop();
-							}
-						}
-
-						/////////////////////////////////
-						/////COLISIONES CON ITEMS/////
-						/////////////////////////////////
-
-						Object.keys(objects.items).forEach(function (key) {
-							objects.items[key].forEach(function (item) {
-								if (item.taken && item.model.scale.x > 0) {
-									item.model.scale.x -= 0.5 * deltaTime;
-									item.model.scale.y -= 0.5 * deltaTime;
-									item.model.scale.z -= 0.5 * deltaTime;
-									item.model.rotation.y += THREE.Math.degToRad(150) * deltaTime;
-								}
-								else if (item.taken) {
-									scene.remove(item.model);
-									scene.remove(item);
+							/////////////////////////////////
+							/////COLISIONES CON PICOS://///
+							/////////////////////////////////
+							objects.spikes.forEach(function (spike) {
+								if (spike.activated && spike.model.position.y < 0) {
+									spike.model.position.y += 10 * deltaTime;
 								}
 							})
-						})
+
+							if (collisionTS.length > 0 && collisionTS[0].distance < 1) {
+								if (!collisionTS[0].object.activated)
+									collisionTS[0].object.activated = true;
 
 
-						if (collisionIt.length > 0 && collisionIt[0].distance < 1) {
-							if (!collisionIt[0].object.taken) {
-								collisionIt[0].object.taken = true;
+								console.log("Picos activados por el jugador " + esteticId);
+								players[index].translateZ(-(forward[index] * 0.90 * deltaTime));
 
-								if (collisionIt[0].object.itemType == "heart") {
-									console.log("Vida extra");
-									player.lives += 1;
-									player.score += 1000;
+								if (!timer[index].running);
+								timer[index].start();
+
+							}
+
+							////////////////////////////////////////////
+							/////COLISIONES CON PAREDES APLASTANTES:////
+							////////////////////////////////////////////
+							objects.crushWalls.forEach(function (crushWall) {
+								if (crushWall.activated) {
+
+
+									if (crushWall.wall_1.position.z < crushWall.position.z - 0.005)
+										crushWall.wall_1.position.z += 10 * deltaTime;
+									else if (crushWall.wall_1.position.z > crushWall.position.z + 0.005)
+										crushWall.wall_1.position.z -= 10 * deltaTime;
+
+									if (crushWall.wall_2.position.z < crushWall.position.z - 0.005)
+										crushWall.wall_2.position.z += 10 * deltaTime;
+									else if (crushWall.wall_2.position.z > crushWall.position.z + 0.005)
+										crushWall.wall_2.position.z -= 10 * deltaTime;
+
+									if (crushWall.wall_1.position.x < crushWall.position.x - 0.005)
+										crushWall.wall_1.position.x += 10 * deltaTime;
+									else if (crushWall.wall_1.position.x > crushWall.position.x + 0.005)
+										crushWall.wall_1.position.x -= 10 * deltaTime;
+
+									if (crushWall.wall_2.position.x < crushWall.position.x - 0.005)
+										crushWall.wall_2.position.x += 10 * deltaTime;
+									else if (crushWall.wall_2.position.x > crushWall.position.x + 0.005)
+										crushWall.wall_2.position.x -= 10 * deltaTime;
+
 								}
+							})
 
-								if (collisionIt[0].object.itemType == "gift") {
-									console.log("Vida perdida");
-									player.lives -= 1;
-									player.score -= 1000;
-								}
+							if (collisionTW.length > 0 && collisionTW[0].distance < 1) {
+								if (!collisionTW[0].object.activated)
+									collisionTW[0].object.activated = true;
 
-								if (collisionIt[0].object.itemType == "clock") {
-									console.log("Enemigos ralentizados");
-									slowerEnemies = true;
-									player.score += 500;
-									timer2.start();
+
+								console.log("Paredes activadas por el jugador " + esteticId);
+								players[index].translateZ(-(forward[index] * 0.90 * deltaTime));
+
+								if (!timer[index].running)
+									timer[index].start();
+
+							}
+
+							////////////////////////////////////////////
+							/////COLISIONES CON ENEMIGOS////////////////
+							////////////////////////////////////////////
+							if (collisionE.length > 0 && collisionE[0].distance < 1) {
+
+								console.log("Colision con enemigo");
+								players[index].translateZ(-(forward[index] * 0.95 * deltaTime));
+
+								if (!timer[index].running)
+									timer[index].start();
+
+							}
+
+							//////////////////////////////////////////////////////
+							/////DELAY ANTES DE REGRESAR AL JUGADOR AL ORIGEN/////
+							//////////////////////////////////////////////////////
+							if (timer[index].running) {
+								if (timer[index].getElapsedTime() > 0.6) {
+									players[index].lives -= 1;
+
+									players[index].position.z = -40 + players[index].coordZ * 10; //SE POSICIONA EL ASSET
+									players[index].position.x = -44 + players[index].coordX * 10;
+									players[index].rotation.y = 0.0;
+
+									players[index].score -= 1000;
+									console.log("Vidas: " + players[index].lives);
+
+									timer[index].stop();
 								}
 							}
-						}
 
-						if (slowerEnemies) {
-							if (timer2.getElapsedTime() < 8)
-								enemySpeed = 0.5;
-							else {
-								slowerEnemies = false;
-								enemySpeed = 1;
-								timer2.stop();
+							/////////////////////////////////
+							/////COLISIONES CON ITEMS/////
+							/////////////////////////////////
+
+							Object.keys(objects.items).forEach(function (key) {
+								objects.items[key].forEach(function (item) {
+									if (item.taken && item.model.scale.x > 0) {
+										item.model.scale.x -= 0.5 * deltaTime;
+										item.model.scale.y -= 0.5 * deltaTime;
+										item.model.scale.z -= 0.5 * deltaTime;
+										item.model.rotation.y += THREE.Math.degToRad(150) * deltaTime;
+									}
+									else if (item.taken) {
+										scene.remove(item.model);
+										scene.remove(item);
+									}
+								})
+							})
+
+
+							if (collisionIt.length > 0 && collisionIt[0].distance < 1) {
+								if (!collisionIt[0].object.taken) {
+									collisionIt[0].object.taken = true;
+
+									if (collisionIt[0].object.itemType == "heart") {
+										console.log("Vida extra para jugador " + esteticId);
+										players[index].lives += 1;
+										players[index].score += 1000;
+									}
+
+									if (collisionIt[0].object.itemType == "gift") {
+										console.log("Vida perdida del jugador " + esteticId);
+										players[index].lives -= 1;
+										players[index].score -= 1000;
+									}
+
+									if (collisionIt[0].object.itemType == "clock") {
+										console.log("Enemigos ralentizados por el jugador " + esteticId);
+										slowerEnemies = true;
+										players[index].score += 500;
+										timer2.start();
+									}
+								}
 							}
-						}
 
+							if (slowerEnemies) {
+								if (timer2.getElapsedTime() < 8)
+									enemySpeed = 0.5;
+								else {
+									slowerEnemies = false;
+									enemySpeed = 1;
+									timer2.stop();
+								}
+							}
 
-						/////////////////////////////////
-						/////COLISIONES CON SALIDA DEL LABERINTO://///
-						/////////////////////////////////
-						if (collisionW.length > 0 && collisionW[0].distance < 1) {
+							/////////////////////////////////////////////
+							/////COLISIONES CON SALIDA DEL LABERINTO:////
+							/////////////////////////////////////////////
+							if (collisionW.length > 0 && collisionW[0].distance < 1) {
 
-							var winTimeS = Math.round(clock.getElapsedTime());
-							var finalScore = player.score + 10000 - (winTimeS * 50);
-							var winTimeD = new Date(winTimeS * 1000).toISOString().substr(14, 5)
+								var winTimeS = Math.round(clock.getElapsedTime());
+								var finalScore = players[index].score + 10000 - (winTimeS * 50);
+								var winTimeD = new Date(winTimeS * 1000).toISOString().substr(14, 5)
+								var esteticId = index + 1;
 
-							$("#playerResults").html("Tiempo: " + winTimeD + " Puntuacion final: " + finalScore);
-							$("#puntos").val(finalScore);
-							estaPausado = true;
-							$("#VictoryScreen").show();
+								$("#playerResults").html("Jugador:" + esteticId + " Tiempo: " + winTimeD + " Puntuacion final: " + finalScore);
+								$("#puntos").val(finalScore);
+                                estaPausado = true;
+								$("#VictoryScreen").show();
+							}
+
 						}
 
 					}
@@ -1298,41 +1396,38 @@
 						objects.items[key].forEach(function (item) {
 							item.model.rotation.y += THREE.Math.degToRad(50) * deltaTime;
 						});
-					})
+					});
 
 					objects.mannequins.forEach(function (mannequin) {
-						mannequin.model.translateX(((Math.sin(clock.getElapsedTime()) + 1) / 2 * distancia + posInicial) * deltaTime2);
+						mannequin.model.translateX(((Math.sin(clock.getElapsedTime()) + 1) / 2 * distancia + posInicial) * deltaTime2);					
 					});
 
 					objects.enemies.forEach(function (enemy) {
 						enemy.model.translateX(((Math.sin(clock.getElapsedTime()) + 1) / 2 * distancia + posInicial) * deltaTime2);
 					});
 
-					contador += 0.01;
-
-
 					renderer.render(scene, camera);
 				}
+
 
 			}
 		}
 
 		function setupScene() {
 			var visibleSize = { width: window.innerWidth, height: window.innerHeight };
-			clock = new THREE.Clock(true);
+			clock = new THREE.Clock();
 			scene = new THREE.Scene();
 
 			//camera = new THREE.PerspectiveCamera(100, visibleSize.width / visibleSize.height, 0.1, 120);
 
 			var aspect = window.innerWidth / window.innerHeight;
-			var d = 70;
+			var d = 90;
 			camera = new THREE.OrthographicCamera(- d * aspect, d * aspect, d, - d, 1, 1000);
-			camera.position.set(50, 60, 100); // all components equal
-			//camera.position.set(0, 60, 0); // all components equal
+			camera.position.set(50, 60, 85); // all components equal
 			//camera.lookAt(0, 0, 0); // or the origin
 
 			//camera.rotation.y = THREE.Math.degToRad(-5);
-			camera.rotation.x = THREE.Math.degToRad(-70);
+			camera.rotation.x = THREE.Math.degToRad(-60);
 
 			camera.rays = [
 				new THREE.Vector3(1, 0, 0),
@@ -1358,7 +1453,6 @@
 			//scene.add(grid);
 
 			$("#scene-section").append(renderer.domElement);
-			$("#playerName").html("Jugador: player 1");
 		}
 
 
@@ -1368,45 +1462,11 @@
 <body>
 
 	<div id="scene-section"></div>
-
-	<audio autoplay loop>
+    <audio autoplay loop>
 		<source src="../audio/Rain.mp3" type="audio/mp3">
 		Tu navegador no soporta HTML5 audio.
   	</audio>
-
-	<div class="nameplay" id="playNombre" style="position: absolute; top:10%; left:80%; color:beige;">
-		<label for="playerName" id="playerName"></label>
-		<br>
-		<label id="playerScore" for=""></label>
-		<br>
-		<label id="playerLives" for=""></label>
-	</div>
-
-	<div class="modal-dialog" id="menuPausa" style="position: absolute; top:20%; left:40%;">
-		<div class="modal-content">
-
-			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Juego en pausa</h5>
-
-			</div>
-			<div class="modal-body">
-
-				<br>
-				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" style=" top:20%; right:90%;" href="../index.html">Guardar y salir</a>
-				</button>
-				<br>
-				<br>
-				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" href="../index.html">Salir sin guardar</a>
-				</button>
-			</div>
-
-
-
-		</div>
-	</div>
-    <div class="modal-dialog" id="VictoryScreen" style="position: absolute; top:20%; left:40%;">
+	  <div class="modal-dialog" id="VictoryScreen" style="position: absolute; top:20%; left:40%;">
 		<div class="modal-content">
 			
 			<div class="modal-header">
@@ -1421,7 +1481,7 @@
 				</button>
 
                 <form method="post">
-				<input type="text" placeholder="Nombre"  name="name">
+				<input type="text" placeholder="Nombre" id="username" name="name">
                 <input id="puntos" name="puntos" hidden="true">
 				<button id="" type="submit">Guardar</button>
                 </form>
@@ -1429,17 +1489,8 @@
                 <?php
                 
                 include("php/guardardatos.php");
-
-                
-                
-                
-            
                 
                 ?> 
-
-
-                
-
 				<br><br>
 				<button onclick="shareFB()">Compartir en Facebook</button>
 				<br>
@@ -1461,7 +1512,7 @@
 		<div class="modal-content">
 
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">¡HAS PERDIDO!</h5>
+				<h5 class="modal-title" id="exampleModalLabel">¡HAN PERDIDO!</h5>
 
 			</div>
 			<div class="modal-body">
@@ -1473,66 +1524,17 @@
 				<br>
 				<br>
 				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" href="indexMediev.html">Volver a intentar</a>
+					<a class="btnSave" href="indexMultiMediev.html">Volver a intentar</a>
 				</button>
 				<br>
 				<br>
 				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" href="../elegirEscenario.html">Seleccionar otro nivel</a>
+					<a class="btnSave" href="../elegirEsceMulti.html">Seleccionar otro nivel</a>
 				</button>
 			</div>
 
 		</div>
 	</div>
-
-
-	<script src="../js/jugar.js"></script>
-
-	<script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
-
-	<script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-database.js"></script>
-
-	<!-- <script>
-
-
-		//tiempo que va a tardar(1.5s)
-		const firebaseConfig = {
-			databaseUR: "https://test-504ea-default-rtdb.firebaseio.com/",
-			apiKey: "AIzaSyB0dQZT1wSPWVTHk8sVTAW-I9DbzUEpZtE",
-			authDomain: "test-504ea.firebaseapp.com",
-			projectId: "test-504ea",
-			storageBucket: "test-504ea.appspot.com",
-			messagingSenderId: "252023945673",
-			appId: "1:252023945673:web:15f98626a906ff679b9018"
-		};
-		// Initialize Firebase
-		firebase.initializeApp(firebaseConfig);
-
-		// const db = getDatabase();
-		var boton = document.getElementById("btnSendSesion");
-		// var username = document.getElementById("username");
-
-
-		var dbRefPlayers = firebase.database().ref("Players");
-		document.querySelector('#btnSendSesion').addEventListener('click', () => {
-			const user = document.getElementById('username').value;
-			const puntos = document.getElementById('puntos').value;
-			var newPlayer = dbRefPlayers.push();
-			newPlayer.set({
-				user,
-				puntos
-			});
-			// 	   dbRefPlayers.push(user);
-			// 	   dbRefPlayers.push(puntos);
-
-		});
-		</script> -->
-
-<script type="text/javascript" src="../js/mifacebook.js"></script>
-<script>function shareFB() {
-		var score = $("#puntos").val();
-		shareScore(score);
-	}</script>
 
 </body>
 

@@ -1348,6 +1348,10 @@
 <body>
 
 	<div id="scene-section"></div>
+	<audio autoplay loop>
+		<source src="../audio/Golden_Time_Lover.mp3" type="audio/mp3">
+		Tu navegador no soporta HTML5 audio.
+  	</audio>
 
 	<!--<div id="menuPausa" style="position: absolute; top:50%; left:50%;">
 		<label style = "color: rgb(1,1,0);">PAUSA</label>

@@ -1356,6 +1356,42 @@
 			directionalLight.position.set(0, 0, 1);
 			scene.add(directionalLight);
 
+			var directionalLight = new THREE.DirectionalLight(new THREE.Color(0.3, 0.1, 1), 0.3);
+			directionalLight.position.set(-44, 15, -45);
+			directionalLight.target.position.set(5, 5, -5);
+			scene.add(directionalLight);
+			scene.add(directionalLight.target);
+
+			var dLight1 = directionalLight.clone();
+			dLight1.position.set(40, 25, -45);
+			dLight1.target.position.set(0, 5, -5);
+			scene.add(dLight1);
+			scene.add(dLight1.target);
+
+			var dLight2 = directionalLight.clone();
+			dLight2.position.set(0, 25, 35);
+			dLight2.target.position.set(0, 5, -15);
+			scene.add(dLight2);
+			scene.add(dLight2.target);
+
+			const spotLight = new THREE.SpotLight(0xffffff);
+			spotLight.position.set(10, 10, 10);
+
+			spotLight.castShadow = true;
+			spotLight.distance = 20;
+
+			spotLight.shadow.mapSize.width = 1024;
+			spotLight.shadow.mapSize.height = 1024;
+
+			spotLight.shadow.camera.near = 500;
+			spotLight.shadow.camera.far = 4000;
+			spotLight.shadow.camera.fov = 30;
+
+
+			var SL1 = spotLight.clone();
+			SL1.name = "spot1"
+			scene.add(SL1);
+
 			var grid = new THREE.GridHelper(200, 50, 0xffffff, 0xffffff);
 			grid.position.y = -1;
 			//scene.add(grid);
@@ -1372,7 +1408,7 @@
 
 	<div id="scene-section"></div>
 
-	<audio autoplay loop>
+	<audio id="audioLevel" autoplay loop>
 		<source src="../audio/Rain.mp3" type="audio/mp3">
 		Tu navegador no soporta HTML5 audio.
   	</audio>
@@ -1390,27 +1426,29 @@
 
 			<div class="modal-header">
 				<h5 class="modal-title" id="exampleModalLabel">Juego en pausa</h5>
-
 			</div>
-			<div class="modal-body">
+			<div id="pauseButtonMediev"class="modal-body">
 
 				<br>
-				
-				<br>
-				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" href="../index.html">Salir sin guardar</a>
+				<button type="button"  style="position: relative; right:25px;" class="btn btn-dark border border-warning">
+					<a class="btnSave" href="../index.html">Salir del juego</a>
 				</button>
 				<br>
 				<br>
-				<button type="button" class="btn btn-dark border border-warning">
+				<button type="button" style="position: relative; right:30px;"class="btn btn-dark border border-warning">
 					<a class="btnSave" href="indexMedievHard.php">Cambiar de dificultad</a>
 				</button>
+				<br>
+				<br>
+				<h5 class="modal-title2" style="position: relative; right:25px;"id="exampleModalLabel2">Volumen de musica</h5>
+				
+				<input type="range" class="buttonSoundMusic btn-warning" id="volRange" style=" position: relative; left:50px; border-radius: 5px;" max="1" min="0" step="0.01" onchange="changevolume(this.value)"/>
+				
 			</div>
-
-
 
 		</div>
 	</div>
+
     <div class="modal-dialog" id="VictoryScreen" style="position: absolute; top:20%; left:40%;">
 		<div class="modal-content">
 			
@@ -1420,15 +1458,10 @@
 				<h5 class="modal-title" id="playerResults"> Hola</h5>
 			</div>
 			<div class="modal-body">
-				<br>
-				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" style=" top:20%; right:90%;" href="../index.html">Volver al menú principal</a>
-				</button>
-
-                <form method="post">
-				<input type="text" placeholder="Nombre"  name="name">
+			<form id="saveDataUser" style="right:50%;" method="post">
+				<input type="text" placeholder="Nombre" id="username" name="name">
                 <input id="puntos" name="puntos" hidden="true">
-				<button id="" type="submit">Guardar</button>
+				<button id="" class="btn btn-dark border border-warning" type="submit">Guardar</button>
                 </form>
 
                 <?php
@@ -1436,11 +1469,14 @@
                 include("php/guardardatos.php");
                 
                 ?> 
-
+				
 				<br><br>
-				<button onclick="shareFB()">Compartir en Facebook</button>
-				<br>
-				<br>
+				<button class="btn btn-dark border border-warning" onclick="shareFB()">Compartir en Facebook</button>
+				<br><br>
+				<button type="button" class="btn btn-dark border border-warning">
+					<a class="btnSave" style=" top:20%; right:60%;" href="../index.html">Volver al menú principal</a>
+				</button>
+				<br><br>
 				<button type="button" class="btn btn-dark border border-warning">
 					<a class="btnSave" href="indexMedieval.php">Volver a jugar</a>
 				</button>
@@ -1484,6 +1520,21 @@
 
 
 	<script src="../js/jugar.js"></script>
+
+	<script>
+		function changevolume(amount) {
+		 var audioobject = document.getElementsByTagName("audio")[0];
+		 audioobject.volume = amount;
+		}
+	</script>
+	<script src="../js/bootstrap.bundle.min.js"></script>
+    <script>var beepOne = $("#theSound")[0];
+                 $("btnReturnToIndex button")
+                     .mouseenter(function() {
+                         beepOne.play();
+                     });
+                 </script>
+    <script>
 
 	<script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
 

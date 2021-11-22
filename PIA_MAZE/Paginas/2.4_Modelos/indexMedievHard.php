@@ -1432,26 +1432,32 @@
 
 			<div class="modal-header">
 				<h5 class="modal-title" id="exampleModalLabel">Juego en pausa</h5>
-
 			</div>
-			<div class="modal-body">
+			<div id="pauseButtonMediev"class="modal-body">
 
 				<br>
-				<br>
-				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" href="../index.html">Salir sin guardar</a>
+				<button type="button"  style="position: relative; right:25px;" class="btn btn-dark border border-warning">
+					<a class="btnSave" href="../index.html">Salir del juego</a>
 				</button>
-                <br>
 				<br>
-				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" href="indexFutureHard.php">Cambiar de dificultad</a>
+				<br>
+				<button type="button" style="position: relative; right:30px;"class="btn btn-dark border border-warning">
+					<a class="btnSave" href="indexMedieval.php">Cambiar de dificultad</a>
 				</button>
+				<br>
+				<br>
+				<h5 class="modal-title2" style="position: relative; right:25px;"id="exampleModalLabel2">Volumen de musica</h5>
+				
+				<input type="range" class="buttonSoundMusic btn-warning" id="volRange" style=" position: relative; left:50px; border-radius: 5px;" max="1" min="0" step="0.01" onchange="changevolume(this.value)"/>
+				
+				
 			</div>
 
 
 
 		</div>
 	</div>
+
 	<div class="modal-dialog" id="VictoryScreen" style="position: absolute; top:20%; left:40%;">
 		<div class="modal-content">
 			
@@ -1461,15 +1467,9 @@
 				<h5 class="modal-title" id="playerResults"> Hola</h5>
 			</div>
 			<div class="modal-body">
-				<br>
-				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" style=" top:20%; right:90%;" href="../index.html">Volver al menú principal</a>
-				</button>
-
-                <form method="post">
-				<input type="text" placeholder="Nombre"  name="name">
+			<input type="text" placeholder="Nombre" id="username" name="name">
                 <input id="puntos" name="puntos" hidden="true">
-				<button id="" type="submit">Guardar</button>
+				<button id="" class="btn btn-dark border border-warning" type="submit">Guardar</button>
                 </form>
 
                 <?php
@@ -1477,16 +1477,18 @@
                 include("php/guardardatos.php");
                 
                 ?> 
-
+				
 				<br><br>
-				<button onclick="shareFB()">Compartir en Facebook</button>
-				<br>
-				<br>
+				<button class="btn btn-dark border border-warning" onclick="shareFB()">Compartir en Facebook</button>
+				<br><br>
+				<button type="button" class="btn btn-dark border border-warning">
+					<a class="btnSave" style=" top:20%; right:60%;" href="../index.html">Volver al menú principal</a>
+				</button>
+				<br><br>
 				<button type="button" class="btn btn-dark border border-warning">
 					<a class="btnSave" href="indexMedieval.php">Volver a jugar</a>
 				</button>
-				<br>
-				<br>
+				<br><br>
 				<button type="button" class="btn btn-dark border border-warning">
 					<a class="btnSave" href="../elegirEscenario.html">Seleccionar otro nivel</a>
 				</button>
@@ -1525,6 +1527,12 @@
 
 
 	<script src="../js/jugar.js"></script>
+	<script>
+		function changevolume(amount) {
+		 var audioobject = document.getElementsByTagName("audio")[0];
+		 audioobject.volume = amount;
+		}
+	</script>
 
 	<script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
 

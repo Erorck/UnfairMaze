@@ -1439,27 +1439,25 @@
 
 			<div class="modal-header">
 				<h5 class="modal-title" id="exampleModalLabel">Juego en pausa</h5>
-
 			</div>
-			<div class="modal-body">
+			<div id="pauseButtonMediev"class="modal-body">
 
 				<br>
-				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" style=" top:20%; right:90%;" href="../index.html">Guardar y salir</a>
+				<button type="button"  style="position: relative; right:25px;" class="btn btn-dark border border-warning">
+					<a class="btnSave" href="../index.html">Salir del juego</a>
 				</button>
 				<br>
 				<br>
-				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" href="../index.html">Salir sin guardar</a>
-				</button>
-				<br>
-				<br>
-				<button type="button" class="btn btn-dark border border-warning">
+				<button type="button" style="position: relative; right:30px;"class="btn btn-dark border border-warning">
 					<a class="btnSave" href="indexForestHard.php">Cambiar de dificultad</a>
 				</button>
+				<br>
+				<br>
+				<h5 class="modal-title2" style="position: relative; right:25px;"id="exampleModalLabel2">Volumen de musica</h5>
+				
+				<input type="range" class="buttonSoundMusic btn-warning" id="volRange" style=" position: relative; left:50px; border-radius: 5px;" max="1" min="0" step="0.01" onchange="changevolume(this.value)"/>
+				
 			</div>
-
-
 
 		</div>
 	</div>
@@ -1473,12 +1471,11 @@
 				<h5 class="modal-title" id="playerResults"> Hola</h5>
 			</div>
 			<div class="modal-body">
-				
-				<br>	
+					
                 <form id="saveDataUser" style="right:50%;" method="post">
 				<input type="text" placeholder="Nombre" id="username" name="name">
                 <input id="puntos" name="puntos" hidden="true">
-				<button id="" type="submit">Guardar</button>
+				<button id="" class="btn btn-dark border border-warning" type="submit">Guardar</button>
                 </form>
 
                 <?php
@@ -1486,16 +1483,16 @@
                 include("php/guardardatos.php");
                 
                 ?> 
-                
-
+				
 				<br><br>
-				<button onclick="shareFB()">Compartir en Facebook</button>
+				<button class="btn btn-dark border border-warning" onclick="shareFB()">Compartir en Facebook</button>
 				<br>
 				
 				<br>
 				<button type="button" class="btn btn-dark border border-warning">
 					<a class="btnSave" style=" top:20%; right:60%;" href="../index.html">Volver al menú principal</a>
 				</button>
+				<br>
 				<br>
 				<button type="button" class="btn btn-dark border border-warning">
 					<a class="btnSave" style="right:60%;" href="indexForest.php">Volver a jugar</a>
@@ -1541,50 +1538,19 @@
 
 	<script src="../js/jugar.js"></script>
 
+	<script>
+		function changevolume(amount) {
+		 var audioobject = document.getElementsByTagName("audio")[0];
+		 audioobject.volume = amount;
+		}
+	</script>
+
 
 	<script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
 
 	<script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-database.js"></script>
 
-	<!-- <script>
 
-
-		//tiempo que va a tardar(1.5s)
-		const firebaseConfig = {
-			databaseUR: "https://test-504ea-default-rtdb.firebaseio.com/",
-			apiKey: "AIzaSyB0dQZT1wSPWVTHk8sVTAW-I9DbzUEpZtE",
-			authDomain: "test-504ea.firebaseapp.com",
-			projectId: "test-504ea",
-			storageBucket: "test-504ea.appspot.com",
-			messagingSenderId: "252023945673",
-			appId: "1:252023945673:web:15f98626a906ff679b9018"
-		};
-		// Initialize Firebase
-		firebase.initializeApp(firebaseConfig);
-
-		// const db = getDatabase();
-		var boton = document.getElementById("btnSendSesion");
-		// var username = document.getElementById("username");
-
-
-		var dbRefPlayers = firebase.database().ref("Players");
-		document.querySelector('#btnSendSesion').addEventListener('click', () => {
-			const user = document.getElementById('username').value;
-			const puntos = document.getElementById('puntos').value;
-			var newPlayer = dbRefPlayers.push();
-			newPlayer.set({
-				user,
-				puntos
-			});
-			// 	   dbRefPlayers.push(user);
-			// 	   dbRefPlayers.push(puntos);
-
-		});
-
-
-
-
-	</script> -->
 
 	<script type="text/javascript">
 

@@ -133,3 +133,42 @@ body{
 	color: #000;
 	border: #FFC300;
 }
+
+
+   .buttonSoundMusic{
+	-webkit-appearance: none;
+	width: 80%;
+	height: 15px;
+	border-radius: 5px;  
+	background: #FFC300;
+	outline: none;
+	opacity: 0.7;
+	-webkit-transition: .2s;
+	transition: opacity .2s;
+  }
+  
+  .buttonSoundMusic::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 25px;
+	height: 25px;
+	border-radius: 50%; 
+	background: #1C1C1C;
+	cursor: pointer;
+  }
+  
+  .buttonSoundMusic::-moz-range-thumb {
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	background: #04AA6D;
+	cursor: pointer;
+  }
+
+   h5{
+	font-family: 'Metal Mania', cursive;
+	font-size: 30px;
+	margin-left: 15px;
+	color: #000;
+	background:#F7D358;
+   }

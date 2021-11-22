@@ -1441,27 +1441,24 @@
 				<h5 class="modal-title" id="playerResults"> Hola</h5>
 			</div>
 			<div class="modal-body">
-				<br>
-				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" style=" top:20%; right:90%;" href="../index.html">Volver al menú principal</a>
-				</button>
-
-                <form method="post">
-				<input type="text" placeholder="Nombre" id="username" name="name">
+			<input type="text" placeholder="Nombre" id="username" name="name">
                 <input id="puntos" name="puntos" hidden="true">
-				<button id="" type="submit">Guardar</button>
+				<button id="" class="btn btn-dark border border-warning" type="submit">Guardar</button>
                 </form>
 
                 <?php
                 
                 include("php/guardardatos.php");
                 
-                ?>
-
+                ?> 
+				
 				<br><br>
-				<button onclick="shareFB()">Compartir en Facebook</button>
-				<br>
-				<br>
+				<button class="btn btn-dark border border-warning" onclick="shareFB()">Compartir en Facebook</button>
+				<br><br>
+				<button type="button" class="btn btn-dark border border-warning">
+					<a class="btnSave" style=" top:20%; right:60%;" href="../index.html">Volver al menú principal</a>
+				</button>
+				<br><br>
 				<button type="button" class="btn btn-dark border border-warning">
 					<a class="btnSave" href="indexFuture.php">Volver a jugar</a>
 				</button>

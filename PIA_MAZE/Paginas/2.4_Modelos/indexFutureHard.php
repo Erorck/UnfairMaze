@@ -1332,10 +1332,11 @@
 				new THREE.Vector3(0, 0, -1),
 			];
 
-			renderer = new THREE.WebGLRenderer({ precision: "mediump" });
-			renderer.setClearColor(new THREE.Color(0, 0, 0));
+			renderer = new THREE.WebGLRenderer({ precision: "mediump", alpha:true });
+            renderer.setClearColor(new THREE.Color(1, 0, 0), 0);
 			renderer.setPixelRatio(visibleSize.width / visibleSize.height);
 			renderer.setSize(visibleSize.width, visibleSize.height);
+
 
 			var ambientLight = new THREE.AmbientLight(new THREE.Color(1, 1, 1), 1.0);
 			scene.add(ambientLight);
@@ -1391,6 +1392,10 @@
 <body>
 
 	<div id="scene-section"></div>
+	<audio autoplay loop>
+		<source src="../audio/Golden_Time_Lover.mp3" type="audio/mp3">
+		Tu navegador no soporta HTML5 audio.
+  	</audio>
 
 	<!--<div id="menuPausa" style="position: absolute; top:50%; left:50%;">
 		<label style = "color: rgb(1,1,0);">PAUSA</label>
@@ -1416,24 +1421,22 @@
 			<div class="modal-body">
 
 				<br>
+				<br>
 				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" style=" top:20%; right:90%;" href="../index.html">Guardar y salir</a>
+					<a class="btnSave" href="../index.html">Salir</a>
 				</button>
 				<br>
 				<br>
 				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" href="../index.html">Salir sin guardar</a>
+					<a class="btnSave" href="indexFuture.php">Cambiar de dificultad</a>
 				</button>
 			</div>
-
-
-
 		</div>
 	</div>
 
 	<div class="modal-dialog" id="VictoryScreen" style="position: absolute; top:20%; left:40%;">
 		<div class="modal-content">
-			<input id="puntos" hidden="true">
+			
 			<div class="modal-header">
 				<h5 class="modal-title" id="exampleModalLabel">¡GANASTE!</h5>
 				<br>
@@ -1444,14 +1447,26 @@
 				<button type="button" class="btn btn-dark border border-warning">
 					<a class="btnSave" style=" top:20%; right:90%;" href="../index.html">Volver al menú principal</a>
 				</button>
-				<input type="text" placeholder="Nombre" id="username">
-				<button id="btnSendSesion">Guardar</button>
+
+                <form method="post">
+				<input type="text" placeholder="Nombre" id="username" name="name">
+                <input id="puntos" name="puntos" hidden="true">
+				<button id="" type="submit">Guardar</button>
+                </form>
+
+                <?php
+                
+                include("php/guardardatos.php");
+
+                ?>
+                
+
 				<br><br>
 				<button onclick="shareFB()">Compartir en Facebook</button>
 				<br>
 				<br>
 				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" href="indexForest.html">Volver a jugar</a>
+					<a class="btnSave" href="indexFutureHard.php">Volver a jugar</a>
 				</button>
 				<br>
 				<br>
@@ -1462,6 +1477,7 @@
 
 		</div>
 	</div>
+
 
 	<div class="modal-dialog" id="DeathScreen" style="position: absolute; top:20%; left:40%;">
 		<div class="modal-content">
@@ -1479,7 +1495,7 @@
 				<br>
 				<br>
 				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" href="indexFuture.html">Volver a intentar</a>
+					<a class="btnSave" href="indexFutureHard.php">Volver a intentar</a>
 				</button>
 				<br>
 				<br>
@@ -1498,7 +1514,7 @@
 
 	<script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-database.js"></script>
 
-	<script>
+	<!-- <script>
 
 
 		//tiempo que va a tardar(1.5s)
@@ -1532,7 +1548,7 @@
 			// 	   dbRefPlayers.push(puntos);
 
 		});
-		</script>
+		</script> -->
 
 <script type="text/javascript" src="../js/mifacebook.js"></script>
 <script>function shareFB() {
@@ -1540,5 +1556,6 @@
 		shareScore(score);
 	}</script>
 </body>
+
 
 </html>

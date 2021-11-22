@@ -5,10 +5,10 @@
 	<link rel="stylesheet" href="../css/bootstrap.min.css">
 	<link rel="stylesheet" href="../css/jugar.css">
 	<link rel="stylesheet" href="../css/FondoForest.css">
-
 	<script type="text/javascript" src="js/libs/jquery/jquery-2.1.4.min.js"></script>
 	<script type="text/javascript" src="js/libs/three/three.js"></script>
 	<script type="text/javascript" src="js/libs/three/three2.js"></script>
+
 	<script type="text/javascript" src="js/libs/three/MTLLoader.js"></script>
 	<script type="text/javascript" src="js/libs/three/FBXLoader.js"></script>
 	<script type="text/javascript" src="js/libs/three/OBJLoader.js"></script>
@@ -29,7 +29,7 @@
 		// TODO: End Modelo Animacion.
 
 		//Coordenadas del jugador del modo de juego principal
-		var mainModePlayer = [[16,18]];
+		var mainModePlayer = [[16, 18]];
 
 		//Coordenadas de las paredes del modo de juego principal
 		var mainModeWalls = [
@@ -93,10 +93,12 @@
 		var mainModeHearts = [[8, 1], [9, 6], [18, 15]];
 
 		//Coordenadas de los relojes del modo de juego principal
-		var mainModeClocks = [[14, 2], [1, 3], [10, 17]];
+		//var mainModeClocks = [[14, 2], [1, 3], [10, 17]];
+		var mainModeClocks = [];
 
 		//Coordenadas de los regalos del modo de juego principal
-		var mainModeGifts = [[3, 10], [13, 12], [2, 18]];
+		//var mainModeGifts = [[3, 10], [13, 12], [2, 18]];
+		var mainModeGifts = [];
 
 		//Coordenadas de las paredes atravesables del modo de juego principal
 		var mainModeFakeWalls = [[9, 7], [11, 2], [17, 15]];
@@ -730,7 +732,7 @@
 
 						assetColl.model = asset;
 						asset.parent = assetColl;
-						
+
 						if (object == "enemies")
 							objects.enemies.push(assetColl);
 
@@ -912,7 +914,7 @@
 
 			});
 
-			
+
 			document.addEventListener('keydown', onKeyDown);
 			document.addEventListener('keyup', onKeyUp);
 
@@ -999,6 +1001,9 @@
 				personaje.score = 3000;
 
 				scene.add(personaje);
+				var spot1 = scene.getObjectByName("spot1");
+				spot1.target = personaje;
+				personaje.spot = spot1;
 				isWorldReady[1] = true;
 			});
 
@@ -1042,35 +1047,38 @@
 			var forward = 0;
 			moving = false;
 
-			if (keys["A"]) {
-				yaw = 5;
-				moving = true;
-			} else if (keys["D"]) {
-				yaw = -5;
-				moving = true;
+			if (player != null){
+				if (keys["A"]) {
+					yaw = 6;
+					moving = true;
+				} else if (keys["D"]) {
+					yaw = -6;
+					moving = true;
+				}
+
+				if (keys["W"]) {
+					moving = true;
+					forward = 20;
+				} else if (keys["S"]) {
+					moving = true;
+					forward = -20;
+				}
+
+				if (keys["G"]) {
+					estaPausado = true;
+					$("#menuPausa").show();
+				}
+				else if (keys["N"]) {
+					estaPausado = false;
+					$("#menuPausa").hide();
+				}
+
+				if (keys["V"]) {
+					estaPausado = true;
+					$("#VictoryScreen").show();
+				}
 			}
 
-			if (keys["W"]) {
-				moving = true;
-				forward = 20;
-			} else if (keys["S"]) {
-				moving = true;
-				forward = -20;
-			}
-
-			if (keys["G"]) {
-				estaPausado = true;
-				$("#menuPausa").show();
-			}
-			else if (keys["N"]) {
-				estaPausado = false;
-				$("#menuPausa").hide();
-			}
-
-			if (keys["V"]) {
-				estaPausado = true;
-				$("#VictoryScreen").show();
-			}
 
 			if (estaPausado == false) {
 
@@ -1096,6 +1104,7 @@
 					$("#playerLives").html("Vidas restantes: " + player.lives);
 					player.rotation.y += yaw * deltaTime;
 					player.translateZ(forward * deltaTime);
+					player.spot.position.set(player.position.x, player.position.y + 5, player.position.z);
 
 					camera.position.x = player.position.x;
 					camera.position.z = player.position.z + 30;
@@ -1330,9 +1339,9 @@
 			//camera = new THREE.PerspectiveCamera(100, visibleSize.width / visibleSize.height, 0.1, 120);
 
 			var aspect = window.innerWidth / window.innerHeight;
-			var d = 70;
+			var d = 80;
 			camera = new THREE.OrthographicCamera(- d * aspect, d * aspect, d, - d, 1, 1000);
-			camera.position.set(50, 60, 100); // all components equal
+			camera.position.set(50, 80, 50); // all components equal
 			//camera.position.set(0, 60, 0); // all components equal
 			//camera.lookAt(0, 0, 0); // or the origin
 
@@ -1346,18 +1355,50 @@
 				new THREE.Vector3(0, 0, -1),
 			];
 
-			
 			renderer = new THREE.WebGLRenderer({ precision: "mediump", alpha:true });
             renderer.setClearColor(new THREE.Color(1, 0, 0), 0);
 			renderer.setPixelRatio(visibleSize.width / visibleSize.height);
 			renderer.setSize(visibleSize.width, visibleSize.height);
 
+
 			var ambientLight = new THREE.AmbientLight(new THREE.Color(1, 1, 1), 1.0);
 			scene.add(ambientLight);
 
-			var directionalLight = new THREE.DirectionalLight(new THREE.Color(1, 1, 0), 0.4);
-			directionalLight.position.set(0, 0, 1);
+			var directionalLight = new THREE.DirectionalLight(new THREE.Color(0.8, 0.8, 0.2), 0.5);
+			directionalLight.position.set(-44, 15, -45);
+			directionalLight.target.position.set(5, 0, -5);
 			scene.add(directionalLight);
+			scene.add(directionalLight.target);
+
+			var dLight1 = directionalLight.clone();
+			dLight1.position.set(40, 25, -45);
+			dLight1.target.position.set(0, 5, -5);
+			scene.add(dLight1);
+			scene.add(dLight1.target);
+
+			var dLight2 = directionalLight.clone();
+			dLight2.position.set(0, 25, 35);
+			dLight2.target.position.set(0, 5, -15);
+			scene.add(dLight2);
+			scene.add(dLight2.target);
+
+			const spotLight = new THREE.SpotLight(new THREE.Color(0.1, 0.7, 0.4), 1);
+			spotLight.position.set(10, 10, 10);
+
+			spotLight.castShadow = true;
+			spotLight.distance = 25;
+
+			spotLight.shadow.mapSize.width = 1024;
+			spotLight.shadow.mapSize.height = 1024;
+
+			spotLight.shadow.camera.near = 500;
+			spotLight.shadow.camera.far = 4000;
+			spotLight.shadow.camera.fov = 30;
+
+
+			var SL1 = spotLight.clone();
+			SL1.name = "spot1"
+			scene.add(SL1);
 
 			var grid = new THREE.GridHelper(200, 50, 0xffffff, 0xffffff);
 			grid.position.y = -1;
@@ -1411,6 +1452,11 @@
 				<button type="button" class="btn btn-dark border border-warning">
 					<a class="btnSave" href="../index.html">Salir sin guardar</a>
 				</button>
+				<br>
+				<br>
+				<button type="button" class="btn btn-dark border border-warning">
+					<a class="btnSave" href="indexForestHard.php">Cambiar de dificultad</a>
+				</button>
 			</div>
 
 
@@ -1427,12 +1473,9 @@
 				<h5 class="modal-title" id="playerResults"> Hola</h5>
 			</div>
 			<div class="modal-body">
-				<br>
-				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" style=" top:20%; right:90%;" href="../index.html">Volver al menú principal</a>
-				</button>
-
-                <form method="post">
+				
+				<br>	
+                <form id="saveDataUser" style="right:50%;" method="post">
 				<input type="text" placeholder="Nombre" id="username" name="name">
                 <input id="puntos" name="puntos" hidden="true">
 				<button id="" type="submit">Guardar</button>
@@ -1443,21 +1486,24 @@
                 include("php/guardardatos.php");
                 
                 ?> 
-
-
                 
 
 				<br><br>
 				<button onclick="shareFB()">Compartir en Facebook</button>
 				<br>
+				
 				<br>
 				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" href="indexForest.php">Volver a jugar</a>
+					<a class="btnSave" style=" top:20%; right:60%;" href="../index.html">Volver al menú principal</a>
+				</button>
+				<br>
+				<button type="button" class="btn btn-dark border border-warning">
+					<a class="btnSave" style="right:60%;" href="indexForest.php">Volver a jugar</a>
 				</button>
 				<br>
 				<br>
 				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" href="../elegirEscenario.html">Seleccionar otro nivel</a>
+					<a class="btnSave" style="right:60%;" href="../elegirEscenario.html">Seleccionar otro nivel</a>
 				</button>
 			</div>
 

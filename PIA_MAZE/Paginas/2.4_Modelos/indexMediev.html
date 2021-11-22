@@ -1348,10 +1348,11 @@
 				new THREE.Vector3(0, 0, -1),
 			];
 
-			renderer = new THREE.WebGLRenderer({ precision: "mediump" });
-			renderer.setClearColor(new THREE.Color(0, 0, 0));
+			renderer = new THREE.WebGLRenderer({ precision: "mediump", alpha:true });
+            renderer.setClearColor(new THREE.Color(1, 0, 0), 0);
 			renderer.setPixelRatio(visibleSize.width / visibleSize.height);
 			renderer.setSize(visibleSize.width, visibleSize.height);
+
 
 			var ambientLight = new THREE.AmbientLight(new THREE.Color(1, 1, 1), 1.0);
 			scene.add(ambientLight);

@@ -4,6 +4,7 @@
 	<title>UnfairMaze</title>
 	<link rel="stylesheet" href="../css/bootstrap.min.css">
 	<link rel="stylesheet" href="../css/jugar.css">
+	<link rel="stylesheet" href="../css/FondoMedieval.css">
 	<script type="text/javascript" src="js/libs/jquery/jquery-2.1.4.min.js"></script>
 	<script type="text/javascript" src="js/libs/three/three.js"></script>
 	<script type="text/javascript" src="js/libs/three/three2.js"></script>
@@ -1436,13 +1437,14 @@
 				new THREE.Vector3(0, 0, -1),
 			];
 
-			renderer = new THREE.WebGLRenderer({ precision: "mediump" });
-			renderer.setClearColor(new THREE.Color(0, 0, 0));
+			renderer = new THREE.WebGLRenderer({ precision: "mediump", alpha:true });
+            renderer.setClearColor(new THREE.Color(1, 0, 0), 0);
 			renderer.setPixelRatio(visibleSize.width / visibleSize.height);
 			renderer.setSize(visibleSize.width, visibleSize.height);
 
 			var ambientLight = new THREE.AmbientLight(new THREE.Color(1, 1, 1), 1.0);
 			scene.add(ambientLight);
+
 
 			var directionalLight = new THREE.DirectionalLight(new THREE.Color(1, 1, 0), 0.4);
 			directionalLight.position.set(0, 0, 1);

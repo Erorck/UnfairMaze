@@ -4,6 +4,7 @@
 	<title>UnfairMaze</title>
 	<link rel="stylesheet" href="../css/bootstrap.min.css">
 	<link rel="stylesheet" href="../css/jugar.css">
+	<link rel="stylesheet" href="../css/FondoMedieval.css">
 	<script type="text/javascript" src="js/libs/jquery/jquery-2.1.4.min.js"></script>
 	<script type="text/javascript" src="js/libs/three/three.js"></script>
 	<script type="text/javascript" src="js/libs/three/three2.js"></script>
@@ -1350,10 +1351,11 @@
 				new THREE.Vector3(0, 0, -1),
 			];
 
-			renderer = new THREE.WebGLRenderer({ precision: "mediump" });
-			renderer.setClearColor(new THREE.Color(0, 0, 0));
+			renderer = new THREE.WebGLRenderer({ precision: "mediump", alpha:true });
+            renderer.setClearColor(new THREE.Color(1, 0, 0), 0);
 			renderer.setPixelRatio(visibleSize.width / visibleSize.height);
 			renderer.setSize(visibleSize.width, visibleSize.height);
+
 
 			var ambientLight = new THREE.AmbientLight(new THREE.Color(1, 1, 1), 1.0);
 			scene.add(ambientLight);
@@ -1450,7 +1452,7 @@
 	</div>
 	<div class="modal-dialog" id="VictoryScreen" style="position: absolute; top:20%; left:40%;">
 		<div class="modal-content">
-			<input id="puntos" hidden="true">
+			
 			<div class="modal-header">
 				<h5 class="modal-title" id="exampleModalLabel">¡GANASTE!</h5>
 				<br>
@@ -1461,14 +1463,25 @@
 				<button type="button" class="btn btn-dark border border-warning">
 					<a class="btnSave" style=" top:20%; right:90%;" href="../index.html">Volver al menú principal</a>
 				</button>
-				<input type="text" placeholder="Nombre" id="username">
-				<button id="btnSendSesion">Guardar</button>
+
+                <form method="post">
+				<input type="text" placeholder="Nombre"  name="name">
+                <input id="puntos" name="puntos" hidden="true">
+				<button id="" type="submit">Guardar</button>
+                </form>
+
+                <?php
+                
+                include("php/guardardatos.php");
+                
+                ?> 
+
 				<br><br>
 				<button onclick="shareFB()">Compartir en Facebook</button>
 				<br>
 				<br>
 				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" href="indexForest.html">Volver a jugar</a>
+					<a class="btnSave" href="indexMedieval.php">Volver a jugar</a>
 				</button>
 				<br>
 				<br>

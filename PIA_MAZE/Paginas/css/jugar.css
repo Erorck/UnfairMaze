@@ -127,3 +127,9 @@ body{
 	border: #FFC300;
 	
 }
+
+.username,.puntos{
+	margin-left: 15px;
+	color: #000;
+	border: #FFC300;
+}

@@ -1395,13 +1395,15 @@
 			<div class="modal-body">
 
 				<br>
+				
+				<br>
 				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" style=" top:20%; right:90%;" href="../index.html">Guardar y salir</a>
+					<a class="btnSave" href="../index.html">Salir sin guardar</a>
 				</button>
 				<br>
 				<br>
 				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" href="../index.html">Salir sin guardar</a>
+					<a class="btnSave" href="indexMedievHard.php">Cambiar de dificultad</a>
 				</button>
 			</div>
 
@@ -1432,16 +1434,8 @@
                 <?php
                 
                 include("php/guardardatos.php");
-
-                
-                
-                
-            
                 
                 ?> 
-
-
-                
 
 				<br><br>
 				<button onclick="shareFB()">Compartir en Facebook</button>

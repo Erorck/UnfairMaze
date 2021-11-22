@@ -7,13 +7,21 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&display=swap" rel="stylesheet">
-    <title>Unfair Maze</title>
+    <script src="js/jquery-3.6.0.min.js"></script>
+<title>Unfair Maze</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/index.js"></script> 
     <link rel="stylesheet" href="css/index.css">
-    <script src="js/jquery-1.12.3.min.js"></script>
+    
 </head>
 
 <body>
+    <audio autoplay loop>
+        <source src="audio/A_Little_Faster.mp3" type="audio/mp3">
+        Tu navegador no soporta HTML5 audio.
+      </audio>
+    
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
         <div class="container-fluid">
             <a href="index.html" class="navbar-brand">Unfair Maze</a>
@@ -37,21 +45,7 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                     <!--Dropdown-->
-                    <li class="nav-item dropdown">
-                        <a href="#" 
-                            class="nav-link dropdown-toggle"
-                            role="button"
-                            data-bs-toggle="dropdown"
-                            aria-epanded="false"
-                            id="dropdown-menu"
-                    >
-                        Cuenta
-                    </a>
-
-                    <ul class="dropdown-menu" aria-labelledby="dropdown-menu">
-                        <li><a href="login.html" class="dropdown-item">Iniciar sesion</a></li>
-                        <li><a href="registro.html" class="dropdown-item">Registrarse</a></li>
-                    </ul>
+                    
 
                     </li>
                     <!--<li class="nav-item"><a href="puntajes.html" class="nav-link">Puntajes</a></li>-->
@@ -75,14 +69,28 @@
                                 <source src="audio/AndrossEnter.mp3" controls >
                         </audio>  
                  <li>
-                     <a type="button" class="btnPlay btn btn-dark border border-warning" href="login.html">Jugar</a>    
+                     <a type="button" class="btnPlay btn btn-dark border border-warning" href="elegirEscenario.html">Jugar</a>    
                  </li> 
-                 <li> <a type="button" class="btnPlay btn btn-dark border border-warning" href="multijugador.html">Multijugador</a></li>
-                 <li><a type="button" class="btnPlay btn btn-dark border border-warning" href="puntajes.html"><img src="img/trofeo.png" width="30"         height="30" alt=""></a></li>
-                 <li><a type="button" class="btnPlay btn btn-dark border border-warning" href="configuracion.html"><img src="img/settings.png"      width="   30" height="30" alt=""></a></li>
+                 <li> <a type="button" class="btnPlay btn btn-dark border border-warning" href="elegirEsceMulti.html">Multijugador</a></li>
+                 <li><a type="button" class="btnPlay btn btn-dark border border-warning" href="puntos.php"><img src="img/trofeo.png" width="30"         height="30" alt=""></a></li>
+                 
+				
             </ul>
             
-    
+           <!-- <ul class="navInicio">
+                <li>
+                    <h5 class="titulo2" style="position: relative; right:25px; "id="exampleModalLabel2">Volumen de musica</h5>
+                    <input type="range" class="buttonSoundMusic btn-warning" id="volRange" style=" position: relative; left:50px; border-radius: 5px;" max="1" min="0" step="0.01" onchange="changevolume(this.value)"/>
+                    <h5 class="titulo2" style="position: relative; right:25px; "id="exampleModalLabel2">Volumen de sonido</h5>
+                    <input type="range" class="buttonSoundMusic btn-warning" id="volRange" style=" position: relative; left:50px; border-radius: 5px;" max="1" min="0" step="0.01" onchange="changevolume2(this.value)"/>
+                </li>
+            </ul>-->
+
+           
+           
+          
+           
+        
 
                  <script>var beepOne = $("#theSound")[0];
                  $("#nav-one a")
@@ -90,14 +98,54 @@
                          beepOne.play();
                      });
                  </script>
+
+                 	<script>
+                        function changevolume(amount) {
+                         var audioobject = document.getElementsByTagName("audio")[0];
+                         audioobject.volume = amount;
+                        }
+                    </script>
+                    <script>
+                        function changevolume2(amount) {
+                         var audioobject2 = document.getElementsByTagName("audio")[1];
+                         audioobject2.volume = amount;
+                        }
+                    </script>
             </div>
      </section>
     </div>
 
  
+ 
     
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="js/index.js"></script> 
+    
+     
+    
+
    
+   <!-- <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.3.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.3.0/firebase-analytics.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+          apiKey: "AIzaSyDIRfhxqVyvP-Td6wvXprbdDxTMUtEEviQ",
+          authDomain: "graficas-77d00.firebaseapp.com",
+          projectId: "graficas-77d00",
+          storageBucket: "graficas-77d00.appspot.com",
+          messagingSenderId: "797287056816",
+          appId: "1:797287056816:web:6069a3e2d4402c47eac275",
+          measurementId: "G-9R9PJN0YC7"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+      </script>-->
+      
 </body>
 </html>

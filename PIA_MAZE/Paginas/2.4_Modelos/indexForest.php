@@ -1492,8 +1492,7 @@
 				<button type="button" class="btn btn-dark border border-warning">
 					<a class="btnSave" style=" top:20%; right:60%;" href="../index.html">Volver al menú principal</a>
 				</button>
-				<br>
-				<br>
+				<br><br>
 				<button type="button" class="btn btn-dark border border-warning">
 					<a class="btnSave" style="right:60%;" href="indexForest.php">Volver a jugar</a>
 				</button>

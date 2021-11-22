@@ -13,6 +13,10 @@
 </head>
 
 <body>
+    <audio autoplay loop>
+		<source src="audio/A_Little_Faster.mp3" type="audio/mp3">
+		Tu navegador no soporta HTML5 audio.
+  	</audio>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
         <div class="container-fluid">
             <a href="index.html" class="navbar-brand">Unfair Maze</a>
@@ -35,25 +39,6 @@
             <div class="collapse navbar-collapse" id="menu">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     
-
-                    <!--Dropdown-->
-                    <li class="nav-item dropdown">
-                        <a href="#" 
-                            class="nav-link dropdown-toggle"
-                            role="button"
-                            data-bs-toggle="dropdown"
-                            aria-epanded="false"
-                            id="dropdown-menu"
-                    >
-                        Cuenta
-                    </a>
-
-                    <ul class="dropdown-menu" aria-labelledby="dropdown-menu">
-                        <li><a href="login.html" class="dropdown-item">Iniciar sesion</a></li>
-                        <li><a href="registro.html" class="dropdown-item">Registrarse</a></li>
-                    </ul>
-
-                    </li>
                     <li class="nav-item"><a href="comoJugar.html" class="nav-link">Como jugar</a></li>
                 </ul>
 

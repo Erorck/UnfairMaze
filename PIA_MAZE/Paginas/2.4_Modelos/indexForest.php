@@ -4,6 +4,8 @@
 	<title>UnfairMaze</title>
 	<link rel="stylesheet" href="../css/bootstrap.min.css">
 	<link rel="stylesheet" href="../css/jugar.css">
+	<link rel="stylesheet" href="../css/FondoForest.css">
+
 	<script type="text/javascript" src="js/libs/jquery/jquery-2.1.4.min.js"></script>
 	<script type="text/javascript" src="js/libs/three/three.js"></script>
 	<script type="text/javascript" src="js/libs/three/three2.js"></script>
@@ -1344,8 +1346,9 @@
 				new THREE.Vector3(0, 0, -1),
 			];
 
-			renderer = new THREE.WebGLRenderer({ precision: "mediump" });
-			renderer.setClearColor(new THREE.Color(0, 0, 0));
+			
+			renderer = new THREE.WebGLRenderer({ precision: "mediump", alpha:true });
+            renderer.setClearColor(new THREE.Color(1, 0, 0), 0);
 			renderer.setPixelRatio(visibleSize.width / visibleSize.height);
 			renderer.setSize(visibleSize.width, visibleSize.height);
 
@@ -1449,7 +1452,7 @@
 				<br>
 				<br>
 				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" href="indexForest.html">Volver a jugar</a>
+					<a class="btnSave" href="indexForest.php">Volver a jugar</a>
 				</button>
 				<br>
 				<br>
@@ -1477,7 +1480,7 @@
 				<br>
 				<br>
 				<button type="button" class="btn btn-dark border border-warning">
-					<a class="btnSave" href="indexForest.html">Volver a intentar</a>
+					<a class="btnSave" href="indexForest.php">Volver a intentar</a>
 				</button>
 				<br>
 				<br>

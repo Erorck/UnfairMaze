@@ -48,14 +48,14 @@ body {
 
 .ConfProp{
 	font-family: 'Metal Mania', cursive;
-	font-size: 230px;
+	font-size: 230px
 	-webkit-text-stroke: 2px #FFC300;
 	
 }
 
 .slider{
   -webkit-appearance: none;
-  width: 80%;
+  width: 100%;
   height: 15px;
   border-radius: 5px;  
   background: #FFC300;

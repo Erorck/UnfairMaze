@@ -1,6 +1,3 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
-
-
 $(document).ready(function(){
 
  if ($(window).width() > 800){			//si el tamaño de la ventana es mayor a 800px
@@ -17,18 +14,8 @@ $(document).ready(function(){
 							//tiempo que va a tardar(1.5s)
 
 
-						
+
 
 });
-
-//function login(){
-
-	//var fireBaseRef= firebase.database().ref('usuarios');
-	//var username=document.getElementById("username").value;
-	
-	//fireBaseRef.push(username);
-	//location.href = 'elegirEscenario.html';
-//};
-
 
 

@@ -1,7 +1,5 @@
 body{
-	background: url('/img/medieval.jpg');
-	background-repeat: no-repeat;
-	background-size: cover;
+	background: url('../img/fondo.png');
 }
 
 .navbar{
@@ -16,7 +14,7 @@ body{
 	font-size: 10px;
 }
 
-/*.container2 .container{
+.container2 .container{
 	position: absolute;
 	margin: 850px 95px;
 
@@ -27,7 +25,7 @@ body{
 	margin: 40px 195px;
 	font-size: 25px;
 	-webkit-text-stroke: 0.5px #FFC300;
-}*/
+}
 
 .punt{
 	margin-top: -15px;
@@ -61,8 +59,6 @@ body{
 	color: #000;
 }
 
-
-
 .modal-body .btn{
 	 font-family: 'Metal Mania', cursive;
 	font-size: 30px;
@@ -83,7 +79,6 @@ body{
 .modal-body .btnSave{
 	text-decoration: none;
 	color:#fff;
-	margin-right: 40px;
 }
 
 .modal-body .btnSave:hover{
@@ -92,6 +87,7 @@ body{
 }
 
 .modal-content{
+	
 	background: #848484;
 }
 
@@ -120,55 +116,3 @@ body{
 	background: #FFC300;
 	color: #000;
 }
-
-.nameplay{
-	font-family: 'Metal Mania', cursive;
-	color: #000;
-	border: #FFC300;
-	
-}
-
-.username,.puntos{
-	margin-left: 15px;
-	color: #000;
-	border: #FFC300;
-}
-
-
-   .buttonSoundMusic{
-	-webkit-appearance: none;
-	width: 80%;
-	height: 15px;
-	border-radius: 5px;  
-	background: #FFC300;
-	outline: none;
-	opacity: 0.7;
-	-webkit-transition: .2s;
-	transition: opacity .2s;
-  }
-  
-  .buttonSoundMusic::-webkit-slider-thumb {
-	-webkit-appearance: none;
-	appearance: none;
-	width: 25px;
-	height: 25px;
-	border-radius: 50%; 
-	background: #1C1C1C;
-	cursor: pointer;
-  }
-  
-  .buttonSoundMusic::-moz-range-thumb {
-	width: 25px;
-	height: 25px;
-	border-radius: 50%;
-	background: #04AA6D;
-	cursor: pointer;
-  }
-
-   h5{
-	font-family: 'Metal Mania', cursive;
-	font-size: 30px;
-	margin-left: 15px;
-	color: #000;
-	background:#F7D358;
-   }
